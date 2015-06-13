@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Test</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="battery_name">Battery Name</string>
+    <string name="battery_cell">Number of Cells</string>
+    <string name="battery_mah">Milliamp Hours</string>
+</resources>
