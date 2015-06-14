@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
         String batteryName;
         String batteryCells;
         String batteryMah;
-
+        //test git push
         batteryName = txtBatteryName.getText().toString();
         batteryCells = txtBatteryCells.getText().toString();
         batteryMah = txtBatteryMah.getText().toString();
