@@ -51,6 +51,9 @@ public class MainActivity extends Activity {
         batteryCells = txtBatteryCells.getText().toString();
         batteryMah = txtBatteryMah.getText().toString();
 
+        getActionBar().setTitle("Dean");
+
+
 
     }
 }
