@@ -16,6 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".CreateEntry"
+            android:label="@string/title_activity_create_entry" >
+        </activity>
+        <activity
+            android:name=".CreateBattery"
+            android:label="@string/title_activity_create_battery" >
+        </activity>
     </application>
 
 </manifest>

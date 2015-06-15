@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Test</string>
+    <string name="app_name">Battery Status</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -10,6 +10,8 @@
     <string name="battery_name">Battery Name</string>
     <string name="battery_cell">Number of Cells</string>
     <string name="battery_mah">Milliamp Hours</string>
+    <string name="title_activity_create_entry">CreateEntry</string>
+    <string name="title_activity_create_battery">create_battery</string>
     <string name="battery_cycles">Number of Cycles</string>
     <string name="battery_type">Battery Type</string>
 
