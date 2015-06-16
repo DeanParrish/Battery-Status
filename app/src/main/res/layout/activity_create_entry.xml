@@ -7,26 +7,30 @@
     tools:context="com.example.parrish.test.CreateEntry">
 
     <SeekBar
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBar"
-        android:layout_marginTop="96dp"
-        android:layout_below="@+id/editText"
+        android:id="@+id/seekBar2"
+        android:layout_marginTop="22dp"
+        android:layout_below="@+id/textView3"
         android:layout_alignParentStart="true" />
 
     <SeekBar
-        android:layout_width="50dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBar2"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/seekBar"
+        android:layout_below="@+id/editText"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp" />
 
     <EditText
         android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:id="@+id/editText"
-        android:layout_alignBottom="@+id/textView2"
-        android:layout_toEndOf="@+id/button2" />
+        android:layout_alignTop="@+id/textView2"
+        android:layout_toEndOf="@+id/textView2"
+        android:layout_alignBaseline="@+id/textView2"
+        android:textSize="23dp"
+        android:gravity="center_horizontal" />
 
     <Spinner
         android:layout_width="wrap_content"
@@ -34,14 +38,16 @@
         android:id="@+id/spinner"
         android:spinnerMode="dropdown"
         android:layout_alignTop="@+id/textView"
-        android:layout_toEndOf="@+id/textView3" />
+        android:layout_toEndOf="@+id/textView" />
 
     <Chronometer
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:id="@+id/chronometer"
         android:layout_below="@+id/spinner"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:gravity="center_horizontal"
+        android:textSize="35dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -49,7 +55,8 @@
         android:text="STOP"
         android:id="@+id/button"
         android:layout_below="@+id/chronometer"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/button6" />
 
     <Button
         android:layout_width="wrap_content"
@@ -65,14 +72,14 @@
         android:text="START"
         android:id="@+id/button4"
         android:layout_alignTop="@+id/button3"
-        android:layout_toEndOf="@+id/button3"
-        android:layout_gravity="left|center_vertical" />
+        android:layout_gravity="left|center_vertical"
+        android:layout_alignEnd="@+id/spinner" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Select Battery:"
+        android:text="Select your Battery:"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="false"
@@ -103,9 +110,9 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Ending Charge:"
         android:id="@+id/textView3"
-        android:layout_below="@+id/seekBar2"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="31dp" />
+        android:layout_marginTop="22dp"
+        android:layout_below="@+id/seekBar"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -127,7 +134,10 @@
         android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:id="@+id/editText2"
-        android:layout_alignBottom="@+id/textView3"
-        android:layout_toEndOf="@+id/textView2" />
+        android:layout_alignTop="@+id/textView3"
+        android:layout_alignStart="@+id/editText"
+        android:layout_alignBaseline="@+id/textView3"
+        android:textSize="23dp"
+        android:gravity="center_horizontal" />
 
 </RelativeLayout>

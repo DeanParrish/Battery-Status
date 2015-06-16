@@ -32,11 +32,11 @@ public class MainActivity extends Activity {
         addListenerOnButton4();
         addListenerOnButton5();
 
-        Spinner ddlBatteryType = (Spinner) findViewById(R.id.ddlType);
+/*        Spinner ddlBatteryType = (Spinner) findViewById(R.id.ddlType);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.battery_type, android.R.layout.simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ddlBatteryType.setAdapter(adapter);
+        ddlBatteryType.setAdapter(adapter);*/
     }
 
     @Override
@@ -84,7 +84,6 @@ public class MainActivity extends Activity {
         });
     }
 
-    }
     public void addListenerOnButton3() {
         final Context context = this;
         btn_entry_create  = (Button) findViewById(R.id.button8);
@@ -108,8 +107,6 @@ public class MainActivity extends Activity {
         });
     }
 
-    public void populateBatteryType(){
-
     public void addListenerOnButton5() {
         final Context context = this;
         btn_view_stats = (Button) findViewById(R.id.button10);
@@ -121,4 +118,7 @@ public class MainActivity extends Activity {
             }
         });
     }
+/*
+    public void populateBatteryType() {
+    }*/
 }

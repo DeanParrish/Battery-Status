@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 
 public class CreateBattery extends Activity {
@@ -14,6 +16,12 @@ public class CreateBattery extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_battery);
+
+        Spinner ddlBatteryType = (Spinner) findViewById(R.id.ddlType);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.battery_type, android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ddlBatteryType.setAdapter(adapter);
     }
 
     @Override
@@ -37,6 +45,7 @@ public class CreateBattery extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
     public void onSubmitClick(View view) {
         EditText txtBatteryName = (EditText) findViewById(R.id.txtBatteryName);
         EditText txtBatteryCells = (EditText) findViewById(R.id.txtBatteryCells);
@@ -51,5 +60,8 @@ public class CreateBattery extends Activity {
         batteryMah = txtBatteryMah.getText().toString();
 
         getActionBar().setTitle("Dean");
+    }
+
+    public void populateBatteryType() {
     }
 }
