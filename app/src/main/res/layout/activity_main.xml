@@ -5,129 +5,82 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="@string/battery_name"
-        android:id="@+id/lblBattery"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginRight="25dp"
-        android:inputType="none"
-        android:labelFor="@+id/txtBatteryName" />
-
-    <EditText
-        android:layout_width="@dimen/activity_horizontal_margin"
-        android:layout_height="40dp"
-        android:id="@+id/txtBatteryName"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/lblCell"
-        android:layout_above="@+id/lblCell"
-        android:inputType="textPersonName" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="@string/battery_cell"
-        android:id="@+id/lblCell"
-        android:layout_below="@+id/lblBattery"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="35dp"
-        android:layout_marginRight="25dp"
-        android:inputType="none"
-        android:labelFor="@+id/txtBatteryCells" />
-
-    <EditText
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/txtBatteryCells"
-        android:layout_alignTop="@+id/lblCell"
-        android:layout_toEndOf="@id/lblCell" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="@string/battery_mah"
-        android:id="@+id/lblMah"
-        android:layout_marginTop="32dp"
-        android:layout_below="@+id/txtBatteryCells"
-        android:layout_alignParentStart="true"
-        android:inputType="none"
-        android:labelFor="@+id/txtMah" />
-
-    <EditText
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/txtMah"
-        android:layout_alignTop="@+id/lblMah"
-        android:layout_toEndOf="@+id/lblCell" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/submit"
-        android:id="@+id/btnSubmit"
-        android:onClick="onSubmitClick"
-        android:layout_marginBottom="62dp"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/txtMah" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lblCycles"
-        android:text="@string/battery_cycles"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true" />
-
     <!--< android:id="@+id/view" />-->
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/txtCycles"
-        android:layout_alignTop="@+id/lblCycles"
-        android:layout_alignStart="@+id/txtMah" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnClear"
-        android:text="@string/clear"
-        android:layout_alignTop="@+id/btnSubmit"
-        android:layout_toEndOf="@+id/txtMah"
-        android:layout_marginStart="30dp" />
+        <Button
+            android:layout_width="190dp"
+            android:layout_height="60dp"
+            android:text="Create Entry"
+            android:id="@+id/button8"
+            android:layout_gravity="center"
+            android:layout_below="@+id/button9"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:drawableLeft="@mipmap/create_entry"
+            android:textColor="#FFFFFFFF"
+            android:onClick="CreateEntry.class"
+            android:background="#ff1b9c7b" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/battery_type"
-        android:id="@+id/lblType"
-        android:layout_below="@+id/txtCycles"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="33dp" />
+        <Button
+            android:layout_width="190dp"
+            android:layout_height="60dp"
+            android:text="Remove Entry"
+            android:id="@+id/button9"
+            android:layout_gravity="center"
+            android:layout_alignParentTop="false"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:drawableLeft="@mipmap/remove_entry"
+            android:textColor="#FFFFFFFF"
+            android:background="#ffe74c3c" />
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ddlType"
-        android:layout_alignBottom="@+id/lblType"
-        android:layout_toEndOf="@+id/lblCell" />
+        <Button
+            android:layout_width="190dp"
+            android:layout_height="60dp"
+            android:text="View Statistics"
+            android:id="@+id/button10"
+            android:layout_below="@+id/button8"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="25dp"
+            android:drawableLeft="@mipmap/statistics"
+            android:textColor="#FFFFFFFF"
+            android:background="#ff9b59b6"
+            android:padding="6dp" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Create Entry"
-        android:id="@+id/button7"
-        android:layout_below="@+id/btnSubmit"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="37dp" />
+        <Button
+            android:layout_width="190dp"
+            android:layout_height="60dp"
+            android:text="Create Battery"
+            android:id="@+id/button11"
+            android:layout_below="@+id/button10"
+            android:layout_alignStart="@+id/button10"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="25dp"
+            android:drawableLeft="@mipmap/battery_create"
+            android:textColor="#fffcffff"
+            android:padding="5dp"
+            android:background="#ff34495e" />
 
+        <Button
+            android:layout_width="190dp"
+            android:layout_height="60dp"
+            android:text="Archive Battery"
+            android:id="@+id/button12"
+            android:layout_below="@+id/button11"
+            android:layout_alignStart="@+id/button11"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="0dp"
+            android:drawableLeft="@mipmap/battery_remove"
+            android:textColor="#ffffffff"
+            android:background="#ff27ae60"
+            android:padding="3dp" />
+    </LinearLayout>
 </RelativeLayout>

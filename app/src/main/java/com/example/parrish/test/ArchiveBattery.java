@@ -4,22 +4,20 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
 
 
-public class CreateBattery extends Activity {
+public class ArchiveBattery extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_battery);
+        setContentView(R.layout.activity_archive_battery);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create_battery, menu);
+        getMenuInflater().inflate(R.menu.menu_archive_battery, menu);
         return true;
     }
 
@@ -36,20 +34,5 @@ public class CreateBattery extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-    public void onSubmitClick(View view) {
-        EditText txtBatteryName = (EditText) findViewById(R.id.txtBatteryName);
-        EditText txtBatteryCells = (EditText) findViewById(R.id.txtBatteryCells);
-        EditText txtBatteryMah = (EditText) findViewById(R.id.txtMah);
-
-        String batteryName;
-        String batteryCells;
-        String batteryMah;
-        //test git push
-        batteryName = txtBatteryName.getText().toString();
-        batteryCells = txtBatteryCells.getText().toString();
-        batteryMah = txtBatteryMah.getText().toString();
-
-        getActionBar().setTitle("Dean");
     }
 }

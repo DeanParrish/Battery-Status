@@ -14,5 +14,8 @@
     <string name="title_activity_create_battery">create_battery</string>
     <string name="battery_cycles">Number of Cycles</string>
     <string name="battery_type">Battery Type</string>
+    <string name="title_activity_remove_entry">RemoveEntry</string>
+    <string name="title_activity_archive_battery">ArchiveBattery</string>
+    <string name="title_activity_view_statistics">ViewStatistics</string>
 
 </resources>

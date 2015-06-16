@@ -24,6 +24,18 @@
             android:name=".CreateBattery"
             android:label="@string/title_activity_create_battery" >
         </activity>
+        <activity
+            android:name=".RemoveEntry"
+            android:label="@string/title_activity_remove_entry" >
+        </activity>
+        <activity
+            android:name=".ArchiveBattery"
+            android:label="@string/title_activity_archive_battery" >
+        </activity>
+        <activity
+            android:name=".ViewStatistics"
+            android:label="@string/title_activity_view_statistics" >
+        </activity>
     </application>
 
 </manifest>
