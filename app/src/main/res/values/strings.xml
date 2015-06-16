@@ -18,4 +18,11 @@
     <string name="title_activity_archive_battery">ArchiveBattery</string>
     <string name="title_activity_view_statistics">ViewStatistics</string>
 
+    <array name="battery_type">
+        <item>LiPo</item>
+        <item>NiMh</item>
+        <item>NiCd</item>
+        <item>LiFe</item>
+    </array>
+
 </resources>

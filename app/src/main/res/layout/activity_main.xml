@@ -39,6 +39,13 @@
             android:textColor="#FFFFFFFF"
             android:background="#ffe74c3c" />
 
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ddlType"
+        android:layout_alignBottom="@+id/lblType"
+        android:layout_toEndOf="@+id/lblCell"
+        android:spinnerMode="dropdown" />
         <Button
             android:layout_width="190dp"
             android:layout_height="60dp"
