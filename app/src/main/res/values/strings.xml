@@ -15,4 +15,11 @@
     <string name="battery_cycles">Number of Cycles</string>
     <string name="battery_type">Battery Type</string>
 
+    <array name="battery_type">
+        <item>LiPo</item>
+        <item>NiMh</item>
+        <item>NiCd</item>
+        <item>LiFe</item>
+    </array>
+
 </resources>
