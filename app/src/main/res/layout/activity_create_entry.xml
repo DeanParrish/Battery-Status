@@ -115,6 +115,14 @@
             android:id="@+id/textView2"
             android:layout_centerVertical="true"
             android:layout_alignStart="@+id/textView3" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SAVE"
+        android:id="@+id/button5"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/chronometer"
+        android:onClick="onSubmitClick"/>
 
         <TextView
             android:layout_width="wrap_content"

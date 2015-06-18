@@ -1,7 +1,9 @@
 package com.example.parrish.test;
 
 import android.app.Activity;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -9,6 +11,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import Classes.Battery;
+import Classes.SaveData;
 
 
 public class CreateBattery extends Activity {
@@ -53,21 +58,31 @@ public class CreateBattery extends Activity {
     }
 
     public void onSubmitClick(View view) {
-        EditText txtBatteryName = (EditText) findViewById(R.id.txtBatteryName);
-        EditText txtBatteryCells = (EditText) findViewById(R.id.txtBatteryCells);
-        EditText txtBatteryMah = (EditText) findViewById(R.id.txtMah);
+        SaveData save = new SaveData(view.getContext());
+        //Screen fields and conversions
+        Spinner spinnerType = (Spinner) findViewById(R.id.ddlType);
+        EditText txtBattName = (EditText) findViewById(R.id.txtBatteryName);
+        EditText txtCells = (EditText) findViewById(R.id.txtBatteryCells);
+        EditText txtMah = (EditText) findViewById(R.id.txtMah);
+        EditText txtCycle = (EditText) findViewById(R.id.txtCycles);
 
-        String batteryName;
-        String batteryCells;
-        String batteryMah;
-        //test git push
-        batteryName = txtBatteryName.getText().toString();
-        batteryCells = txtBatteryCells.getText().toString();
-        batteryMah = txtBatteryMah.getText().toString();
+        try {
+            String type = spinnerType.getSelectedItem().toString();
+            String batteryName = txtBattName.getText().toString();
+            int batteryCells = Integer.parseInt(txtCells.getText().toString());
+            int batteryMah = Integer.parseInt((txtMah.getText().toString()));
+            int batteryCycle = Integer.parseInt(txtCycle.getText().toString());
+        } catch (IllegalStateException e){
+            Log.e("Add Battery", e.toString());
+        }
 
-        getActionBar().setTitle("Dean");
-    }
 
-    public void populateBatteryType() {
+/*        //add the battery to the database
+        try {
+            save.addBattery(batteryName,batteryCells, batteryMah, batteryCycle,  type);
+        } catch (SQLiteException e){
+            Log.e("Add Battery", e.toString());
+        }*/
+
     }
 }
