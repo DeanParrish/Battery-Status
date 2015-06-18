@@ -11,21 +11,22 @@
         android:layout_height="40dp"
         android:text="@string/battery_name"
         android:id="@+id/lblBattery"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
         android:layout_marginRight="25dp"
         android:inputType="none"
-        android:labelFor="@+id/txtBatteryName" />
+        android:labelFor="@+id/txtBatteryName"
+        android:layout_below="@+id/title"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="37dp" />
 
     <EditText
         android:layout_width="@dimen/activity_horizontal_margin"
         android:layout_height="40dp"
         android:id="@+id/txtBatteryName"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/lblCell"
         android:layout_above="@+id/lblCell"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:layout_alignTop="@+id/lblBattery" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -53,11 +54,10 @@
         android:layout_height="40dp"
         android:text="@string/battery_mah"
         android:id="@+id/lblMah"
-        android:layout_marginTop="32dp"
-        android:layout_below="@+id/txtBatteryCells"
-        android:layout_alignParentStart="true"
         android:inputType="none"
-        android:labelFor="@+id/txtMah" />
+        android:labelFor="@+id/txtMah"
+        android:layout_below="@+id/txtBatteryCells"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="60dp"
@@ -67,16 +67,6 @@
         android:id="@+id/txtMah"
         android:layout_alignTop="@+id/lblMah"
         android:layout_toEndOf="@+id/lblCell" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/submit"
-        android:id="@+id/btnSubmit"
-        android:onClick="onSubmitClick"
-        android:layout_marginBottom="62dp"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/txtMah" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -97,15 +87,6 @@
         android:layout_alignTop="@+id/lblCycles"
         android:layout_alignStart="@+id/txtMah" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnClear"
-        android:text="@string/clear"
-        android:layout_alignTop="@+id/btnSubmit"
-        android:layout_toEndOf="@+id/txtMah"
-        android:layout_marginStart="30dp" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -122,14 +103,18 @@
         android:layout_alignBottom="@+id/lblType"
         android:layout_toEndOf="@+id/lblCell" />
 
-    <Button
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create Entry"
-        android:id="@+id/button7"
-        android:layout_below="@+id/btnSubmit"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="37dp" />
-
-
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="CREATE BATTERY"
+        android:id="@+id/title"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center_horizontal"
+        android:textColor="#ffffff"
+        android:background="#ff34495e"
+        android:layout_alignParentStart="true"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp" />
 </RelativeLayout>

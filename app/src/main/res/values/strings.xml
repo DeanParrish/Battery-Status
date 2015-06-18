@@ -8,6 +8,10 @@
     <string name="clear">Clear</string>
 
     <string name="battery_name">Battery Name</string>
+    <string name="activity_save">Save</string>
+    <string name="activity_filter">Filter</string>
+    <string name="activity_delete">Delete</string>
+    <string name="activity_search">Search</string>
     <string name="battery_cell">Number of Cells</string>
     <string name="battery_mah">Milliamp Hours</string>
     <string name="title_activity_create_entry">CreateEntry</string>

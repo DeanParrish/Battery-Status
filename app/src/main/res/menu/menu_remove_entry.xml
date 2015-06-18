@@ -1,6 +1,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.parrish.test.RemoveEntry">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" android:showAsAction="never" />
+    <item
+        android:id="@+id/action_filter"
+        android:icon="@mipmap/ic_filter"
+        android:orderInCategory="1"
+        android:showAsAction="ifRoom"
+        android:title="@string/activity_save" />
+    <item
+        android:id="@+id/action_search"
+        android:icon="@mipmap/ic_search"
+        android:orderInCategory="0"
+        android:showAsAction="ifRoom"
+        android:title="@string/activity_search" />
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@mipmap/ic_delete"
+        android:orderInCategory="2"
+        android:showAsAction="always"
+        android:title="@string/activity_delete" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_settings" />
 </menu>

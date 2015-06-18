@@ -93,9 +93,9 @@ public class CreateEntry extends Activity {
            // A private method to help us initialize our variables.
     private void initializeVariables() {
         seekBar_start = (SeekBar) findViewById(R.id.seekBar);
-        textView_start = (TextView) findViewById(R.id.editText);
+        textView_start = (TextView) findViewById(R.id.txtStart);
         seekBar_end = (SeekBar) findViewById(R.id.seekBar2);
-        textView_end = (TextView) findViewById(R.id.editText2);
+        textView_end = (TextView) findViewById(R.id.txtEnd);
     }
 
 }

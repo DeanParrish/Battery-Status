@@ -3,6 +3,7 @@ package com.example.parrish.test;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -27,8 +28,13 @@ public class CreateBattery extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create_battery, menu);
-        return true;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_create_battery, menu);
+
+        return super.onCreateOptionsMenu(menu);
+
+//        getMenuInflater().inflate(R.menu.menu_create_battery, menu);
+//        return true;
     }
 
     @Override
