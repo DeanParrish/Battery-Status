@@ -96,7 +96,7 @@ public class CreateEntry extends Activity {
             batteryNam[i] = battery.getName().toString();
         }
 
-        Spinner ddlBatteryName = (Spinner) findViewById(R.id.spinner);
+        Spinner ddlBatteryName = (Spinner) findViewById(R.id.ddlName);
 
        // ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, batteryNam, android.R.layout.simple_spinner_dropdown_item);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateEntry.this, android.R.layout.simple_spinner_dropdown_item, batteryNam);
