@@ -120,7 +120,8 @@
         android:text="SAVE"
         android:id="@+id/button5"
         android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/chronometer" />
+        android:layout_alignEnd="@+id/chronometer"
+        android:onClick="onSubmitClick"/>
 
     <Button
         android:layout_width="wrap_content"

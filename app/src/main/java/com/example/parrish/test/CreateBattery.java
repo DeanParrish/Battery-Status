@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import Classes.FeedEntry;
+import Classes.Battery;
 import Classes.SaveData;
 
 
@@ -59,17 +59,24 @@ public class CreateBattery extends Activity {
         EditText txtCells = (EditText) findViewById(R.id.txtBatteryCells);
         EditText txtMah = (EditText) findViewById(R.id.txtMah);
         EditText txtCycle = (EditText) findViewById(R.id.txtCycles);
-        String type = spinnerType.getSelectedItem().toString();
-        String batteryName = txtBattName.getText().toString();
-        int batteryCells = Integer.parseInt(txtCells.getText().toString());
-        int batteryMah = Integer.parseInt((txtMah.getText().toString()));
-        int batteryCycle = Integer.parseInt(txtCycle.getText().toString());
 
-        //add the battery to the database
+        try {
+            String type = spinnerType.getSelectedItem().toString();
+            String batteryName = txtBattName.getText().toString();
+            int batteryCells = Integer.parseInt(txtCells.getText().toString());
+            int batteryMah = Integer.parseInt((txtMah.getText().toString()));
+            int batteryCycle = Integer.parseInt(txtCycle.getText().toString());
+        } catch (IllegalStateException e){
+            Log.e("Add Battery", e.toString());
+        }
+
+
+/*        //add the battery to the database
         try {
             save.addBattery(batteryName,batteryCells, batteryMah, batteryCycle,  type);
         } catch (SQLiteException e){
             Log.e("Add Battery", e.toString());
-        }
+        }*/
+
     }
 }

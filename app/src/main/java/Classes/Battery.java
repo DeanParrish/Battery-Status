@@ -47,4 +47,9 @@ public class Battery {
     public void setType(String type){
         this.type = type;
     }
+
+    //getters
+    public String getName(){
+        return this.name.toString();
+    }
 }
