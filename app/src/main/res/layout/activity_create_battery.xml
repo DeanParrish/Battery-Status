@@ -25,7 +25,7 @@
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/lblCell"
         android:layout_above="@+id/lblCell"
-        android:inputType="textPersonName" />
+        android:inputType="text" />
 
     <TextView
         android:layout_width="wrap_content"

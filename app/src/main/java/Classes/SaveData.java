@@ -1,29 +1,100 @@
 package Classes;
 
+
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.BaseColumns;
 
 /**
  * Created by Dean Parrish on 6/15/2015.
  */
 public class SaveData {
-    //public FeedEntry dbconn;
-/*    Class dbcon = Class.forName("FeedEntry");
 
-    dbcon*/
+    private Context context;
+    private SQLiteDatabase db;
+    private static String tableName = "batteries";
+    private static String batteryName = "name";
+    private static String batteryCell = "cells";
+    private static String batteryMah = "mah";
+    private static String batteryCycles = "cycles";
+    private static String batteryType = "type";
+    private static String chanrgeTime = "time";
+    private static String chargeStart = "start";
+    private static String chargeEnd = "end";
 
-
-
-
-    public void SaveData(){
-
+    public SaveData(Context con) {
+        context = con;
     }
 
+    public void addBattery(String name, int cells, int mah, int cycles, String type) {
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        ContentValues values = new ContentValues();
 
-   // public int intDBVersion = FeedReaderDbHelper.DATABASE_VERSION;
+        //add values to be inserted
+        values.put(batteryName, name);
+        values.put(batteryCell, cells);
+        values.put(batteryMah, mah);
+        values.put(batteryCycles, cycles);
+        values.put(batteryType, type);
 
+        db = dbcon.getWritableDatabase();
+
+        db.insert(tableName, //table
+                null,        //column hack
+                values);     //column and values; populated above
+
+        db.close();
+    }
+
+    public Battery getBattery(String name) {
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        String[] columns = {batteryName, batteryCell, batteryMah, batteryCycles, batteryType};
+        Battery battery = new Battery();
+
+        db = dbcon.getReadableDatabase();
+
+        Cursor cursor =
+                db.query(tableName,                                           //table name
+                        columns,                                              //column names
+                        " name = ?",                                            //selections
+                        new String[] { String.valueOf(name)},                 //selection value
+                        null,                                                 //group by
+                        null,                                                 //having
+                        null,                                                 //order by
+                        null);                                                //limit
+
+        if (cursor != null){
+            cursor.moveToFirst();
+        }
+
+        battery.setName(cursor.getString(0));
+        battery.setCells(Integer.parseInt(cursor.getString(1)));
+        battery.setMah(Integer.parseInt(cursor.getString(2)));
+        battery.setCycles(Integer.parseInt(cursor.getString(3)));
+        battery.setType(cursor.getString(4));
+
+        return battery;
+    }
+
+    public void addEntry(String name, int time, int start, int end) {
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        ContentValues values = new ContentValues();
+
+        //add values to be inserted
+        values.put(batteryName, name);
+        values.put(chanrgeTime, time);
+        values.put(chargeStart, start);
+        values.put(chargeEnd, end);
+
+        db = dbcon.getWritableDatabase();
+
+        db.insert(tableName,    //table name
+                null,           //column hack
+                values);        //column and value
+
+        db.close();
+    }
 }
 
 
