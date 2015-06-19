@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_filter"
         android:icon="@mipmap/ic_filter"
-        android:orderInCategory="0"
+        android:orderInCategory="1"
         android:showAsAction="ifRoom"
         android:title="@string/activity_filter" />
     <item
@@ -17,7 +17,7 @@
         android:id="@+id/action_delete"
         android:icon="@mipmap/ic_delete"
         android:orderInCategory="2"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:title="@string/activity_delete" />
     <item
         android:id="@+id/action_settings"

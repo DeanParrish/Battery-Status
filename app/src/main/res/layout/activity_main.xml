@@ -1,86 +1,123 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".MainActivity">
 
     <!--< android:id="@+id/view" />-->
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight=".20"></RelativeLayout>
 
-        <Button
-            android:layout_width="190dp"
-            android:layout_height="60dp"
-            android:text="Create Entry"
-            android:id="@+id/button8"
-            android:layout_gravity="center"
-            android:layout_below="@+id/button9"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:drawableLeft="@mipmap/create_entry"
-            android:textColor="#FFFFFFFF"
-            android:onClick="CreateEntry.class"
-            android:background="#ff1b9c7b" />
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight=".60">
 
-        <Button
-            android:layout_width="190dp"
-            android:layout_height="60dp"
-            android:text="Remove Entry"
-            android:id="@+id/button9"
-            android:layout_gravity="center"
-            android:layout_alignParentTop="false"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
-            android:drawableLeft="@mipmap/remove_entry"
-            android:textColor="#FFFFFFFF"
-            android:background="#ffe74c3c" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
 
-        <Button
-            android:layout_width="190dp"
-            android:layout_height="60dp"
-            android:text="View Statistics"
-            android:id="@+id/button10"
-            android:layout_below="@+id/button8"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
-            android:drawableLeft="@mipmap/statistics"
-            android:textColor="#FFFFFFFF"
-            android:background="#ff9b59b6"
-            android:padding="6dp" />
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".2"></RelativeLayout>
 
-        <Button
-            android:layout_width="190dp"
-            android:layout_height="60dp"
-            android:text="Create Battery"
-            android:id="@+id/button11"
-            android:layout_below="@+id/button10"
-            android:layout_alignStart="@+id/button10"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
-            android:drawableLeft="@mipmap/battery_create"
-            android:textColor="#fffcffff"
-            android:padding="5dp"
-            android:background="#ff34495e" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight=".80">
 
-        <Button
-            android:layout_width="190dp"
-            android:layout_height="60dp"
-            android:text="Archive Battery"
-            android:id="@+id/button12"
-            android:layout_below="@+id/button11"
-            android:layout_alignStart="@+id/button11"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="0dp"
-            android:drawableLeft="@mipmap/battery_remove"
-            android:textColor="#ffffffff"
-            android:background="#ff27ae60"
-            android:padding="3dp" />
-    </LinearLayout>
-</RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight=".10"></RelativeLayout>
+
+            <Button
+                android:id="@+id/button8"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/button9"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:background="#ff1b9c7b"
+                android:drawableStart="@mipmap/create_entry"
+                android:onClick="CreateEntry.class"
+                android:text="Create Entry"
+                android:textColor="#FFFFFFFF" />
+
+            <Button
+                android:id="@+id/button9"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="false"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:background="#ffe74c3c"
+                android:drawableStart="@mipmap/remove_entry"
+                android:text="Remove Entry"
+                android:textColor="#FFFFFFFF" />
+
+            <Button
+                android:id="@+id/button10"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/button8"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:background="#ff9b59b6"
+                android:drawableStart="@mipmap/statistics"
+                android:text="View Statistics"
+                android:textColor="#FFFFFFFF" />
+
+            <Button
+                android:id="@+id/button11"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/button10"
+                android:layout_below="@+id/button10"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:background="#ff34495e"
+                android:drawableStart="@mipmap/battery_create"
+                android:text="Create Battery"
+                android:textColor="#fffcffff" />
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="#f39c12"
+                android:drawableStart="@mipmap/ic_edit"
+                android:text="Edit Battery"
+                android:textColor="#fffcffff"
+                android:layout_above="@+id/button12"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:id="@+id/button12"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/button11"
+                android:layout_below="@+id/button11"
+                android:layout_gravity="center_horizontal"
+                android:background="#ff27ae60"
+                android:drawableStart="@mipmap/battery_remove"
+                android:text="Archive Battery"
+                android:textColor="#ffffffff" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight=".20"></RelativeLayout>
+
+</LinearLayout>

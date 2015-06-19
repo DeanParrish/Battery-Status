@@ -32,10 +32,12 @@ public class MainActivity extends Activity {
         addListenerOnButton3();
         addListenerOnButton4();
         addListenerOnButton5();
+        addListenerOnButton6();
 
         // hides shadow from action bar
         ActionBar actionBar = getActionBar();
         actionBar.setElevation(0);
+        actionBar.hide();
     }
 
     @Override
@@ -66,6 +68,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View arg0) {
                 Intent intent = new Intent(context, CreateBattery.class);
+                intent.putExtra("create_battery", 1 );  // sets flag for create battery
                 startActivity(intent);
             }
         });
@@ -113,6 +116,19 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View arg0) {
                 Intent intent = new Intent(context, ViewStatistics.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void addListenerOnButton6() {
+        final Context context = this;
+        btn_battery_create = (Button) findViewById(R.id.button1);
+        btn_battery_create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                Intent intent = new Intent(context, CreateBattery.class);
+                intent.putExtra("create_battery", 0 );  // sets flag for create battery
                 startActivity(intent);
             }
         });

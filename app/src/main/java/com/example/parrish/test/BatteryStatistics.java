@@ -2,23 +2,19 @@ package com.example.parrish.test;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.SearchView;
 
 
-public class ViewStatistics extends Activity {
+public class BatteryStatistics extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_statistics);
+        setContentView(R.layout.activity_battery_statistics);
 
-        // hides shadow from action bar
+        //       hides shadow from action bar
         ActionBar actionBar = getActionBar();
         actionBar.setElevation(0);
         // Enabling Up / Back navigation
@@ -30,16 +26,8 @@ public class ViewStatistics extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_view_statistics, menu);
-
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
-                .getActionView();
-        searchView.setSearchableInfo(searchManager
-                .getSearchableInfo(getComponentName()));
-
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_battery_statistics, menu);
+        return true;
     }
 
     @Override
@@ -50,10 +38,8 @@ public class ViewStatistics extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_details) {
-            final Context context = this;
-            Intent intent = new Intent(context, BatteryStatistics.class);
-            startActivity(intent);
+        if (id == R.id.action_settings) {
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

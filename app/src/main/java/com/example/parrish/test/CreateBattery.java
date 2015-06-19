@@ -3,6 +3,7 @@ package com.example.parrish.test;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,8 +11,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import Classes.Battery;
 import Classes.SaveData;
@@ -32,6 +37,18 @@ public class CreateBattery extends Activity {
         //hide label in action bar
         actionBar.setDisplayShowTitleEnabled(false);
 
+        Integer variable = getIntent().getExtras().getInt("create_battery");
+
+        if( variable == 0 )
+        {
+            TextView textViewToChange = (TextView) findViewById(R.id.title);
+            textViewToChange.setText("EDIT BATTERY");
+            textViewToChange.setBackgroundColor(Color.parseColor("#f39c12"));
+
+            EditText textInputToChange =  (EditText) findViewById(R.id.txtBatteryName);
+            textInputToChange.setEnabled(false);
+        }
+
         Spinner ddlBatteryType = (Spinner) findViewById(R.id.ddlType);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.battery_type, android.R.layout.simple_spinner_dropdown_item);
@@ -47,8 +64,6 @@ public class CreateBattery extends Activity {
 
         return super.onCreateOptionsMenu(menu);
 
-//        getMenuInflater().inflate(R.menu.menu_create_battery, menu);
-//        return true;
     }
 
     @Override
@@ -81,7 +96,7 @@ public class CreateBattery extends Activity {
             int batteryCells = Integer.parseInt(txtCells.getText().toString());
             int batteryMah = Integer.parseInt((txtMah.getText().toString()));
             int batteryCycle = Integer.parseInt(txtCycle.getText().toString());
-        } catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             Log.e("Add Battery", e.toString());
         }
 
