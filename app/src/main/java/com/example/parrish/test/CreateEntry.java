@@ -2,20 +2,29 @@ package com.example.parrish.test;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import Classes.Battery;
+import Classes.Entry;
 import Classes.SaveData;
 
 
@@ -26,6 +35,7 @@ public class CreateEntry extends Activity {
     SeekBar seekBar_end;
     TextView textView_end;
     SaveData save;
+    long timeSave;
 
 
     @Override
@@ -33,7 +43,6 @@ public class CreateEntry extends Activity {
         List<Battery> batteries;
         Battery battery;
         String[] batteryNames;
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_entry);
@@ -135,6 +144,7 @@ public class CreateEntry extends Activity {
         switch (id) {
             case R.id.action_save:
                 // save action action
+                onSubmitClick(item);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -144,16 +154,80 @@ public class CreateEntry extends Activity {
 
     // A private method to help us initialize our variables.
     private void initializeVariables() {
-        seekBar_start = (SeekBar) findViewById(R.id.seekBar);
+        seekBar_start = (SeekBar) findViewById(R.id.seekBar2);
         textView_start = (TextView) findViewById(R.id.txtStart);
-        seekBar_end = (SeekBar) findViewById(R.id.seekBar2);
+        seekBar_end = (SeekBar) findViewById(R.id.seekBar);
         textView_end = (TextView) findViewById(R.id.txtEnd);
     }
 
-    private void onSubmitClick(View view) {
-        SaveData save = new SaveData(view.getContext());
+    public void onClickChronometer(View view){
+        Chronometer chronoTime = (Chronometer) findViewById(R.id.chronoTime);
+        switch (view.getId()){
+            case R.id.btnStart:
+                chronoTime.setBase(SystemClock.elapsedRealtime());
+                chronoTime.start();
+                break;
+            case R.id.btnStop:
+                chronoTime.stop();
+                break;
+            case R.id.btnPause:
+                timeSave = chronoPause(chronoTime, timeSave);
+                break;
+            case R.id.btnReset:
+                chronoTime.stop();
+                chronoTime.start();
+                break;
+            default:
+        }
+    }
 
+    public long chronoPause(Chronometer chrono, long timeSave){
+        if (timeSave == 0) {
+            timeSave = chrono.getBase() - SystemClock.elapsedRealtime();
+            chrono.stop();
+        } else {
+            chrono.setBase(SystemClock.elapsedRealtime() + timeSave);
+            chrono.start();
+            timeSave = 0;
+        }
+        return timeSave;
+    }
 
+    public void onSubmitClick(MenuItem item) {
+        EditText txtStart = (EditText) findViewById(R.id.txtStart);
+        EditText txtEnd = (EditText) findViewById(R.id.txtStart);
+        Spinner ddlName = (Spinner) findViewById(R.id.ddlName);
+        Chronometer chronoTime = (Chronometer) findViewById(R.id.chronoTime);
+        String name;
+        int start;
+        int end;
+        long time;
+        Context context = getApplicationContext();
+        SaveData save = new SaveData(context);
+        CharSequence toastText = "Entry created!";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, toastText, duration);
+
+        try {
+            name = ddlName.getSelectedItem().toString();
+            start = Integer.parseInt(txtStart.getText().toString().substring(0, txtStart.length() - 1));
+            end = Integer.parseInt(txtEnd.getText().toString().substring(0, txtEnd.length() - 1));
+            time = (chronoTime.getBase() - SystemClock.elapsedRealtime()) * -1;
+
+            try {
+                save.addEntry(name, time, start, end);
+                toast.show();
+            } catch (SQLiteException e){
+                Log.e("Add Entry", e.toString());
+            }
+        } catch (IllegalStateException e){
+            Log.e("Add Entry", e.toString());
+        }
+
+        //testing entries
+        List<Entry> entries = new LinkedList<Entry>();
+        entries = save.getAllEntries();
+        Log.d("entries", "1");
     }
 
 }

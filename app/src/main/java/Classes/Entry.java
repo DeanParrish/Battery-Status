@@ -5,13 +5,13 @@ package Classes;
  */
 public class Entry {
     private String batteryName;
-    private int runTime;
+    private long runTime;
     private int startCharge;
     private int endCharge;
 
     public Entry(){}
 
-    public Entry(String name, int time, int start, int end){
+    public Entry(String name,long time, int start, int end){
         super();
         this.batteryName = name;
         this.runTime = time;
@@ -24,7 +24,7 @@ public class Entry {
         this.batteryName = name;
     }
 
-    public void setRunTime(int time){
+    public void setRunTime(long time){
         this.runTime = time;
     }
 

@@ -6,7 +6,8 @@
         android:icon="@mipmap/ic_save"
         android:orderInCategory="0"
         android:showAsAction="ifRoom"
-        android:title="@string/activity_save" />
+        android:title="@string/activity_save"
+        android:onClick="onSubmitClick"/>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
