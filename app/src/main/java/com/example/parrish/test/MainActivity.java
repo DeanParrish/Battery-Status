@@ -1,5 +1,6 @@
 package com.example.parrish.test;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -32,11 +33,9 @@ public class MainActivity extends Activity {
         addListenerOnButton4();
         addListenerOnButton5();
 
-/*        Spinner ddlBatteryType = (Spinner) findViewById(R.id.ddlType);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.battery_type, android.R.layout.simple_spinner_dropdown_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ddlBatteryType.setAdapter(adapter);*/
+        // hides shadow from action bar
+        ActionBar actionBar = getActionBar();
+        actionBar.setElevation(0);
     }
 
     @Override

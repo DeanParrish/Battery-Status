@@ -4,9 +4,9 @@
     <item
         android:id="@+id/action_filter"
         android:icon="@mipmap/ic_filter"
-        android:orderInCategory="1"
+        android:orderInCategory="0"
         android:showAsAction="ifRoom"
-        android:title="@string/activity_save" />
+        android:title="@string/activity_filter" />
     <item
         android:id="@+id/action_search"
         android:icon="@mipmap/ic_search"

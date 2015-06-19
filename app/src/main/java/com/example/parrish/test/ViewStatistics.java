@@ -1,5 +1,6 @@
 package com.example.parrish.test;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +13,14 @@ public class ViewStatistics extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_statistics);
+
+        // hides shadow from action bar
+        ActionBar actionBar = getActionBar();
+        actionBar.setElevation(0);
+        // Enabling Up / Back navigation
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        //hide label in action bar
+        actionBar.setDisplayShowTitleEnabled(false);
     }
 
     @Override

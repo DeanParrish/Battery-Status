@@ -1,5 +1,6 @@
 package com.example.parrish.test;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -38,6 +39,14 @@ public class CreateEntry extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_entry);
         initializeVariables();
+
+        // hides shadow from action bar
+        ActionBar actionBar = getActionBar();
+        actionBar.setElevation(0);
+        // Enabling Up / Back navigation
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        //hide label in action bar
+        actionBar.setDisplayShowTitleEnabled(false);
 
         // Initialize the textview with '0'.
         textView_start.setText(seekBar_start.getProgress() + "%");
@@ -98,7 +107,7 @@ public class CreateEntry extends Activity {
 
         Spinner ddlBatteryName = (Spinner) findViewById(R.id.ddlName);
 
-       // ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, batteryNam, android.R.layout.simple_spinner_dropdown_item);
+        // ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, batteryNam, android.R.layout.simple_spinner_dropdown_item);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateEntry.this, android.R.layout.simple_spinner_dropdown_item, batteryNam);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ddlBatteryName.setAdapter(adapter);
@@ -122,11 +131,13 @@ public class CreateEntry extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_save:
+                // save action action
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
 

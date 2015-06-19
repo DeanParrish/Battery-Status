@@ -1,5 +1,6 @@
 package com.example.parrish.test;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
@@ -22,6 +23,14 @@ public class CreateBattery extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_battery);
+
+//       hides shadow from action bar
+        ActionBar actionBar = getActionBar();
+        actionBar.setElevation(0);
+        // Enabling Up / Back navigation
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        //hide label in action bar
+        actionBar.setDisplayShowTitleEnabled(false);
 
         Spinner ddlBatteryType = (Spinner) findViewById(R.id.ddlType);
 
