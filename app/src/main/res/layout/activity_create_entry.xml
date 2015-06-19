@@ -19,7 +19,7 @@
         android:background="#ff1b9c7b"
         android:layout_alignParentStart="true"
         android:paddingTop="5dp"
-        android:paddingBottom="5dp" />
+        android:paddingBottom="5dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:id="@+id/seekBar2"
-            android:layout_above="@+id/txtStart"
+            android:layout_above="@+id/txtEnd"
             android:layout_centerHorizontal="true" />
 
         <SeekBar
@@ -65,7 +65,8 @@
             android:id="@+id/btnStop"
             android:background="@null"
             android:layout_alignTop="@+id/btnPause"
-            android:layout_alignStart="@+id/seekBar2" />
+            android:layout_alignStart="@+id/seekBar2"
+            android:onClick="onClickChronometer" />
 
         <Button
             android:layout_width="50dp"
@@ -75,7 +76,8 @@
             android:background="@null"
             android:layout_below="@+id/chronoTime"
             android:layout_toStartOf="@+id/ddlName"
-            android:layout_marginEnd="42dp" />
+            android:layout_marginEnd="42dp"
+            android:onClick="onClickChronometer" />
 
         <Button
             android:layout_width="50dp"
@@ -85,7 +87,8 @@
             android:layout_gravity="left|center_vertical"
             android:background="@null"
             android:layout_alignTop="@+id/btnReset"
-            android:layout_alignEnd="@+id/txtStart" />
+            android:layout_alignEnd="@+id/txtStart"
+            android:onClick="onClickChronometer"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -105,7 +108,8 @@
             android:layout_gravity="left|center_vertical"
             android:background="@null"
             android:layout_below="@+id/chronoTime"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:onClick="onClickChronometer" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -131,7 +135,7 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
-            android:id="@+id/txtStart"
+            android:id="@+id/txtEnd"
             android:layout_alignBottom="@+id/textView3"
             android:layout_alignStart="@+id/ddlName" />
 
@@ -140,7 +144,7 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
-            android:id="@+id/txtEnd"
+            android:id="@+id/txtStart"
             android:layout_alignBottom="@+id/textView2"
             android:layout_toEndOf="@+id/btnPause" />
 

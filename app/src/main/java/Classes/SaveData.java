@@ -27,6 +27,7 @@ public class SaveData {
     private static String chanrgeTime = "time";
     private static String chargeStart = "start";
     private static String chargeEnd = "end";
+    private FeedReaderDbHelper dbconnn;
 
     public SaveData() {
 
@@ -34,6 +35,7 @@ public class SaveData {
 
     public SaveData(Context con) {
         context = con;
+        dbconnn = new FeedReaderDbHelper(con);
     }
 
     public void addBattery(String name, int cells, int mah, int cycles, String type) {
@@ -111,7 +113,7 @@ public class SaveData {
         return batteries;
     }
 
-    public void addEntry(String name, int time, int start, int end) {
+    public void addEntry(String name, long time, int start, int end) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         ContentValues values = new ContentValues();
 
@@ -132,11 +134,11 @@ public class SaveData {
 
     public List<Entry> getAllEntries(){
         List<Entry> entries = new LinkedList<Entry>();
-        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        //FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
 
         String query = "SELECT * FROM " + entryTableName;
 
-        db = dbcon.getReadableDatabase();
+        db = dbconnn.getReadableDatabase();
 
         Cursor cursor = db.rawQuery(query, null);
 
@@ -144,10 +146,10 @@ public class SaveData {
         if (cursor.moveToFirst()){
             do {
                 entry = new Entry();
-                entry.setBatteryName(cursor.getString(1));
-                entry.setRunTime(Integer.parseInt(cursor.getString(2)));
-                entry.setStartCharge(Integer.parseInt(cursor.getString(3)));
-                entry.setEndCharge(Integer.parseInt(cursor.getString(4)));
+                entry.setBatteryName(cursor.getString(0));
+                entry.setRunTime(Long.parseLong(cursor.getString(1)));
+                entry.setStartCharge(Integer.parseInt(cursor.getString(2)));
+                entry.setEndCharge(Integer.parseInt(cursor.getString(3)));
 
                 entries.add(entry);
             } while (cursor.moveToNext());

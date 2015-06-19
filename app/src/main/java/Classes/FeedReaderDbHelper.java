@@ -29,12 +29,12 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                 "CREATE TABLE entries ( " +
                         "id INT PRIMARY KEY AUTOINCREMENT, " +
                         "name TEXT, " +
-                        "time INT, " +
+                        "time LONG, " + //changed from INT
                         "start INT, " +
                         "end INT )";
 
 
-        db.execSQL(SQL_CREATE_BATTERY);
+        //db.execSQL(SQL_CREATE_BATTERY);
         db.execSQL(SQL_CREATE_ENTRY);
     }
 
