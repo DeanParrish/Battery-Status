@@ -1,152 +1,196 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.parrish.test.CreateEntry">
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="CREATE ENTRY"
-        android:id="@+id/title"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:gravity="center_horizontal"
-        android:textColor="#ffffff"
-        android:background="#ff1b9c7b"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="#ff1b9c7b"
+        android:gravity="center_horizontal"
+        android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:paddingBottom="5dp"/>
+        android:text="CREATE ENTRY"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ffffff" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/title">
+        android:layout_below="@+id/title"
+        android:padding="15dp">
 
-        <SeekBar
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/seekBar2"
-            android:layout_above="@+id/txtEnd"
-            android:layout_centerHorizontal="true" />
-
-        <SeekBar
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/seekBar"
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/seekBar2"
-            android:layout_marginBottom="48dp" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ddlName"
-            android:spinnerMode="dropdown"
-            android:layout_alignTop="@+id/textView"
-            android:layout_toEndOf="@+id/textView" />
-
-        <Chronometer
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/chronoTime"
-            android:layout_below="@+id/ddlName"
-            android:layout_alignParentStart="true"
-            android:gravity="center_horizontal"
-            android:textSize="35dp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/ic_stop"
-            android:id="@+id/btnStop"
-            android:background="@null"
-            android:layout_alignTop="@+id/btnPause"
-            android:layout_alignStart="@+id/seekBar2"
-            android:onClick="onClickChronometer" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight=".1"
+                android:orientation="horizontal">
 
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/ic_pause"
-            android:id="@+id/btnPause"
-            android:background="@null"
-            android:layout_below="@+id/chronoTime"
-            android:layout_toStartOf="@+id/ddlName"
-            android:layout_marginEnd="42dp"
-            android:onClick="onClickChronometer" />
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/title"
+                    android:layout_gravity="center_vertical"
+                    android:text="Select your Battery:"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/ic_start"
-            android:id="@+id/btnStart"
-            android:layout_gravity="left|center_vertical"
-            android:background="@null"
-            android:layout_alignTop="@+id/btnReset"
-            android:layout_alignEnd="@+id/txtStart"
-            android:onClick="onClickChronometer"/>
+                <Spinner
+                    android:id="@+id/ddlName"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_alignTop="@+id/textView"
+                    android:layout_gravity="center_vertical"
+                    android:layout_toEndOf="@+id/textView"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Select your Battery:"
-            android:id="@+id/textView"
-            android:layout_gravity="center_horizontal|top"
-            android:layout_below="@+id/title"
-            android:layout_alignParentStart="true" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".25"
+                android:orientation="vertical">
 
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/ic_reset"
-            android:id="@+id/btnReset"
-            android:layout_gravity="left|center_vertical"
-            android:background="@null"
-            android:layout_below="@+id/chronoTime"
-            android:layout_centerHorizontal="true"
-            android:onClick="onClickChronometer" />
+                <Chronometer
+                    android:id="@+id/chronoTime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/ddlName"
+                    android:gravity="center_horizontal"
+                    android:autoText="false" />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Starting Charge:"
-            android:id="@+id/textView2"
-            android:layout_centerVertical="true"
-            android:layout_alignStart="@+id/textView3" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".15"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:weightSum="1">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Ending Charge:"
-            android:id="@+id/textView3"
-            android:layout_marginBottom="39dp"
-            android:layout_above="@+id/seekBar"
-            android:layout_toStartOf="@+id/btnReset" />
+                <ImageButton
+                    android:id="@+id/btnPause"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".25"
+                    android:background="@null"
+                    android:src="@mipmap/ic_pause" />
 
-        <EditText
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/txtEnd"
-            android:layout_alignBottom="@+id/textView3"
-            android:layout_alignStart="@+id/ddlName" />
+                <ImageButton
+                    android:id="@+id/btnStop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".25"
+                    android:background="@null"
+                    android:src="@mipmap/ic_stop" />
 
-        <EditText
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/txtStart"
-            android:layout_alignBottom="@+id/textView2"
-            android:layout_toEndOf="@+id/btnPause" />
+                <ImageButton
+                    android:id="@+id/btnReset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".25"
+                    android:background="@null"
+                    android:src="@mipmap/ic_reset" />
+
+                <ImageButton
+                    android:id="@+id/btnStart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".25"
+                    android:background="@null"
+                    android:src="@mipmap/ic_start" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight=".15"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/textView3"
+                    android:layout_centerVertical="true"
+                    android:text="Starting Charge:"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <EditText
+                    android:id="@+id/txtStart"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/textView2"
+                    android:layout_toEndOf="@+id/btnPause"
+                    android:ems="10"
+                    android:inputType="number" />
+
+            </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/seekBar2"
+                android:layout_gravity="center_horizontal" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight=".15"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/seekBar"
+                    android:layout_toStartOf="@+id/btnReset"
+                    android:text="Ending Charge:"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <EditText
+                    android:id="@+id/txtEnd"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/textView3"
+                    android:layout_alignStart="@+id/ddlName"
+                    android:ems="10"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/seekBar2"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/txtEnd"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 

@@ -39,13 +39,12 @@ public class CreateBattery extends Activity {
 
         Integer variable = getIntent().getExtras().getInt("create_battery");
 
-        if( variable == 0 )
-        {
+        if (variable == 0) {
             TextView textViewToChange = (TextView) findViewById(R.id.title);
             textViewToChange.setText("EDIT BATTERY");
             textViewToChange.setBackgroundColor(Color.parseColor("#f39c12"));
 
-            EditText textInputToChange =  (EditText) findViewById(R.id.txtBatteryName);
+            EditText textInputToChange = (EditText) findViewById(R.id.txtBatteryName);
             textInputToChange.setEnabled(false);
         }
 
@@ -108,16 +107,10 @@ public class CreateBattery extends Activity {
             batteryCycle = Integer.parseInt(txtCycle.getText().toString());
             //add the battery to the database
             try {
-                save.addBattery(batteryName,batteryCells, batteryMah, batteryCycle,  type);
-            } catch (SQLiteException e){
+                save.addBattery(batteryName, batteryCells, batteryMah, batteryCycle, type);
+            } catch (SQLiteException e) {
                 Log.e("Add Battery", e.toString());
             }
-        } catch (IllegalStateException e){
-            String type = spinnerType.getSelectedItem().toString();
-            String batteryName = txtBattName.getText().toString();
-            int batteryCells = Integer.parseInt(txtCells.getText().toString());
-            int batteryMah = Integer.parseInt((txtMah.getText().toString()));
-            int batteryCycle = Integer.parseInt(txtCycle.getText().toString());
         } catch (IllegalStateException e) {
             Log.e("Add Battery", e.toString());
         }
