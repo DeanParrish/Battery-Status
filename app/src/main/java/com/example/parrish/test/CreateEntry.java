@@ -32,8 +32,7 @@ public class CreateEntry extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         List<Battery> batteries;
         Battery battery;
-        //ArrayList<String> batteryNames = new ArrayList<String>();
-        String[] batteryNam;
+        String[] batteryNames;
 
 
         super.onCreate(savedInstanceState);
@@ -96,22 +95,24 @@ public class CreateEntry extends Activity {
 
         //start population of drop down list
         save = new SaveData(getApplicationContext());
+        //gets all batteries in a List<Battery>
         batteries = save.getAllBatteries();
-        batteryNam = new String[batteries.size()];
+        //new string for battery names
+        batteryNames = new String[batteries.size()];
 
+        //loops through the List<Battery>
         for (int i = 0; i < batteries.size(); i++) {
+            //gets the battery into the object battery
             battery = batteries.get(i);
-            //batteryNames.add(battery.getName());
-            batteryNam[i] = battery.getName().toString();
+            //appends the battery name to the batteryName array
+            batteryNames[i] = battery.getName().toString();
         }
 
         Spinner ddlBatteryName = (Spinner) findViewById(R.id.ddlName);
 
-        // ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, batteryNam, android.R.layout.simple_spinner_dropdown_item);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateEntry.this, android.R.layout.simple_spinner_dropdown_item, batteryNam);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateEntry.this, android.R.layout.simple_spinner_dropdown_item, batteryNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ddlBatteryName.setAdapter(adapter);
-        //etAdapter(adapter);
 
         //end population
     }

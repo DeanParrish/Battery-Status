@@ -78,11 +78,21 @@ public class CreateBattery extends Activity {
             return true;
         }
 
+        switch (id) {
+            case R.id.action_save:
+                onSubmitClick(item);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
-    public void onSubmitClick(View view) {
-        SaveData save = new SaveData(view.getContext());
+    public void onSubmitClick(MenuItem item) {
+        SaveData save = new SaveData(getApplicationContext());
+        String type;
+        String batteryName;
+        int batteryCells;
+        int batteryMah;
+        int batteryCycle;
         //Screen fields and conversions
         Spinner spinnerType = (Spinner) findViewById(R.id.ddlType);
         EditText txtBattName = (EditText) findViewById(R.id.txtBatteryName);
@@ -91,6 +101,18 @@ public class CreateBattery extends Activity {
         EditText txtCycle = (EditText) findViewById(R.id.txtCycles);
 
         try {
+            type = spinnerType.getSelectedItem().toString();
+            batteryName = txtBattName.getText().toString();
+            batteryCells = Integer.parseInt(txtCells.getText().toString());
+            batteryMah = Integer.parseInt((txtMah.getText().toString()));
+            batteryCycle = Integer.parseInt(txtCycle.getText().toString());
+            //add the battery to the database
+            try {
+                save.addBattery(batteryName,batteryCells, batteryMah, batteryCycle,  type);
+            } catch (SQLiteException e){
+                Log.e("Add Battery", e.toString());
+            }
+        } catch (IllegalStateException e){
             String type = spinnerType.getSelectedItem().toString();
             String batteryName = txtBattName.getText().toString();
             int batteryCells = Integer.parseInt(txtCells.getText().toString());
@@ -99,14 +121,5 @@ public class CreateBattery extends Activity {
         } catch (IllegalStateException e) {
             Log.e("Add Battery", e.toString());
         }
-
-
-/*        //add the battery to the database
-        try {
-            save.addBattery(batteryName,batteryCells, batteryMah, batteryCycle,  type);
-        } catch (SQLiteException e){
-            Log.e("Add Battery", e.toString());
-        }*/
-
     }
 }
