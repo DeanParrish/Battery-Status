@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class FeedReaderDbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "Battery_Status";
+    public static final String DATABASE_NAME = "Battery_Statuses";
 
     public FeedReaderDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -27,14 +27,14 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_ENTRY =
                 "CREATE TABLE entries ( " +
-                        "id INT PRIMARY KEY AUTOINCREMENT, " +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "name TEXT, " +
                         "time LONG, " + //changed from INT
                         "start INT, " +
                         "end INT )";
 
 
-        //db.execSQL(SQL_CREATE_BATTERY);
+        db.execSQL(SQL_CREATE_BATTERY);
         db.execSQL(SQL_CREATE_ENTRY);
     }
 

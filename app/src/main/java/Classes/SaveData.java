@@ -146,10 +146,10 @@ public class SaveData {
         if (cursor.moveToFirst()){
             do {
                 entry = new Entry();
-                entry.setBatteryName(cursor.getString(0));
-                entry.setRunTime(Long.parseLong(cursor.getString(1)));
-                entry.setStartCharge(Integer.parseInt(cursor.getString(2)));
-                entry.setEndCharge(Integer.parseInt(cursor.getString(3)));
+                entry.setBatteryName(cursor.getString(1));
+                entry.setRunTime(Long.parseLong(cursor.getString(2)));
+                entry.setStartCharge(Integer.parseInt(cursor.getString(3)));
+                entry.setEndCharge(Integer.parseInt(cursor.getString(4)));
 
                 entries.add(entry);
             } while (cursor.moveToNext());

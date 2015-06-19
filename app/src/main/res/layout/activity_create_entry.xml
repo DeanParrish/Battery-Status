@@ -91,7 +91,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".25"
                     android:background="@null"
-                    android:src="@mipmap/ic_pause" />
+                    android:src="@mipmap/ic_pause"
+                    android:onClick="onClickChronometer" />
 
                 <ImageButton
                     android:id="@+id/btnStop"
@@ -99,7 +100,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".25"
                     android:background="@null"
-                    android:src="@mipmap/ic_stop" />
+                    android:src="@mipmap/ic_stop"
+                    android:onClick="onClickChronometer" />
 
                 <ImageButton
                     android:id="@+id/btnReset"
@@ -107,7 +109,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".25"
                     android:background="@null"
-                    android:src="@mipmap/ic_reset" />
+                    android:src="@mipmap/ic_reset"
+                    android:nestedScrollingEnabled="false"
+                    android:onClick="onClickChronometer" />
 
                 <ImageButton
                     android:id="@+id/btnStart"
@@ -115,7 +119,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".25"
                     android:background="@null"
-                    android:src="@mipmap/ic_start" />
+                    android:src="@mipmap/ic_start"
+                    android:onClick="onClickChronometer" />
 
             </LinearLayout>
 
