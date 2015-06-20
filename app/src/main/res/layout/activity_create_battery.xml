@@ -39,16 +39,7 @@
         android:layout_marginTop="35dp"
         android:layout_marginRight="25dp"
         android:inputType="none"
-        android:labelFor="@+id/txtBatteryCells" />
-
-    <EditText
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/txtBatteryCells"
-        android:layout_alignTop="@+id/lblCell"
-        android:layout_toEndOf="@id/lblCell" />
+        android:labelFor="@+id/ddlCells" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -57,8 +48,8 @@
         android:id="@+id/lblMah"
         android:inputType="none"
         android:labelFor="@+id/txtMah"
-        android:layout_below="@+id/txtBatteryCells"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/lblCell" />
 
     <EditText
         android:layout_width="60dp"
@@ -118,4 +109,11 @@
         android:layout_alignParentStart="true"
         android:paddingTop="5dp"
         android:paddingBottom="5dp" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ddlCells"
+        android:layout_alignBottom="@+id/lblCell"
+        android:layout_toEndOf="@+id/lblCell" />
 </RelativeLayout>

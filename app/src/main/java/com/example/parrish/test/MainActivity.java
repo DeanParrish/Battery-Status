@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
@@ -38,6 +40,19 @@ public class MainActivity extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setElevation(0);
         actionBar.hide();
+        try {
+            Boolean no_battery = getIntent().getExtras().getBoolean("no_batteries");
+
+            if (no_battery == true) {
+                CharSequence toastText = "Please create a battery first!";
+                int duration = Toast.LENGTH_LONG;
+                Toast toast = Toast.makeText(getApplicationContext(), toastText, duration);
+                toast.show();
+            }
+        } catch (Exception e) {
+            Log.e("Main Activity no_batter", e.toString());
+        }
+
     }
 
     @Override
@@ -68,7 +83,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View arg0) {
                 Intent intent = new Intent(context, CreateBattery.class);
-                intent.putExtra("create_battery", 1 );  // sets flag for create battery
+                intent.putExtra("create_battery", 1);  // sets flag for create battery
                 startActivity(intent);
             }
         });
@@ -76,7 +91,7 @@ public class MainActivity extends Activity {
 
     public void addListenerOnButton2() {
         final Context context = this;
-        btn_battery_archive  = (Button) findViewById(R.id.button12);
+        btn_battery_archive = (Button) findViewById(R.id.button12);
         btn_battery_archive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -88,7 +103,7 @@ public class MainActivity extends Activity {
 
     public void addListenerOnButton3() {
         final Context context = this;
-        btn_entry_create  = (Button) findViewById(R.id.button8);
+        btn_entry_create = (Button) findViewById(R.id.button8);
         btn_entry_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -97,9 +112,10 @@ public class MainActivity extends Activity {
             }
         });
     }
+
     public void addListenerOnButton4() {
         final Context context = this;
-        btn_entry_remove  = (Button) findViewById(R.id.button9);
+        btn_entry_remove = (Button) findViewById(R.id.button9);
         btn_entry_remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -128,7 +144,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View arg0) {
                 Intent intent = new Intent(context, CreateBattery.class);
-                intent.putExtra("create_battery", 0 );  // sets flag for create battery
+                intent.putExtra("create_battery", 0);  // sets flag for create battery
                 startActivity(intent);
             }
         });

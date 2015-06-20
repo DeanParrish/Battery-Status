@@ -24,6 +24,7 @@
     <string name="title_activity_archive_battery">ArchiveBattery</string>
     <string name="title_activity_view_statistics">ViewStatistics</string>
     <string name="search_hint">Search</string>
+    <string name="title_activity_battery_statistics">BatteryStatistics</string>
 
     <array name="battery_type">
         <item>LiPo</item>
@@ -31,6 +32,4 @@
         <item>NiCd</item>
         <item>LiFe</item>
     </array>
-    <string name="title_activity_battery_statistics">BatteryStatistics</string>
-
 </resources>

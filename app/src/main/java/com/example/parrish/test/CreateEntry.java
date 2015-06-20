@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -106,6 +107,12 @@ public class CreateEntry extends Activity {
         save = new SaveData(getApplicationContext());
         //gets all batteries in a List<Battery>
         batteries = save.getAllBatteries();
+
+        if (batteries.size() == 0){
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("no_batteries", true);
+            startActivity(intent);
+        }
         //new string for battery names
         batteryNames = new String[batteries.size()];
 
@@ -154,9 +161,9 @@ public class CreateEntry extends Activity {
 
     // A private method to help us initialize our variables.
     private void initializeVariables() {
-        seekBar_start = (SeekBar) findViewById(R.id.seekBar2);
+        seekBar_start = (SeekBar) findViewById(R.id.seekBar);
         textView_start = (TextView) findViewById(R.id.txtStart);
-        seekBar_end = (SeekBar) findViewById(R.id.seekBar);
+        seekBar_end = (SeekBar) findViewById(R.id.seekBar2);
         textView_end = (TextView) findViewById(R.id.txtEnd);
     }
 

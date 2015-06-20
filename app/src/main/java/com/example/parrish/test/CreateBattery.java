@@ -2,6 +2,7 @@ package com.example.parrish.test;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -49,10 +51,16 @@ public class CreateBattery extends Activity {
         }
 
         Spinner ddlBatteryType = (Spinner) findViewById(R.id.ddlType);
+        Spinner ddlBatteryCells = (Spinner) findViewById(R.id.ddlCells);
+        Integer[] cells = {1, 2, 3, 4, 5, 6, 7, 8};
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.battery_type, android.R.layout.simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ddlBatteryType.setAdapter(adapter);
+
+        ArrayAdapter<Integer> adapterCells = new ArrayAdapter<Integer>( this, android.R.layout.simple_spinner_dropdown_item, cells);
+        adapterCells.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ddlBatteryCells.setAdapter(adapterCells);
     }
 
     @Override
@@ -92,22 +100,28 @@ public class CreateBattery extends Activity {
         int batteryCells;
         int batteryMah;
         int batteryCycle;
+        CharSequence toastText = "Battery created!";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(getApplicationContext(), toastText, duration);
         //Screen fields and conversions
         Spinner spinnerType = (Spinner) findViewById(R.id.ddlType);
+        Spinner ddlCells = (Spinner) findViewById(R.id.ddlCells);
         EditText txtBattName = (EditText) findViewById(R.id.txtBatteryName);
-        EditText txtCells = (EditText) findViewById(R.id.txtBatteryCells);
         EditText txtMah = (EditText) findViewById(R.id.txtMah);
         EditText txtCycle = (EditText) findViewById(R.id.txtCycles);
 
         try {
             type = spinnerType.getSelectedItem().toString();
             batteryName = txtBattName.getText().toString();
-            batteryCells = Integer.parseInt(txtCells.getText().toString());
+            batteryCells = Integer.parseInt(ddlCells.getSelectedItem().toString());
             batteryMah = Integer.parseInt((txtMah.getText().toString()));
             batteryCycle = Integer.parseInt(txtCycle.getText().toString());
             //add the battery to the database
             try {
                 save.addBattery(batteryName, batteryCells, batteryMah, batteryCycle, type);
+                toast.show();
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
             } catch (SQLiteException e) {
                 Log.e("Add Battery", e.toString());
             }

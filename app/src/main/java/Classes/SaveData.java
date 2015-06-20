@@ -69,13 +69,13 @@ public class SaveData {
                 db.query(batteryTableName,                                           //table name
                         columns,                                              //column names
                         " name = ?",                                            //selections
-                        new String[] { String.valueOf(name)},                 //selection value
+                        new String[]{String.valueOf(name)},                 //selection value
                         null,                                                 //group by
                         null,                                                 //having
                         null,                                                 //order by
                         null);                                                //limit
 
-        if (cursor != null){
+        if (cursor != null) {
             cursor.moveToFirst();
         }
 
@@ -88,7 +88,7 @@ public class SaveData {
         return battery;
     }
 
-    public List<Battery> getAllBatteries(){
+    public List<Battery> getAllBatteries() {
         List<Battery> batteries = new LinkedList<Battery>();
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         Battery battery;
@@ -98,7 +98,7 @@ public class SaveData {
 
         Cursor cursor = db.rawQuery(query, null);
 
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             do {
                 battery = new Battery();
                 battery.setName(cursor.getString(0));
@@ -108,7 +108,7 @@ public class SaveData {
                 battery.setType(cursor.getString(4));
 
                 batteries.add(battery);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         return batteries;
     }
@@ -123,6 +123,7 @@ public class SaveData {
         values.put(chargeStart, start);
         values.put(chargeEnd, end);
 
+
         db = dbcon.getWritableDatabase();
 
         db.insert(entryTableName,    //table name
@@ -132,7 +133,7 @@ public class SaveData {
         db.close();
     }
 
-    public List<Entry> getAllEntries(){
+    public List<Entry> getAllEntries() {
         List<Entry> entries = new LinkedList<Entry>();
         //FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
 
@@ -143,7 +144,7 @@ public class SaveData {
         Cursor cursor = db.rawQuery(query, null);
 
         Entry entry;
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             do {
                 entry = new Entry();
                 entry.setBatteryName(cursor.getString(1));
