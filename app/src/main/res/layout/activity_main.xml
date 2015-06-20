@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:padding="10dp">
 
     <!--< android:id="@+id/view" />-->
 
@@ -22,96 +23,91 @@
             android:layout_centerInParent="true"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".2"></RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight=".80">
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight=".10"></RelativeLayout>
-
             <Button
                 android:id="@+id/button8"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_below="@+id/button9"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
                 android:background="#ff1b9c7b"
-                android:drawableStart="@mipmap/create_entry"
+                android:drawableStart="@mipmap/ic_entry_add"
                 android:onClick="CreateEntry.class"
                 android:text="Create Entry"
-                android:textColor="#FFFFFFFF" />
+                android:textColor="#FFFFFFFF"
+                android:layout_margin="3dp"
+                android:layout_weight=".1" />
 
             <Button
                 android:id="@+id/button9"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_alignParentTop="false"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
-                android:background="#ffe74c3c"
-                android:drawableStart="@mipmap/remove_entry"
+                android:background="#ffeb4d3d"
+                android:drawableStart="@mipmap/ic_entry_remove"
                 android:text="Remove Entry"
-                android:textColor="#FFFFFFFF" />
+                android:textColor="#FFFFFFFF"
+                android:layout_margin="3dp"
+                android:layout_weight=".1" />
 
             <Button
                 android:id="@+id/button10"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_below="@+id/button8"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
-                android:background="#ff9b59b6"
-                android:drawableStart="@mipmap/statistics"
+                android:background="#ff9754e1"
+                android:drawableStart="@mipmap/ic_details"
                 android:text="View Statistics"
-                android:textColor="#FFFFFFFF" />
+                android:textColor="#FFFFFFFF"
+                android:layout_margin="3dp"
+                android:layout_weight=".1" />
 
             <Button
                 android:id="@+id/button11"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_alignStart="@+id/button10"
                 android:layout_below="@+id/button10"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
                 android:background="#ff34495e"
-                android:drawableStart="@mipmap/battery_create"
+                android:drawableStart="@mipmap/ic_battery_create"
                 android:text="Create Battery"
-                android:textColor="#fffcffff" />
+                android:textColor="#fffcffff"
+                android:layout_margin="3dp"
+                android:layout_weight=".1" />
 
             <Button
                 android:id="@+id/button1"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_gravity="center_horizontal"
-                android:background="#f39c12"
+                android:background="#fff9a112"
                 android:drawableStart="@mipmap/ic_edit"
                 android:text="Edit Battery"
                 android:textColor="#fffcffff"
                 android:layout_above="@+id/button12"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_margin="3dp"
+                android:layout_weight=".1" />
 
             <Button
                 android:id="@+id/button12"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_alignStart="@+id/button11"
                 android:layout_below="@+id/button11"
                 android:layout_gravity="center_horizontal"
-                android:background="#ff27ae60"
-                android:drawableStart="@mipmap/battery_remove"
+                android:background="#ff7f8c8d"
+                android:drawableStart="@mipmap/ic_battery_remove"
                 android:text="Archive Battery"
-                android:textColor="#ffffffff" />
+                android:textColor="#ffffffff"
+                android:layout_margin="3dp"
+                android:layout_weight=".1" />
         </LinearLayout>
     </RelativeLayout>
 

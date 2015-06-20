@@ -38,7 +38,6 @@ public class CreateEntry extends Activity {
     SaveData save;
     long timeSave;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         List<Battery> batteries;
@@ -58,8 +57,8 @@ public class CreateEntry extends Activity {
         actionBar.setDisplayShowTitleEnabled(false);
 
         // Initialize the textview with '0'.
-        textView_start.setText(seekBar_start.getProgress() + "%");
-        textView_end.setText(seekBar_start.getProgress() + "%");
+//        textView_start.setText(seekBar_start.getProgress());
+//        textView_end.setText(seekBar_start.getProgress());
 
         //Seekbar start
         seekBar_start.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -68,17 +67,17 @@ public class CreateEntry extends Activity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
                 progress = progresValue;
-                textView_start.setText(seekBar.getProgress() + "%");
+                textView_start.setText(seekBar.getProgress() +" ");
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                textView_start.setText(seekBar.getProgress() + "%");
+                textView_start.setText(seekBar.getProgress() +" ");
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                textView_start.setText(seekBar.getProgress() + "%");
+                textView_start.setText(seekBar.getProgress() +" ");
             }
         });
 
@@ -89,17 +88,17 @@ public class CreateEntry extends Activity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
                 progress = progresValue;
-                textView_end.setText(seekBar.getProgress() + "%");
+                textView_end.setText(seekBar.getProgress() + " ");
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                textView_end.setText(seekBar.getProgress() + "%");
+                textView_end.setText(seekBar.getProgress() + " ");
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                textView_end.setText(seekBar.getProgress() + "%");
+                textView_end.setText(seekBar.getProgress() +" ");
             }
         });
 

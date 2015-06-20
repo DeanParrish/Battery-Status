@@ -7,93 +7,7 @@
     android:id="@+id/viewCreateBattery"
     tools:context="com.example.parrish.test.CreateBattery">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="@string/battery_name"
-        android:id="@+id/lblBattery"
-        android:layout_marginRight="25dp"
-        android:inputType="none"
-        android:labelFor="@+id/txtBatteryName"
-        android:layout_below="@+id/title"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="37dp" />
-
-    <EditText
-        android:layout_width="@dimen/activity_horizontal_margin"
-        android:layout_height="40dp"
-        android:id="@+id/txtBatteryName"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/lblCell"
-        android:layout_above="@+id/lblCell"
-        android:inputType="textPersonName"
-        android:layout_alignTop="@+id/lblBattery" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="@string/battery_cell"
-        android:id="@+id/lblCell"
-        android:layout_below="@+id/lblBattery"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="35dp"
-        android:layout_marginRight="25dp"
-        android:inputType="none"
-        android:labelFor="@+id/ddlCells" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="@string/battery_mah"
-        android:id="@+id/lblMah"
-        android:inputType="none"
-        android:labelFor="@+id/txtMah"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/lblCell" />
-
-    <EditText
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/txtMah"
-        android:layout_alignTop="@+id/lblMah"
-        android:layout_toEndOf="@+id/lblCell" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lblCycles"
-        android:text="@string/battery_cycles"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true" />
-
     <!--< android:id="@+id/view" />-->
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/txtCycles"
-        android:layout_alignTop="@+id/lblCycles"
-        android:layout_alignStart="@+id/txtMah" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/battery_type"
-        android:id="@+id/lblType"
-        android:layout_below="@+id/txtCycles"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="33dp" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ddlType"
-        android:layout_alignBottom="@+id/lblType"
-        android:layout_toEndOf="@+id/lblCell" />
 
     <TextView
         android:layout_width="match_parent"
@@ -110,10 +24,157 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp" />
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ddlCells"
-        android:layout_alignBottom="@+id/lblCell"
-        android:layout_toEndOf="@+id/lblCell" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".2"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/battery_name"
+                android:id="@+id/lblBattery"
+                android:inputType="none"
+                android:labelFor="@+id/txtBatteryName"
+                android:layout_below="@+id/title"
+                android:layout_alignParentStart="true"
+                android:textSize="20sp" />
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtBatteryName"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@+id/lblCell"
+                android:layout_above="@+id/lblCell"
+                android:inputType="textPersonName"
+                android:layout_alignTop="@+id/lblBattery"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".2"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/battery_cell"
+                android:id="@+id/lblCell"
+                android:layout_below="@+id/lblBattery"
+                android:layout_alignParentStart="true"
+                android:inputType="none"
+                android:labelFor="@+id/ddlCells"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ddlCells"
+                android:layout_alignBottom="@+id/lblCell"
+                android:layout_toEndOf="@+id/lblCell"
+                android:scrollbarSize="20sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".2"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/battery_mah"
+                android:id="@+id/lblMah"
+                android:inputType="none"
+                android:labelFor="@+id/txtMah"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/lblCell"
+                android:textSize="20sp"
+                android:gravity="center_vertical" />
+
+            <EditText
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/txtMah"
+                android:layout_alignTop="@+id/lblMah"
+                android:layout_toEndOf="@+id/lblCell"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".2"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblCycles"
+                android:text="@string/battery_cycles"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:textSize="20sp" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/txtCycles"
+                android:layout_alignTop="@+id/lblCycles"
+                android:layout_alignStart="@+id/txtMah"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".2"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/battery_type"
+                android:id="@+id/lblType"
+                android:layout_below="@+id/txtCycles"
+                android:layout_alignParentStart="true"
+                android:textSize="20sp"
+                android:gravity="center_vertical" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ddlType"
+                android:layout_alignBottom="@+id/lblType"
+                android:layout_toEndOf="@+id/lblCell"
+                android:scrollbarSize="20sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
 </RelativeLayout>
