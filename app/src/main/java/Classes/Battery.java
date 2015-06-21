@@ -1,9 +1,11 @@
 package Classes;
 
+import java.io.Serializable;
+
 /**
  * Created by Parrish on 6/17/2015.
  */
-public class Battery {
+public class Battery implements Serializable {
     private String name;
     private int cells;
     private int mah;
@@ -52,4 +54,17 @@ public class Battery {
     public String getName(){
         return this.name.toString();
     }
+    public String getCells(){
+        return Integer.toString(this.cells);
+    }
+    public String getMah(){
+        return Integer.toString(this.mah);
+    }
+    public String getCycles(){
+        return Integer.toString(this.cycles);
+    }
+    public String getType(){
+        return this.type.toString();
+    }
+
 }

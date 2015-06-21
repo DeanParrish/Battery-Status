@@ -7,6 +7,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,9 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -29,6 +33,8 @@ import Classes.SaveData;
 public class ViewStatistics extends Activity {
 
     SaveData save;
+    String batteryName;
+    Battery pBattery = new Battery();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +75,7 @@ public class ViewStatistics extends Activity {
             batteryNames[i] = battery.getName().toString();
         }
 
+        Arrays.sort(batteryNames);
         ListView batteryList = (ListView) findViewById(R.id.listView);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewStatistics.this, android.R.layout.simple_list_item_single_choice, batteryNames);
@@ -76,23 +83,17 @@ public class ViewStatistics extends Activity {
         batteryList.setAdapter(adapter);
         batteryList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-//        // listening to single list item on click
-//        batteryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            final Context context = this;
-//
-//            public void onItemClick(AdapterView<?> parent, View view,
-//                                    int position, long id) {
-//
-//                // selected item
-//                String product = ((TextView) view).getText().toString();
-//
-//                // Launching new Activity on selecting single List Item
-//                Intent intent = new Intent(context, CreateBattery.class);
-//                intent.putExtra("Battery Name", "Test2");  // sets flag for create battery
-//                startActivity(intent);
-//            }
-//            //endregion
-//        });
+        // listening to single list item on click
+        batteryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+
+                // populating class with selected item
+                String name = ((TextView) view).getText().toString();
+                batteryName = name;
+                pBattery.setName(name);
+            }
+        });
     }
 
     @Override
@@ -115,15 +116,17 @@ public class ViewStatistics extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+//        String lv_batteryName = batteryName;
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_details) {
             final Context context = this;
             Intent intent = new Intent(context, BatteryStatistics.class);
+            intent.putExtra("battery",batteryName);
+//            intent.putExtra("classBattery", pBattery);
             startActivity(intent);
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

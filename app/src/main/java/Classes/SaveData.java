@@ -158,6 +158,33 @@ public class SaveData {
 
         return entries;
     }
+    public List<Entry> getAllEntriesForBattery(String name) {
+        List<Entry> entries = new LinkedList<Entry>();
+        //FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+
+        String query = "SELECT * FROM " + entryTableName + " WHERE name = ?";
+        String[] whereArgs = new String[] {
+                name,
+        };
+        db = dbconnn.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, whereArgs);
+
+        Entry entry;
+        if (cursor.moveToFirst()) {
+            do {
+                entry = new Entry();
+                entry.setBatteryName(cursor.getString(1));
+                entry.setRunTime(Long.parseLong(cursor.getString(2)));
+                entry.setStartCharge(Integer.parseInt(cursor.getString(3)));
+                entry.setEndCharge(Integer.parseInt(cursor.getString(4)));
+
+                entries.add(entry);
+            } while (cursor.moveToNext());
+        }
+
+        return entries;
+    }
 }
 
 

@@ -200,8 +200,8 @@ public class CreateEntry extends Activity {
     }
 
     public void onSubmitClick(MenuItem item) {
-        EditText txtStart = (EditText) findViewById(R.id.txtStart);
-        EditText txtEnd = (EditText) findViewById(R.id.txtStart);
+        TextView txtStart = (TextView) findViewById(R.id.txtStart);
+        TextView txtEnd = (TextView) findViewById(R.id.txtEnd);
         Spinner ddlName = (Spinner) findViewById(R.id.ddlName);
         Chronometer chronoTime = (Chronometer) findViewById(R.id.chronoTime);
         String name;
@@ -223,6 +223,8 @@ public class CreateEntry extends Activity {
             try {
                 save.addEntry(name, time, start, end);
                 toast.show();
+                Intent intent = new Intent(context, MainActivity.class);
+                startActivity(intent);
             } catch (SQLiteException e){
                 Log.e("Add Entry", e.toString());
             }

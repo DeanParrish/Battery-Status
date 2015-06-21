@@ -15,7 +15,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:background="#ff7f8c8d"
+        android:background="#ff9b59b6"
         android:gravity="center_horizontal"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
@@ -65,28 +65,24 @@
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_weight=".2"
+                            android:layout_weight="1"
                             android:gravity="center_vertical" >
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/battery_name"
-                                android:id="@+id/lblCell"
-                                android:inputType="none"
-                                android:labelFor="@+id/editText"
-                                android:layout_alignParentStart="true"
+                                android:id="@+id/lblBattery"
                                 android:textSize="20sp" />
 
-                            <EditText
-                                android:layout_width="fill_parent"
+                            <TextView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/editText"
-                                android:layout_alignParentEnd="true"
-                                android:layout_toEndOf="@+id/lblCell"
-                                android:layout_above="@+id/lblCell"
-                                android:inputType="textPersonName"
-                                android:layout_alignTop="@+id/lblCell"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:text="Large Text"
+                                android:id="@+id/lblBatteyValue"
+                                android:paddingLeft="5dp"
                                 android:textSize="20sp" />
                         </LinearLayout>
 
@@ -94,55 +90,49 @@
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_weight=".2"
+                            android:layout_weight="1"
                             android:gravity="center_vertical" >
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/battery_cell"
                                 android:id="@+id/lblCell"
-                                android:layout_alignParentStart="true"
-                                android:inputType="none"
-                                android:labelFor="@+id/ddlCells"
                                 android:textSize="20sp" />
 
-                            <Spinner
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/ddlCells"
-                                android:layout_weight="1"
-                                android:spinnerMode="dropdown" />
-
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:text="Large Text"
+                                android:id="@+id/lblCellValue"
+                                android:paddingLeft="5dp"
+                                android:textSize="20sp" />
                         </LinearLayout>
 
                         <LinearLayout
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_weight=".2"
+                            android:layout_weight="1"
                             android:gravity="center_vertical" >
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/battery_mah"
-                                android:id="@+id/lblCell"
-                                android:inputType="none"
-                                android:labelFor="@+id/editText"
-                                android:layout_alignParentStart="true"
-                                android:layout_below="@+id/lblCell"
-                                android:textSize="20sp"
-                                android:gravity="center_vertical" />
+                                android:id="@+id/lblMah"
+                                android:textSize="20sp" />
 
-                            <EditText
-                                android:layout_width="60dp"
+                            <TextView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:inputType="number"
-                                android:ems="10"
-                                android:id="@+id/editText"
-                                android:layout_alignTop="@+id/lblCell"
-                                android:layout_toEndOf="@+id/lblCell"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:text="Large Text"
+                                android:id="@+id/lblMahValue"
+                                android:paddingLeft="5dp"
                                 android:textSize="20sp" />
                         </LinearLayout>
 
@@ -150,26 +140,24 @@
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_weight=".2"
+                            android:layout_weight="1"
                             android:gravity="center_vertical" >
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/lblCell"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/battery_cycles"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentStart="true"
+                                android:id="@+id/lblCycles"
                                 android:textSize="20sp" />
 
-                            <EditText
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:inputType="number"
-                                android:ems="10"
-                                android:id="@+id/editText"
-                                android:layout_alignTop="@+id/lblCell"
-                                android:layout_alignStart="@+id/txtMah"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:text="Large Text"
+                                android:id="@+id/lblCyclesValue"
+                                android:paddingLeft="5dp"
                                 android:textSize="20sp" />
                         </LinearLayout>
 
@@ -177,26 +165,25 @@
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_weight=".2"
+                            android:layout_weight="1"
                             android:gravity="center_vertical" >
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/battery_type"
-                                android:id="@+id/lblCell"
-                                android:layout_below="@+id/txtCycles"
-                                android:layout_alignParentStart="true"
-                                android:textSize="20sp"
-                                android:gravity="center_vertical" />
+                                android:id="@+id/lblType"
+                                android:textSize="20sp" />
 
-                            <Spinner
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/ddlType"
-                                android:layout_weight="1"
-                                android:spinnerMode="dropdown" />
-
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:text="Large Text"
+                                android:id="@+id/lblTypeValue"
+                                android:paddingLeft="5dp"
+                                android:textSize="20sp" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -204,7 +191,50 @@
                         android:id="@+id/tab2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"></LinearLayout>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:text="Avergage run time"
+                                android:id="@+id/lblRunTime" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:text="Large Text"
+                                android:id="@+id/lblRunTimeValue" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:text="Status"
+                                android:id="@+id/lblStatus" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:text="Large Text"
+                                android:id="@+id/lblStatusValue" />
+                        </LinearLayout>
+
+                    </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
         </TabHost>
