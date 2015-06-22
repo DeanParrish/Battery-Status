@@ -7,14 +7,14 @@ import java.io.Serializable;
  */
 public class Entry implements Serializable {
     private String batteryName;
-    private long runTime;
+    private int runTime;
     private int startCharge;
     private int endCharge;
 
     public Entry() {
     }
 
-    public Entry(String name, long time, int start, int end) {
+    public Entry(String name, int time, int start, int end) {
         super();
         this.batteryName = name;
         this.runTime = time;
@@ -27,7 +27,7 @@ public class Entry implements Serializable {
         this.batteryName = name;
     }
 
-    public void setRunTime(long time) {
+    public void setRunTime(int time) {
         this.runTime = time;
     }
 

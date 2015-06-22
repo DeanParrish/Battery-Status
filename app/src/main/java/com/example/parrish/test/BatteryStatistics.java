@@ -58,6 +58,9 @@ public class BatteryStatistics extends Activity {
         Entry mEntry;
         entries = save.getAllEntriesForBattery(mbattery.getName());
 
+        //get number of cycles or entries for this battery; set it to property of the battery
+        mbattery.setRunCyclesFinished(entries.size());
+
 
 
         /**region Tab Host

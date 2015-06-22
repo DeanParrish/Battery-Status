@@ -113,6 +113,22 @@ public class SaveData {
         return batteries;
     }
 
+    public void deleteBattery(String name){
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        String query = "DELETE FROM " + batteryTableName + " WHERE name = ?";
+        String[] whereArgs = new String[] {
+                name,
+        };
+
+        db = dbcon.getWritableDatabase();
+
+        db.delete(batteryTableName, "name = ?", whereArgs);
+
+        db.delete(entryTableName, "name = ?", whereArgs);
+
+        db.close();
+    }
+
     public void addEntry(String name, long time, int start, int end) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         ContentValues values = new ContentValues();
@@ -135,20 +151,23 @@ public class SaveData {
 
     public List<Entry> getAllEntries() {
         List<Entry> entries = new LinkedList<Entry>();
-        //FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        int runTime;
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
 
         String query = "SELECT * FROM " + entryTableName;
 
-        db = dbconnn.getReadableDatabase();
+        db = dbcon.getReadableDatabase();
 
         Cursor cursor = db.rawQuery(query, null);
 
         Entry entry;
         if (cursor.moveToFirst()) {
             do {
+                runTime = cursor.getInt(2);
+                runTime = runTime / 1000;   //divides by 1000 to get rid of milliseconds
                 entry = new Entry();
                 entry.setBatteryName(cursor.getString(1));
-                entry.setRunTime(Long.parseLong(cursor.getString(2)));
+                entry.setRunTime(runTime);
                 entry.setStartCharge(Integer.parseInt(cursor.getString(3)));
                 entry.setEndCharge(Integer.parseInt(cursor.getString(4)));
 
@@ -175,7 +194,7 @@ public class SaveData {
             do {
                 entry = new Entry();
                 entry.setBatteryName(cursor.getString(1));
-                entry.setRunTime(Long.parseLong(cursor.getString(2)));
+                entry.setRunTime(cursor.getInt(2));
                 entry.setStartCharge(Integer.parseInt(cursor.getString(3)));
                 entry.setEndCharge(Integer.parseInt(cursor.getString(4)));
 

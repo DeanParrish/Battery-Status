@@ -231,11 +231,6 @@ public class CreateEntry extends Activity {
         } catch (IllegalStateException e){
             Log.e("Add Entry", e.toString());
         }
-
-        //testing entries
-        List<Entry> entries = new LinkedList<Entry>();
-        entries = save.getAllEntries();
-        Log.d("entries", "1");
     }
 
 }
