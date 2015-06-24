@@ -3,6 +3,7 @@ package com.example.parrish.test;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -59,7 +60,7 @@ public class BatteryStatistics extends Activity {
         entries = save.getAllEntriesForBattery(mbattery.getName());
 
         //get number of cycles or entries for this battery; set it to property of the battery
-        mbattery.setRunCyclesFinished(entries.size());
+//        mbattery.setRunCyclesFinished(entries.size());
 
 
 
@@ -108,12 +109,13 @@ public class BatteryStatistics extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        final Context context = this;
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == android.R.id.home) {
+            Intent intent = new Intent(context, ViewStatistics.class);
+            startActivity(intent);return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

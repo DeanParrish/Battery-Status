@@ -1,16 +1,22 @@
 <resources>
 
-     <!--Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <!--Base application theme. -->
+    <style name="AppTheme" parent="android:Theme.Material.Light">
         <item name="android:background">#ffffff</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:dropDownListViewStyle">@style/mySpinnerStyle</item>
     </style>
-
-<!--    <style name="MyCustomTheme" parent="@android:style/Theme.Holo.Light">
-        <item name="android:actionBarStyle">@style/MyActionBarTheme</item>
+    <style name="mySpinnerStyle" parent="android:Widget.ListView.DropDown">
+        <!--<item name="android:divider">#000000</item>-->
+        <!--<item name="android:dividerHeight">1dp</item>-->
+        <item name="android:textSize">20pt</item>
+        <item name="android:gravity">center</item>
     </style>
+    <!--    <style name="MyCustomTheme" parent="@android:style/Theme.Holo.Light">
+            <item name="android:actionBarStyle">@style/MyActionBarTheme</item>
+        </style>
 
-    <style name="MyActionBarTheme" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">#ffffff</item>
-    </style>-->
+        <style name="MyActionBarTheme" parent="@android:style/Widget.Holo.Light.ActionBar">
+            <item name="android:background">#ffffff</item>
+        </style>-->
 </resources>

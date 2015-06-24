@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -127,6 +129,26 @@ public class SaveData {
         db.delete(entryTableName, "name = ?", whereArgs);
 
         db.close();
+    }
+    public void updateBattery(String name, int cells, int mah, int cycles, String type){
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        String[] whereArgs = new String[] {
+                name,
+        };
+        ContentValues values = new ContentValues();
+
+        values.put(batteryCell, cells);
+        values.put(batteryMah, mah);
+        values.put(batteryCycles, cycles);
+        values.put(batteryType, type);
+
+        try {
+            db = dbcon.getWritableDatabase();
+            db.update(batteryTableName, values, "name = ?", whereArgs);
+            db.close();
+        } catch (SQLiteException e){
+            Log.e("Update Battery", e.toString());
+        }
     }
 
     public void addEntry(String name, long time, int start, int end) {

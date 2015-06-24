@@ -61,7 +61,8 @@
                 android:layout_above="@+id/lblCell"
                 android:inputType="textPersonName"
                 android:layout_alignTop="@+id/lblBattery"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:gravity="bottom" />
         </LinearLayout>
 
         <LinearLayout
@@ -88,7 +89,10 @@
                 android:id="@+id/ddlCells"
                 android:layout_alignBottom="@+id/lblCell"
                 android:layout_toEndOf="@+id/lblCell"
-                android:scrollbarSize="20sp"/>
+                android:scrollbarSize="30dp"
+                android:dropDownWidth="40dp"
+                android:layout_gravity="center"
+                android:gravity="bottom" />
 
         </LinearLayout>
 
@@ -112,14 +116,15 @@
                 android:gravity="center_vertical" />
 
             <EditText
-                android:layout_width="60dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
                 android:id="@+id/txtMah"
                 android:layout_alignTop="@+id/lblMah"
                 android:layout_toEndOf="@+id/lblCell"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:gravity="bottom" />
         </LinearLayout>
 
         <LinearLayout
@@ -139,14 +144,15 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
                 android:id="@+id/txtCycles"
                 android:layout_alignTop="@+id/lblCycles"
                 android:layout_alignStart="@+id/txtMah"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:gravity="bottom" />
         </LinearLayout>
 
         <LinearLayout
@@ -172,7 +178,8 @@
                 android:id="@+id/ddlType"
                 android:layout_alignBottom="@+id/lblType"
                 android:layout_toEndOf="@+id/lblCell"
-                android:scrollbarSize="20sp"/>
+                android:scrollbarSize="20sp"
+                android:gravity="bottom" />
         </LinearLayout>
 
     </LinearLayout>

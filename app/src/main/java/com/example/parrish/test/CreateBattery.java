@@ -2,10 +2,14 @@ package com.example.parrish.test;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,11 +24,20 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import Classes.Battery;
 import Classes.SaveData;
 
+import static java.lang.Integer.*;
+
 
 public class CreateBattery extends Activity {
+
+    Integer editFlag;
+    SaveData save;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +53,7 @@ public class CreateBattery extends Activity {
         actionBar.setDisplayShowTitleEnabled(false);
 
         Integer variable = getIntent().getExtras().getInt("create_battery");
-
-        if (variable == 0) {
-            TextView textViewToChange = (TextView) findViewById(R.id.title);
-            textViewToChange.setText("EDIT BATTERY");
-            textViewToChange.setBackgroundColor(Color.parseColor("#f39c12"));
-
-            EditText textInputToChange = (EditText) findViewById(R.id.txtBatteryName);
-            textInputToChange.setEnabled(false);
-        }
+        editFlag = variable;
 
         Spinner ddlBatteryType = (Spinner) findViewById(R.id.ddlType);
         Spinner ddlBatteryCells = (Spinner) findViewById(R.id.ddlCells);
@@ -58,9 +63,47 @@ public class CreateBattery extends Activity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ddlBatteryType.setAdapter(adapter);
 
-        ArrayAdapter<Integer> adapterCells = new ArrayAdapter<Integer>( this, android.R.layout.simple_spinner_dropdown_item, cells);
+        ArrayAdapter<Integer> adapterCells = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item, cells);
         adapterCells.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ddlBatteryCells.setAdapter(adapterCells);
+
+        if (variable == 0) {
+            int spinnerPositionCells;
+            int spinnerPositionType;
+            Intent intent = getIntent();
+            String stringBattery = intent.getStringExtra("battery");
+
+            //region Populate List from database
+            List<Battery> batteries;
+            Battery mbattery;
+            save = new SaveData(getApplicationContext());
+            //gets all batteries in a List<Battery>
+            mbattery = save.getBattery(stringBattery);
+
+            TextView textViewToChange = (TextView) findViewById(R.id.title);
+            textViewToChange.setText("EDIT BATTERY");
+            textViewToChange.setBackgroundColor(Color.parseColor("#f39c12"));
+
+            EditText textInputToChange = (EditText) findViewById(R.id.txtBatteryName);
+            textInputToChange.setText(mbattery.getName());
+            textInputToChange.setEnabled(false);
+
+            spinnerPositionCells = adapterCells.getPosition(Integer.parseInt(mbattery.getCells()));
+            Spinner lblCellValue = (Spinner) findViewById(R.id.ddlCells);
+            lblCellValue.setSelection(spinnerPositionCells);
+
+            TextView lblMahValue = (TextView) findViewById(R.id.txtMah);
+            lblMahValue.setText(mbattery.getMah());
+
+            spinnerPositionType = adapter.getPosition(mbattery.getType());
+            Spinner lblTypeValue = (Spinner) findViewById(R.id.ddlType);
+            lblTypeValue.setSelection(spinnerPositionType);
+
+            TextView lblCyclesValue = (TextView) findViewById(R.id.txtCycles);
+            lblCyclesValue.setText(mbattery.getCycles());
+
+
+        }
     }
 
     @Override
@@ -70,39 +113,68 @@ public class CreateBattery extends Activity {
         inflater.inflate(R.menu.menu_create_battery, menu);
 
         return super.onCreateOptionsMenu(menu);
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        final Context context = this;
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+
+        // set icon
+        alertDialogBuilder.setIcon(R.mipmap.ic_alert);
+        // set title
+        alertDialogBuilder.setTitle("Battery not saved!");
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("You will loose any unsaved data.")
+                .setCancelable(false)
+                .setPositiveButton(R.string.alert_confirm, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (editFlag == 0) {
+                            Intent intent = new Intent(context, EditBattery.class);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(context, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.alert_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        dialog.cancel();
+                    }
+                });
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == android.R.id.home) {
+            alertDialog.show();
         }
-
-        switch (id) {
-            case R.id.action_save:
-                onSubmitClick(item);
+        if (id == R.id.action_save) {
+            onSubmitClick(item);
         }
-
-        return super.onOptionsItemSelected(item);
+        return true;//super.onOptionsItemSelected(item);
     }
 
     public void onSubmitClick(MenuItem item) {
         SaveData save = new SaveData(getApplicationContext());
+        Boolean isValidText = true;
         String type;
         String batteryName;
         int batteryCells;
         int batteryMah;
         int batteryCycle;
-        CharSequence toastText = "Battery created!";
+        CharSequence toastTextCreate = "Battery created!";
+        CharSequence toastTextEdit = "Battery updated!";
         int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(getApplicationContext(), toastText, duration);
+        Toast toastCreate = Toast.makeText(getApplicationContext(), toastTextCreate, duration);
+        Toast toastUpdate = Toast.makeText(getApplicationContext(), toastTextEdit, duration);
         //Screen fields and conversions
         Spinner spinnerType = (Spinner) findViewById(R.id.ddlType);
         Spinner ddlCells = (Spinner) findViewById(R.id.ddlCells);
@@ -110,23 +182,92 @@ public class CreateBattery extends Activity {
         EditText txtMah = (EditText) findViewById(R.id.txtMah);
         EditText txtCycle = (EditText) findViewById(R.id.txtCycles);
 
-        try {
-            type = spinnerType.getSelectedItem().toString();
-            batteryName = txtBattName.getText().toString();
-            batteryCells = Integer.parseInt(ddlCells.getSelectedItem().toString());
-            batteryMah = Integer.parseInt((txtMah.getText().toString()));
-            batteryCycle = Integer.parseInt(txtCycle.getText().toString());
-            //add the battery to the database
-            try {
-                save.addBattery(batteryName, batteryCells, batteryMah, batteryCycle, type);
-                toast.show();
-                Intent intent = new Intent(this, MainActivity.class);
+        String toastBattery = "Enter a valid name";
+        String toastMah = "Enter a valid number between 100 and 99999";
+        String toastCycles = "Enter a valid number between 100 and 9999";
+
+        if (isValidBattery(txtBattName.getText().toString()) != true) {
+            txtBattName.setError(toastBattery);
+            isValidText = false;
+        }
+        if (isValidMah(txtMah.getText().toString()) != true) {
+            txtMah.setError(toastMah);
+            isValidText = false;
+        }
+        if (isValidCycles(txtCycle.getText().toString()) != true) {
+            txtCycle.setError(toastCycles);
+            isValidText = false;
+        }
+        if (isValidText == true) {
+            if (editFlag == 1) {
+                try {
+                    type = spinnerType.getSelectedItem().toString();
+                    batteryName = txtBattName.getText().toString();
+                    batteryCells = parseInt(ddlCells.getSelectedItem().toString());
+                    batteryMah = parseInt((txtMah.getText().toString()));
+                    batteryCycle = parseInt(txtCycle.getText().toString());
+                    //add the battery to the database
+                    try {
+                        save.addBattery(batteryName, batteryCells, batteryMah, batteryCycle, type);
+                        toastCreate.show();
+                        Intent intent = new Intent(this, MainActivity.class);
+                        startActivity(intent);
+                    } catch (SQLiteException e) {
+                        Log.e("Add Battery", e.toString());
+                    }
+                } catch (IllegalStateException e) {
+                    Log.e("Add Battery", e.toString());
+                }
+            } else {
+                type = spinnerType.getSelectedItem().toString();
+                batteryName = txtBattName.getText().toString();
+                batteryCells = parseInt(ddlCells.getSelectedItem().toString());
+                batteryMah = parseInt((txtMah.getText().toString()));
+                batteryCycle = parseInt(txtCycle.getText().toString());
+
+                //update battery to the database
+                save.updateBattery(batteryName, batteryCells, batteryMah, batteryCycle, type);
+                toastUpdate.show();
+                Intent intent = new Intent(this, EditBattery.class);
                 startActivity(intent);
-            } catch (SQLiteException e) {
-                Log.e("Add Battery", e.toString());
             }
-        } catch (IllegalStateException e) {
-            Log.e("Add Battery", e.toString());
         }
     }
+
+    //methods
+    public void createToast(CharSequence text, Integer duration) {
+        Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+        toast.show();
+    }
+
+    public final static boolean isValidBattery(CharSequence target) {
+        return !TextUtils.isEmpty(target);
+    }
+
+    public final static boolean isValidMah(CharSequence target) {
+        Boolean stringMatch;
+        Integer intTarget;
+        String stringTarget;
+        intTarget = parseInt(target.toString());
+        stringTarget = intTarget.toString();
+        String mahPattern = "[0-9]{3,5}";
+        Pattern pattern = Pattern.compile(mahPattern);
+        Matcher matcher = pattern.matcher(stringTarget);
+        stringMatch = matcher.matches();
+        return !TextUtils.isEmpty(target) && stringMatch;
+    }
+
+    public final static boolean isValidCycles(CharSequence target) {
+        Boolean stringMatch;
+        Integer intTarget;
+        String stringTarget;
+        intTarget = parseInt(target.toString());
+        stringTarget = intTarget.toString();
+        String cyclesPattern = "[0-9]{2,4}";
+        Pattern pattern = Pattern.compile(cyclesPattern);
+        Matcher matcher = pattern.matcher(stringTarget);
+        stringMatch = matcher.matches();
+        return !TextUtils.isEmpty(target) && stringMatch;
+    }
+
 }

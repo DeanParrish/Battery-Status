@@ -163,7 +163,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="%"
-                android:id="@+id/lblPercent"
+                android:id="@+id/lblPercentStart"
                 android:textSize="20sp" />
 
         </LinearLayout>
@@ -174,7 +174,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignStart="@+id/seekBar2"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -209,7 +211,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="%"
-                android:id="@+id/lblPercent"
+                android:id="@+id/lblPercentEnd"
                 android:textSize="20sp" />
 
         </LinearLayout>
@@ -220,7 +222,9 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/txtEnd"
             android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="15dp" />
 
     </LinearLayout>
 

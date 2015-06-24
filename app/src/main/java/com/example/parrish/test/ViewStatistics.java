@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,6 +36,10 @@ public class ViewStatistics extends Activity {
     SaveData save;
     String batteryName;
     Battery pBattery = new Battery();
+
+    CharSequence toastText = "Select a battery";
+    int duration = Toast.LENGTH_SHORT;
+    final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,12 +126,24 @@ public class ViewStatistics extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_details) {
-            final Context context = this;
-            Intent intent = new Intent(context, BatteryStatistics.class);
-            intent.putExtra("battery",batteryName);
+            if (batteryName != null) {
+                Intent intent = new Intent(context, BatteryStatistics.class);
+                intent.putExtra("battery",batteryName);
 //            intent.putExtra("classBattery", pBattery);
-            startActivity(intent);
+                startActivity(intent);
+            } else {
+                createToast(toastText, duration);
+            }
+        }
+        else if(id == R.id.action_details){
+
         }
         return super.onOptionsItemSelected(item);
     }
+    //methods
+    public void createToast(CharSequence text, Integer duration){
+        Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+        toast.show();
+    }
+
 }

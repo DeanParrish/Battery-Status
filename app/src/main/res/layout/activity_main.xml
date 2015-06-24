@@ -60,7 +60,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
                 android:background="#ff9754e1"
-                android:drawableStart="@mipmap/ic_details"
+                android:drawableStart="@mipmap/ic_stats"
                 android:text="View Statistics"
                 android:textColor="#FFFFFFFF"
                 android:layout_margin="3dp"

@@ -2,12 +2,39 @@ package com.example.parrish.test;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.service.notification.StatusBarNotification;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Arrays;
+import java.util.List;
+
+import Classes.Battery;
+import Classes.SaveData;
 
 
 public class ArchiveBattery extends Activity {
+
+    SaveData save;
+    String batteryName;
+
+    int duration = Toast.LENGTH_SHORT;
+    CharSequence toastText = "Battery deleted";
+    CharSequence toastTextError = "Select a battery";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +48,52 @@ public class ArchiveBattery extends Activity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         //hide label in action bar
         actionBar.setDisplayShowTitleEnabled(false);
+
+        //region Populate List from database
+        List<Battery> batteries;
+        Battery battery;
+        String[] batteryNames;
+        //start population of drop down list
+        save = new SaveData(getApplicationContext());
+        //gets all batteries in a List<Battery>
+        batteries = save.getAllBatteries();
+
+        if (batteries.size() == 0) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("no_batteries", true);
+            startActivity(intent);
+        }
+        //new string for battery names
+        batteryNames = new String[batteries.size()];
+
+        //loops through the List<Battery>
+        for (int i = 0; i < batteries.size(); i++) {
+            //gets the battery into the object battery
+            battery = batteries.get(i);
+            //appends the battery name to the batteryName array
+            batteryNames[i] = battery.getName().toString();
+        }
+
+        Arrays.sort(batteryNames);
+        ListView batteryList = (ListView) findViewById(R.id.listView);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(ArchiveBattery.this, android.R.layout.simple_list_item_single_choice, batteryNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        batteryList.setAdapter(adapter);
+        batteryList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        // listening to single list item on click
+        batteryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+
+                // populating class with selected item
+                String name = ((TextView) view).getText().toString();
+                batteryName = name;
+            }
+        });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -36,12 +108,57 @@ public class ArchiveBattery extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        final Context context = this;
+        final SaveData delete = new SaveData(getApplicationContext());
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+
+        // set icon
+        alertDialogBuilder.setIcon(R.mipmap.ic_alert);
+        // set title
+        alertDialogBuilder.setTitle("Delete battery?");
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("This action can't be undone and will delete all associated entries.")
+                .setCancelable(false)
+                .setPositiveButton(R.string.alert_confirm, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        try {
+                            delete.deleteBattery(batteryName);
+                            createToast(toastText, duration);
+                            finish();
+                            startActivity(getIntent());
+                        } catch (SQLiteException e) {
+                            Log.e("Add Battery", e.toString());
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.alert_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        dialog.cancel();
+                    }
+                });
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_archive) {
+            if (batteryName != null) {
+            // show alert dialog
+                alertDialog.show();
+            }else{
+                createToast(toastTextError,duration);
+            }
         }
-
         return super.onOptionsItemSelected(item);
     }
+
+    //methods
+    public void createToast(CharSequence text, Integer duration){
+        Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+        toast.show();
+    }
+
 }
