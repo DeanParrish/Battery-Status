@@ -79,19 +79,17 @@ public class SaveData {
 
         if (cursor != null) {
             cursor.moveToFirst();
+            battery.setName(cursor.getString(0));
+            battery.setCells(Integer.parseInt(cursor.getString(1)));
+            battery.setMah(Integer.parseInt(cursor.getString(2)));
+            battery.setCycles(Integer.parseInt(cursor.getString(3)));
+            battery.setType(cursor.getString(4));
         }
-
-        battery.setName(cursor.getString(0));
-        battery.setCells(Integer.parseInt(cursor.getString(1)));
-        battery.setMah(Integer.parseInt(cursor.getString(2)));
-        battery.setCycles(Integer.parseInt(cursor.getString(3)));
-        battery.setType(cursor.getString(4));
-
         return battery;
     }
 
     public List<Battery> getAllBatteries() {
-        List<Battery> batteries = new LinkedList<Battery>();
+        List<Battery> batteries = new LinkedList<>();
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         Battery battery;
         String query = "SELECT * FROM " + batteryTableName;
@@ -172,7 +170,7 @@ public class SaveData {
     }
 
     public List<Entry> getAllEntries() {
-        List<Entry> entries = new LinkedList<Entry>();
+        List<Entry> entries = new LinkedList<>();
         int runTime;
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
 
@@ -200,7 +198,7 @@ public class SaveData {
         return entries;
     }
     public List<Entry> getAllEntriesForBattery(String name) {
-        List<Entry> entries = new LinkedList<Entry>();
+        List<Entry> entries = new LinkedList<>();
         //FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
 
         String query = "SELECT * FROM " + entryTableName + " WHERE name = ?";

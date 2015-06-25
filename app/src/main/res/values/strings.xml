@@ -47,4 +47,12 @@
     </array>
 
     <string name="title_activity_edit_battery">EditBattery</string>
+
+    <string-array name="tabs">
+        <item>Basic</item>
+        <item>Graph</item>
+    </string-array>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

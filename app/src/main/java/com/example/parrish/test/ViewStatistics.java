@@ -2,12 +2,11 @@ package com.example.parrish.test;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,19 +14,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
 import Classes.Battery;
-import Classes.Entry;
 import Classes.SaveData;
 
 
@@ -46,14 +38,17 @@ public class ViewStatistics extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_statistics);
 
-        // hides shadow from action bar
-        ActionBar actionBar = getActionBar();
-        actionBar.setElevation(0);
-        // Enabling Up / Back navigation
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        //hide label in action bar
-        actionBar.setDisplayShowTitleEnabled(false);
-
+        try {
+            // hides shadow from action bar
+            ActionBar actionBar = getActionBar();
+            actionBar.setElevation(0);
+            // Enabling Up / Back navigation
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            //hide label in action bar
+            actionBar.setDisplayShowTitleEnabled(false);
+        } catch (NullPointerException e){
+            Log.e("actionbar", e.toString());
+        }
 
         //region Populate List from database
         List<Battery> batteries;
@@ -77,7 +72,7 @@ public class ViewStatistics extends Activity {
             //gets the battery into the object battery
             battery = batteries.get(i);
             //appends the battery name to the batteryName array
-            batteryNames[i] = battery.getName().toString();
+            batteryNames[i] = battery.getName();
         }
 
         Arrays.sort(batteryNames);
@@ -129,7 +124,6 @@ public class ViewStatistics extends Activity {
             if (batteryName != null) {
                 Intent intent = new Intent(context, BatteryStatistics.class);
                 intent.putExtra("battery",batteryName);
-//            intent.putExtra("classBattery", pBattery);
                 startActivity(intent);
             } else {
                 createToast(toastText, duration);

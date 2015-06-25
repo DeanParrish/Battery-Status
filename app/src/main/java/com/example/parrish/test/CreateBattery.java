@@ -14,15 +14,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -44,13 +40,18 @@ public class CreateBattery extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_battery);
 
-//       hides shadow from action bar
-        ActionBar actionBar = getActionBar();
-        actionBar.setElevation(0);
-        // Enabling Up / Back navigation
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        //hide label in action bar
-        actionBar.setDisplayShowTitleEnabled(false);
+        try{
+            //       hides shadow from action bar
+            ActionBar actionBar = getActionBar();
+            actionBar.setElevation(0);
+            // Enabling Up / Back navigation
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            //hide label in action bar
+            actionBar.setDisplayShowTitleEnabled(false);
+        } catch (NullPointerException e){
+            Log.e("actionbar", e.toString());
+        }
+
 
         Integer variable = getIntent().getExtras().getInt("create_battery");
         editFlag = variable;
@@ -63,7 +64,7 @@ public class CreateBattery extends Activity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ddlBatteryType.setAdapter(adapter);
 
-        ArrayAdapter<Integer> adapterCells = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item, cells);
+        ArrayAdapter<Integer> adapterCells = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, cells);
         adapterCells.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ddlBatteryCells.setAdapter(adapterCells);
 
@@ -127,7 +128,7 @@ public class CreateBattery extends Activity {
 
         // set dialog message
         alertDialogBuilder
-                .setMessage("You will loose any unsaved data.")
+                .setMessage("You will lose any unsaved data.")
                 .setCancelable(false)
                 .setPositiveButton(R.string.alert_confirm, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -232,6 +233,7 @@ public class CreateBattery extends Activity {
                 startActivity(intent);
             }
         }
+
     }
 
     //methods
@@ -240,11 +242,11 @@ public class CreateBattery extends Activity {
         toast.show();
     }
 
-    public final static boolean isValidBattery(CharSequence target) {
+    public static boolean isValidBattery(CharSequence target) {
         return !TextUtils.isEmpty(target);
     }
 
-    public final static boolean isValidMah(CharSequence target) {
+    public static boolean isValidMah(CharSequence target) {
         Boolean stringMatch;
         Integer intTarget;
         String stringTarget;
@@ -257,7 +259,7 @@ public class CreateBattery extends Activity {
         return !TextUtils.isEmpty(target) && stringMatch;
     }
 
-    public final static boolean isValidCycles(CharSequence target) {
+    public static boolean isValidCycles(CharSequence target) {
         Boolean stringMatch;
         Integer intTarget;
         String stringTarget;

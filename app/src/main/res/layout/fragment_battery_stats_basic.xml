@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_weight=".16">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Battery Name:"
+            android:id="@+id/textView4"
+            android:textSize="22dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginRight="6dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/txtBatteryName"
+            android:textSize="22dp"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/textView4" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_weight=".16">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Battery Cells:"
+            android:id="@+id/textView5"
+            android:layout_below="@+id/txtBatteryName"
+            android:layout_alignParentStart="true"
+            android:textSize="22dp"
+            android:layout_marginRight="6dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/txtBatteryCells"
+            android:layout_alignBottom="@+id/textView5"
+            android:layout_alignStart="@+id/txtBatteryName"
+            android:textSize="22dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight=".16"
+        android:gravity="center_vertical|center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Battery MAH:"
+            android:id="@+id/textView6"
+            android:layout_below="@+id/textView5"
+            android:layout_alignParentStart="true"
+            android:textSize="22dp"
+            android:layout_marginRight="6dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/txtBatteryMAH"
+            android:layout_alignTop="@+id/textView6"
+            android:layout_alignStart="@+id/txtBatteryCells"
+            android:textSize="22dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight=".16"
+        android:gravity="center_vertical|center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Number of Cycles:"
+            android:id="@+id/textView7"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:textSize="22dp"
+            android:layout_marginRight="6dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/txtCycles"
+            android:layout_centerVertical="true"
+            android:layout_alignStart="@+id/txtBatteryMAH"
+            android:textSize="22dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight=".16"
+        android:gravity="center_vertical|center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Battery Type:"
+            android:id="@+id/textView8"
+            android:layout_below="@+id/textView7"
+            android:layout_alignParentStart="true"
+            android:textSize="22dp"
+            android:layout_marginRight="6dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/txtBatteryType"
+            android:layout_alignTop="@+id/textView8"
+            android:layout_alignStart="@+id/txtCycles"
+            android:textSize="22dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight=".16"
+        android:gravity="center_vertical|center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cycles Completed:"
+            android:id="@+id/textView9"
+            android:textSize="22dp"
+            android:layout_marginRight="6dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/txtCyclesCompleted"
+            android:textSize="22dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
