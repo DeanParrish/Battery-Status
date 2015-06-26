@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.os.Parcelable;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -129,11 +131,9 @@ public class ViewStatistics extends Activity {
                 createToast(toastText, duration);
             }
         }
-        else if(id == R.id.action_details){
-
-        }
         return super.onOptionsItemSelected(item);
     }
+
     //methods
     public void createToast(CharSequence text, Integer duration){
         Toast toast = Toast.makeText(getApplicationContext(), text, duration);

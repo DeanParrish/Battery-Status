@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -109,7 +110,7 @@ public class EditBattery extends Activity {
             if (batteryName != null) {
                 Intent intent = new Intent(context, CreateBattery.class);
                 intent.putExtra("create_battery", 0);  // sets flag for create battery
-                intent.putExtra("battery",batteryName);
+                intent.putExtra("battery", batteryName);
                 startActivity(intent);
             } else {
                 createToast(toastText, duration);
@@ -121,6 +122,14 @@ public class EditBattery extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     //methods

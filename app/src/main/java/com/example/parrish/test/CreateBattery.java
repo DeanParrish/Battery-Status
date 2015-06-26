@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -133,8 +134,7 @@ public class CreateBattery extends Activity {
                 .setPositiveButton(R.string.alert_confirm, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (editFlag == 0) {
-                            Intent intent = new Intent(context, EditBattery.class);
-                            startActivity(intent);
+                            finish();
                         } else {
                             Intent intent = new Intent(context, MainActivity.class);
                             startActivity(intent);
@@ -163,9 +163,50 @@ public class CreateBattery extends Activity {
         return true;//super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            final Context context = this;
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+
+            // set icon
+            alertDialogBuilder.setIcon(R.mipmap.ic_alert);
+            // set title
+            alertDialogBuilder.setTitle("Battery not saved!");
+
+            // set dialog message
+            alertDialogBuilder
+                    .setMessage("You will loose any unsaved data.")
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.alert_confirm, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            if (editFlag == 0) {
+                                finish();
+                            } else {
+                                Intent intent = new Intent(context, MainActivity.class);
+                                startActivity(intent);
+                            }
+                        }
+                    })
+                    .setNegativeButton(R.string.alert_cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, just close
+                            // the dialog box and do nothing
+                            dialog.cancel();
+                        }
+                    });
+            // create alert dialog
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     public void onSubmitClick(MenuItem item) {
         SaveData save = new SaveData(getApplicationContext());
         Boolean isValidText = true;
+        Boolean isValidMah = true;
+        Boolean isValidCycles = true;
         String type;
         String batteryName;
         int batteryCells;
@@ -185,7 +226,7 @@ public class CreateBattery extends Activity {
 
         String toastBattery = "Enter a valid name";
         String toastMah = "Enter a valid number between 100 and 99999";
-        String toastCycles = "Enter a valid number between 100 and 9999";
+        String toastCycles = "Enter a valid number between 10 and 9999";
 
         if (isValidBattery(txtBattName.getText().toString()) != true) {
             txtBattName.setError(toastBattery);
@@ -193,13 +234,13 @@ public class CreateBattery extends Activity {
         }
         if (isValidMah(txtMah.getText().toString()) != true) {
             txtMah.setError(toastMah);
-            isValidText = false;
+            isValidMah = false;
         }
         if (isValidCycles(txtCycle.getText().toString()) != true) {
             txtCycle.setError(toastCycles);
-            isValidText = false;
+            isValidCycles = false;
         }
-        if (isValidText == true) {
+        if (isValidText == true && isValidCycles == true && isValidMah == true) {
             if (editFlag == 1) {
                 try {
                     type = spinnerType.getSelectedItem().toString();
@@ -211,8 +252,7 @@ public class CreateBattery extends Activity {
                     try {
                         save.addBattery(batteryName, batteryCells, batteryMah, batteryCycle, type);
                         toastCreate.show();
-                        Intent intent = new Intent(this, MainActivity.class);
-                        startActivity(intent);
+                        finish();
                     } catch (SQLiteException e) {
                         Log.e("Add Battery", e.toString());
                     }
@@ -229,8 +269,7 @@ public class CreateBattery extends Activity {
                 //update battery to the database
                 save.updateBattery(batteryName, batteryCells, batteryMah, batteryCycle, type);
                 toastUpdate.show();
-                Intent intent = new Intent(this, EditBattery.class);
-                startActivity(intent);
+                finish();
             }
         }
 
@@ -250,26 +289,34 @@ public class CreateBattery extends Activity {
         Boolean stringMatch;
         Integer intTarget;
         String stringTarget;
-        intTarget = parseInt(target.toString());
-        stringTarget = intTarget.toString();
-        String mahPattern = "[0-9]{3,5}";
-        Pattern pattern = Pattern.compile(mahPattern);
-        Matcher matcher = pattern.matcher(stringTarget);
-        stringMatch = matcher.matches();
-        return !TextUtils.isEmpty(target) && stringMatch;
+        if (TextUtils.isEmpty(target) == true) {
+            return false;
+        } else {
+            intTarget = parseInt(target.toString());
+            stringTarget = intTarget.toString();
+            String mahPattern = "[0-9]{3,5}";
+            Pattern pattern = Pattern.compile(mahPattern);
+            Matcher matcher = pattern.matcher(stringTarget);
+            stringMatch = matcher.matches();
+            return stringMatch;
+        }
     }
 
     public static boolean isValidCycles(CharSequence target) {
         Boolean stringMatch;
         Integer intTarget;
         String stringTarget;
-        intTarget = parseInt(target.toString());
-        stringTarget = intTarget.toString();
-        String cyclesPattern = "[0-9]{2,4}";
-        Pattern pattern = Pattern.compile(cyclesPattern);
-        Matcher matcher = pattern.matcher(stringTarget);
-        stringMatch = matcher.matches();
-        return !TextUtils.isEmpty(target) && stringMatch;
+        if (TextUtils.isEmpty(target) == true) {
+            return false;
+        } else {
+            intTarget = parseInt(target.toString());
+            stringTarget = intTarget.toString();
+            String cyclesPattern = "[0-9]{2,4}";
+            Pattern pattern = Pattern.compile(cyclesPattern);
+            Matcher matcher = pattern.matcher(stringTarget);
+            stringMatch = matcher.matches();
+            return stringMatch;
+        }
     }
 
 }
