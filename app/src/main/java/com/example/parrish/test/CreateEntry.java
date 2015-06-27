@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
@@ -42,7 +43,7 @@ public class CreateEntry extends Activity {
     SeekBar seekBar_end;
     TextView textView_end;
     SaveData save;
-    long timeSave;
+    long timeSave = 0L;
     Boolean startTimer = false;
     Boolean stopTimer = true;
     Boolean pauseTimer = false;
@@ -50,6 +51,7 @@ public class CreateEntry extends Activity {
     String stringTime = "00:00";
     Integer totalSeconds;
     Boolean pauseToggle = false;
+    long persistentTime = 0L;
 
 //    Chronometer chronoTime = (Chronometer) findViewById(R.id.chronoTime);
 
@@ -67,7 +69,6 @@ public class CreateEntry extends Activity {
             setContentView(R.layout.activity_create_entry_l);
         }
         initializeVariables();
-        initializeVariables();
 
         // hides shadow from action bar
         ActionBar actionBar = getActionBar();
@@ -77,51 +78,67 @@ public class CreateEntry extends Activity {
         //hide label in action bar
         actionBar.setDisplayShowTitleEnabled(false);
 
-        // Initialize the textview with '0'.
-//        textView_start.setText(seekBar_start.getProgress());
-//        textView_end.setText(seekBar_start.getProgress());
+        final ImageButton buttonStopPressed = (ImageButton) findViewById(R.id.btnStop);
+
+        if (savedInstanceState != null) {
+            persistentTime = savedInstanceState.getLong("timerTime");
+            if (persistentTime != 0L) {
+                Chronometer chronoTime = (Chronometer) findViewById(R.id.chronoTime);
+                timeSave = persistentTime;
+                chronoTime.setBase(SystemClock.elapsedRealtime() - timeSave);
+                buttonStopPressed.setImageResource(R.mipmap.ic_stop_pressed);
+            }
+            else{
+                buttonStopPressed.setImageResource(R.mipmap.ic_stop);
+            }
+        }
 
         //Seekbar start
-        seekBar_start.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            int progress = 0;
+        seekBar_start.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+                                                 {
+                                                     int progress = 0;
 
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                progress = progresValue;
-                textView_start.setText(seekBar.getProgress() + "");
-            }
+                                                     @Override
+                                                     public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+                                                         progress = progresValue;
+                                                         textView_start.setText(seekBar.getProgress() + "");
+                                                     }
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                textView_start.setText(seekBar.getProgress() + "");
-            }
+                                                     @Override
+                                                     public void onStartTrackingTouch(SeekBar seekBar) {
+                                                         textView_start.setText(seekBar.getProgress() + "");
+                                                     }
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                textView_start.setText(seekBar.getProgress() + "");
-            }
-        });
+                                                     @Override
+                                                     public void onStopTrackingTouch(SeekBar seekBar) {
+                                                         textView_start.setText(seekBar.getProgress() + "");
+                                                     }
+                                                 }
+
+        );
 
         //seekbar end
         seekBar_end.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            int progress = 0;
+                                                   int progress = 0;
 
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                progress = progresValue;
-                textView_end.setText(seekBar.getProgress() + "");
-            }
+                                                   @Override
+                                                   public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+                                                       progress = progresValue;
+                                                       textView_end.setText(seekBar.getProgress() + "");
+                                                   }
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                textView_end.setText(seekBar.getProgress() + "");
-            }
+                                                   @Override
+                                                   public void onStartTrackingTouch(SeekBar seekBar) {
+                                                       textView_end.setText(seekBar.getProgress() + "");
+                                                   }
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                textView_end.setText(seekBar.getProgress() + "");
-            }
-        });
+                                                   @Override
+                                                   public void onStopTrackingTouch(SeekBar seekBar) {
+                                                       textView_end.setText(seekBar.getProgress() + "");
+                                                   }
+                                               }
+
+        );
 
         //start population of drop down list
         save = new SaveData(getApplicationContext());
@@ -137,12 +154,17 @@ public class CreateEntry extends Activity {
         batteryNames = new String[batteries.size()];
 
         //loops through the List<Battery>
-        for (int i = 0; i < batteries.size(); i++) {
+        for (
+                int i = 0;
+                i < batteries.size(); i++)
+
+        {
             //gets the battery into the object battery
             battery = batteries.get(i);
             //appends the battery name to the batteryName array
             batteryNames[i] = battery.getName().toString();
         }
+
         Arrays.sort(batteryNames);
 
         Spinner ddlBatteryName = (Spinner) findViewById(R.id.ddlName);
@@ -245,6 +267,25 @@ public class CreateEntry extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Saving variables
+        savedInstanceState.putLong("timerTime", persistentTime);
+//        savedInstanceState.putBoolean("timerStopFlag", submitTimer);
+
+        // Call at the end
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Call at the start
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Retrieve variables
+        timeSave = savedInstanceState.getLong("timerTime");
+    }
+
     // A private method to help us initialize our variables.
     private void initializeVariables() {
         seekBar_start = (SeekBar) findViewById(R.id.seekBar);
@@ -279,11 +320,18 @@ public class CreateEntry extends Activity {
         switch (view.getId()) {
             case R.id.btnStart:
                 if (stopTimer == true && pauseTimer != true) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
                     buttonStartPressed.setImageResource(R.mipmap.ic_start_pressed);
                     buttonPausePressed.setImageResource(R.mipmap.ic_pause);
                     buttonResetPressed.setImageResource(R.mipmap.ic_reset);
                     buttonStopPressed.setImageResource(R.mipmap.ic_stop);
-                    chronoTime.setBase(SystemClock.elapsedRealtime());
+
+                    if (timeSave == 0L) {
+                        chronoTime.setBase(SystemClock.elapsedRealtime()); //SystemClock.elapsedRealtime());
+                    } else {
+                        chronoTime.setBase(SystemClock.elapsedRealtime() - timeSave); //SystemClock.elapsedRealtime());
+                    }
+
                     chronoTime.start();
                     stringTime = "00:01";
                     startTimer = true;
@@ -295,11 +343,13 @@ public class CreateEntry extends Activity {
                 break;
             case R.id.btnStop:
                 if (startTimer == true && pauseTimer != true) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                     buttonStopPressed.setImageResource(R.mipmap.ic_stop_pressed);
                     buttonPausePressed.setImageResource(R.mipmap.ic_pause);
                     buttonStartPressed.setImageResource(R.mipmap.ic_start);
                     buttonResetPressed.setImageResource(R.mipmap.ic_reset);
                     chronoTime.stop();
+                    persistentTime = SystemClock.elapsedRealtime() - chronoTime.getBase();
                     stringTime = chronoTime.getText().toString();
                     startTimer = false;
                     stopTimer = true;
@@ -312,12 +362,12 @@ public class CreateEntry extends Activity {
                     buttonResetPressed.setImageResource(R.mipmap.ic_reset);
                     buttonStopPressed.setImageResource(R.mipmap.ic_stop);
 
-                    if (pauseToggle == false){
+                    if (pauseToggle == false) {
                         buttonPausePressed.setImageResource(R.mipmap.ic_pause_pressed);
                         buttonStartPressed.setImageResource(R.mipmap.ic_start);
                         pauseTimer = true;
                         pauseToggle = true;
-                    }else{
+                    } else {
                         buttonPausePressed.setImageResource(R.mipmap.ic_pause);
                         buttonStartPressed.setImageResource(R.mipmap.ic_start_pressed);
                         pauseTimer = false;
@@ -457,17 +507,16 @@ public class CreateEntry extends Activity {
             } else if (timeSize == 7) {
                 seconds = Integer.parseInt(time.substring(5, 7));
                 minutes = Integer.parseInt(time.substring(2, 4));
-                hours = Integer.parseInt(time.substring(0,1));
+                hours = Integer.parseInt(time.substring(0, 1));
                 totalSeconds = seconds + (minutes * 60) + (hours * 3600);
                 return totalSeconds;
             } else if (timeSize == 8) {
                 seconds = Integer.parseInt(time.substring(7, 8));
                 minutes = Integer.parseInt(time.substring(4, 5));
-                hours = Integer.parseInt(time.substring(0,2));
+                hours = Integer.parseInt(time.substring(0, 2));
                 totalSeconds = seconds + (minutes * 60) + (hours * 3600);
                 return totalSeconds;
-            }
-            else{
+            } else {
                 return 1;
             }
         }
