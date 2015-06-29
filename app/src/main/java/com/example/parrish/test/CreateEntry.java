@@ -82,6 +82,9 @@ public class CreateEntry extends Activity {
 
         if (savedInstanceState != null) {
             persistentTime = savedInstanceState.getLong("timerTime");
+            submitTimer = savedInstanceState.getBoolean("submitTimer");
+            startTimer = savedInstanceState.getBoolean("startTimer");
+            stringTime = savedInstanceState.getString("stringTime");
             if (persistentTime != 0L) {
                 Chronometer chronoTime = (Chronometer) findViewById(R.id.chronoTime);
                 timeSave = persistentTime;
@@ -271,7 +274,10 @@ public class CreateEntry extends Activity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Saving variables
         savedInstanceState.putLong("timerTime", persistentTime);
-//        savedInstanceState.putBoolean("timerStopFlag", submitTimer);
+        savedInstanceState.putBoolean("submitTimer",submitTimer);
+        savedInstanceState.putBoolean("startTimer",startTimer);
+        savedInstanceState.putString("stringTime",stringTime);
+
 
         // Call at the end
         super.onSaveInstanceState(savedInstanceState);
@@ -284,6 +290,9 @@ public class CreateEntry extends Activity {
 
         // Retrieve variables
         timeSave = savedInstanceState.getLong("timerTime");
+        submitTimer = savedInstanceState.getBoolean("submitTimer");
+        startTimer = savedInstanceState.getBoolean("startTimer");
+        stringTime = savedInstanceState.getString("stringTime", stringTime);
     }
 
     // A private method to help us initialize our variables.
