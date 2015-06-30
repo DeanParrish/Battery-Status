@@ -26,7 +26,7 @@ public class SaveData {
     private static String batteryType = "type";
     private static String entryTableName = "entries";
     private static String entryID = "id";
-    private static String chanrgeTime = "time";
+    private static String chargeTime = "time";
     private static String chargeStart = "start";
     private static String chargeEnd = "end";
     private FeedReaderDbHelper dbconnn;
@@ -152,13 +152,15 @@ public class SaveData {
     public void addEntry(String name, long time, int start, int end) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         ContentValues values = new ContentValues();
+        int runTime;
+
+        runTime = Integer.parseInt(Long.toString(time)) / 1000;
 
         //add values to be inserted
         values.put(batteryName, name);
-        values.put(chanrgeTime, time);
+        values.put(chargeTime, runTime);
         values.put(chargeStart, start);
         values.put(chargeEnd, end);
-
 
         db = dbcon.getWritableDatabase();
 
@@ -183,11 +185,9 @@ public class SaveData {
         Entry entry;
         if (cursor.moveToFirst()) {
             do {
-                runTime = cursor.getInt(2);
-                runTime = runTime / 1000;   //divides by 1000 to get rid of milliseconds
                 entry = new Entry();
                 entry.setBatteryName(cursor.getString(1));
-                entry.setRunTime(runTime);
+                entry.setRunTime(cursor.getInt(2));
                 entry.setStartCharge(Integer.parseInt(cursor.getString(3)));
                 entry.setEndCharge(Integer.parseInt(cursor.getString(4)));
 
@@ -199,13 +199,14 @@ public class SaveData {
     }
     public List<Entry> getAllEntriesForBattery(String name) {
         List<Entry> entries = new LinkedList<>();
-        //FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        int runTime;
 
         String query = "SELECT * FROM " + entryTableName + " WHERE name = ?";
         String[] whereArgs = new String[] {
                 name,
         };
-        db = dbconnn.getReadableDatabase();
+        db = dbcon.getReadableDatabase();
 
         Cursor cursor = db.rawQuery(query, whereArgs);
 
