@@ -26,6 +26,7 @@ public class BatteryStatsBasic extends Fragment {
     TextView txtviewBatteryCycles;
     TextView txtviewBatteryType;
     TextView txtviewCyclesComplete;
+    TextView txtviewCyclesLeft;
 
     public static BatteryStatsBasic newInstance(String batteryName) {
         BatteryStatsBasic batteryStatsBasic = new BatteryStatsBasic();
@@ -55,6 +56,8 @@ public class BatteryStatsBasic extends Fragment {
         txtviewBatteryCycles = (TextView) view.findViewById(R.id.txtCycles);
         txtviewBatteryType = (TextView) view.findViewById(R.id.txtBatteryType);
         txtviewCyclesComplete = (TextView) view.findViewById(R.id.txtCyclesCompleted);
+        txtviewCyclesLeft = (TextView) view.findViewById(R.id.txtCyclesLeft);
+
         displayBatteryInfo();
         return view;
     }
@@ -62,7 +65,7 @@ public class BatteryStatsBasic extends Fragment {
     private void displayBatteryInfo(){
         Battery battery;
         List<Entry> entryList;
-        String cycles;
+        Integer cyclesLeft;
 
         battery = save.getBattery(batteryName);
 
@@ -75,5 +78,12 @@ public class BatteryStatsBasic extends Fragment {
         entryList = save.getAllEntriesForBattery(batteryName);
 
         txtviewCyclesComplete.setText(Integer.toString(entryList.size()));
+        cyclesLeft = Integer.parseInt(battery.getCycles()) - entryList.size();
+        if (cyclesLeft < 0){
+            txtviewCyclesLeft.setText("Completed cycles exceed rated cycles!");
+            txtviewCyclesLeft.setTextColor(-65536); //Red color
+        } else {
+            txtviewCyclesLeft.setText(cyclesLeft.toString());
+        }
 }
 }

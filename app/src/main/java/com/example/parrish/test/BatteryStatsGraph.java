@@ -88,7 +88,7 @@ public class BatteryStatsGraph extends Fragment {
         final List<Entry> entryList;
         Iterator<Entry> iterator;
         Entry entry;
-        DataPoint point;
+        DataPoint pointRunTime;
         int iteratorCount = 0;
         save = new SaveData(view.getContext());
         graph = (GraphView) view.findViewById(R.id.graph);
@@ -100,8 +100,8 @@ public class BatteryStatsGraph extends Fragment {
         iterator = entryList.listIterator();
         while (iterator.hasNext()){
             entry = iterator.next();
-            point = new DataPoint(Double.parseDouble(Integer.toString(iteratorCount)), Double.parseDouble(entry.getRunTime()));
-            points[iteratorCount] = point;
+            pointRunTime = new DataPoint(Double.parseDouble(Integer.toString(iteratorCount)), Double.parseDouble(entry.getRunTime()));
+            points[iteratorCount] = pointRunTime;
             iteratorCount++;
         }
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(points);
@@ -120,6 +120,7 @@ public class BatteryStatsGraph extends Fragment {
             public void onTap(Series series, DataPointInterface dataPoint) {
                 Dialog dialog = new Dialog(view2.getContext());
                 Entry popup_entry;
+                Long timeSeconds;
 
                 dialog.setContentView(R.layout.popup_view_statistics);
 
@@ -132,10 +133,59 @@ public class BatteryStatsGraph extends Fragment {
                 popup_entry = entryList.get((int) dataPoint.getX());
 
                 int entry = (int) dataPoint.getX();
+                //timeSeconds = Long.parseLong(popup_entry.getRunTime());
+                timeSeconds = Long.parseLong(Integer.toString(3876));
+
+                if ((timeSeconds / 60) >= 60) {          //more than one hour
+                    int hours;
+                    String strHours;
+                    int minutes;
+                    String strMinutes;
+                    int seconds;
+                    String strSeconds;
+                    hours = Integer.parseInt(Long.toString(timeSeconds / 3600));
+                    if (hours < 10) {
+                        strHours = "0" + Integer.toString(hours);
+                    } else {
+                        strHours = Integer.toString(hours);
+                    }
+                    minutes = (Integer.parseInt(Long.toString(timeSeconds)) / 60) - (hours * 60);
+                    if (minutes < 10) {
+                        strMinutes = "0" + Integer.toString(minutes);
+                    } else {
+                        strMinutes = Integer.toString(minutes);
+                    }
+                    seconds = Integer.parseInt(Long.toString(timeSeconds)) - ((hours * 3600) + (minutes * 60));
+                    if (seconds < 10) {
+                        strSeconds = "0" + Integer.toString(seconds);
+                    } else {
+                        strSeconds = Integer.toString(seconds);
+                    }
+                    txtBatteryRunTime.setText(strHours + ":" + strMinutes + ":" + strSeconds);
+                } else if ((timeSeconds / 60) >= 1) {
+                    int minutes = (Integer.parseInt(Long.toString(timeSeconds)) / 60);
+                    int seconds = Integer.parseInt(Long.toString(timeSeconds)) - (minutes * 60);
+                    String strMinutes;
+                    String strSeconds;
+
+                    if (minutes < 10) {
+                        strMinutes = "0" + Integer.toString(minutes);
+                    } else {
+                        strMinutes = Integer.toString(minutes);
+                    }
+                    if (seconds < 10) {
+                        strSeconds = "0" + Integer.toString(seconds);
+                    } else {
+                        strSeconds = Integer.toString(seconds);
+                    }
+                    txtBatteryRunTime.setText(strMinutes + ":" + strSeconds);
+                } else {
+                    txtBatteryRunTime.setText("00:" + Long.toString(timeSeconds));
+                }
 
                 txtEntryNumber.setText(Integer.toString(entry));
                 txtBatteryName.setText(popup_entry.getBatteryName());
-                txtBatteryRunTime.setText(popup_entry.getRunTime());
+                // txtBatteryRunTime.setText(popup_entry.getRunTime());
                 txtBatteryStart.setText(popup_entry.getStartCharge() + "%");
                 txtBatteryEnd.setText(popup_entry.getEndCharge() + "%");
 

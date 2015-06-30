@@ -154,7 +154,7 @@ public class SaveData {
         ContentValues values = new ContentValues();
         int runTime;
 
-        runTime = Integer.parseInt(Long.toString(time)) / 1000;
+        runTime = Integer.parseInt(Long.toString(time));
 
         //add values to be inserted
         values.put(batteryName, name);

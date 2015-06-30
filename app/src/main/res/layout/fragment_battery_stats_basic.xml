@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center_vertical|center_horizontal"
-        android:layout_weight=".16">
+        android:layout_weight=".14">
 
         <TextView
             android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center_vertical|center_horizontal"
-        android:layout_weight=".16">
+        android:layout_weight=".14">
 
         <TextView
             android:layout_width="wrap_content"
@@ -66,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_weight=".16"
+        android:layout_weight=".14"
         android:gravity="center_vertical|center_horizontal">
 
         <TextView
@@ -94,7 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_weight=".16"
+        android:layout_weight=".14"
         android:gravity="center_vertical|center_horizontal">
 
         <TextView
@@ -121,7 +121,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight=".16"
+        android:layout_weight=".14"
         android:gravity="center_vertical|center_horizontal">
 
         <TextView
@@ -148,7 +148,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight=".16"
+        android:layout_weight=".14"
         android:gravity="center_vertical|center_horizontal">
 
         <TextView
@@ -166,6 +166,29 @@
             android:id="@+id/txtCyclesCompleted"
             android:textSize="22dp" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight=".14"
+        android:gravity="center_vertical|center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cycles Left:"
+            android:id="@+id/textView16"
+            android:textSize="22dp"
+            android:layout_marginRight="6dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/txtCyclesLeft"
+            android:textSize="22dp" />
     </LinearLayout>
 
 </LinearLayout>
