@@ -2,7 +2,6 @@ package com.example.parrish.test;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,16 +9,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.SecondScale;
 import com.jjoe64.graphview.Viewport;
-import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -49,7 +45,6 @@ public class BatteryStatsGraph extends Fragment {
         BatteryStatsGraph fragment = new BatteryStatsGraph();
         Bundle args = new Bundle();
         args.putString("batteryName", batteryName);
-        //args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -140,16 +135,11 @@ public class BatteryStatsGraph extends Fragment {
         viewPort.setMaxY(highestPoint);
         viewPort.setMaxX(Double.parseDouble(Integer.toString(iteratorCount)));
         viewPort.setScalable(true);
-        //viewPort.setMaxY(200);
 
         secondScale = graph.getSecondScale();
         secondScale.addSeries(seriesCharge);
         secondScale.setMinY(0);
         secondScale.setMaxY(100);
-/*        graph.getSecondScale().addSeries(seriesCharge);
-        graph.getSecondScale().setMinY(0);
-        graph.getSecondScale().setMaxY(100);
-        graph.getGridLabelRenderer().setVerticalLabelsSecondScaleColor(Color.RED);*/
         graph.getLegendRenderer().setVisible(true);
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
         graph.onDataChanged(false, true);
