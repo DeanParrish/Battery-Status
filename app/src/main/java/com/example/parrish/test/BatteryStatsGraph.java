@@ -3,6 +3,7 @@ package com.example.parrish.test;
 import android.app.Activity;
 import android.app.Dialog;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,14 +14,21 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.LegendRenderer;
+import com.jjoe64.graphview.SecondScale;
 import com.jjoe64.graphview.Viewport;
+import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.PointsGraphSeries;
 import com.jjoe64.graphview.series.Series;
 
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.Iterator;
 import java.util.List;
 
@@ -88,34 +96,70 @@ public class BatteryStatsGraph extends Fragment {
         final List<Entry> entryList;
         Iterator<Entry> iterator;
         Entry entry;
-        DataPoint pointRunTime;
+        DataPoint point;
         int iteratorCount = 0;
+        double highestPoint = 0;
+        double minutes;
+        int chargeUsed;
         save = new SaveData(view.getContext());
         graph = (GraphView) view.findViewById(R.id.graph);
+        SecondScale secondScale;
+        NumberFormat numberFormat;
         final View view2 = view;
 
         entryList = save.getAllEntriesForBattery(batteryName);
-        DataPoint[] points = new DataPoint[entryList.size()];
+        DataPoint[] pointsRunTime = new DataPoint[entryList.size()];
+        DataPoint[] pointsCharge = new DataPoint[entryList.size()];
 
         iterator = entryList.listIterator();
         while (iterator.hasNext()){
             entry = iterator.next();
-            pointRunTime = new DataPoint(Double.parseDouble(Integer.toString(iteratorCount)), Double.parseDouble(entry.getRunTime()));
-            points[iteratorCount] = pointRunTime;
+            minutes = Double.parseDouble(entry.getRunTime()) / 60;
+            point = new DataPoint(Double.parseDouble(Integer.toString(iteratorCount)), minutes);
+            pointsRunTime[iteratorCount] = point;
+            if (minutes > highestPoint){
+                highestPoint = minutes;  //set respectful view for y-axis
+            }
+            chargeUsed = Integer.parseInt(entry.getStartCharge()) - Integer.parseInt(entry.getEndCharge());
+            point = new DataPoint(Double.parseDouble(Integer.toString(iteratorCount)), Double.parseDouble(Integer.toString(chargeUsed)));
+            pointsCharge[iteratorCount] = point;
             iteratorCount++;
         }
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(points);
-        series.setDrawDataPoints(true);
-        Viewport viewPort = graph.getViewport();
+        LineGraphSeries<DataPoint> seriesRunTime = new LineGraphSeries<>(pointsRunTime);
+        PointsGraphSeries<DataPoint> seriesCharge = new PointsGraphSeries<>(pointsCharge);
+        seriesRunTime.setDrawDataPoints(true);
+        seriesCharge.setColor(Color.parseColor("#FFB2B2"));     //light red for bar chart
+        seriesRunTime.setTitle("Run Time");
+        seriesCharge.setTitle("Charge Used");
 
+        Viewport viewPort = graph.getViewport();
         viewPort.setMinY(0);
         viewPort.setYAxisBoundsManual(true);
         viewPort.setScrollable(true);
-        viewPort.setMaxY(100);
+        highestPoint = 5*(Math.ceil(Math.abs(highestPoint / 5))); //rounds to nearest increment of 5 for runtime
+        viewPort.setMaxY(highestPoint);
+        viewPort.setMaxX(Double.parseDouble(Integer.toString(iteratorCount)));
+        viewPort.setScalable(true);
+        //viewPort.setMaxY(200);
+
+        secondScale = graph.getSecondScale();
+        secondScale.addSeries(seriesCharge);
+        secondScale.setMinY(0);
+        secondScale.setMaxY(100);
+/*        graph.getSecondScale().addSeries(seriesCharge);
+        graph.getSecondScale().setMinY(0);
+        graph.getSecondScale().setMaxY(100);
+        graph.getGridLabelRenderer().setVerticalLabelsSecondScaleColor(Color.RED);*/
+        graph.getLegendRenderer().setVisible(true);
+        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
         graph.onDataChanged(false, true);
 
+        numberFormat = NumberFormat.getNumberInstance();
+        numberFormat.setRoundingMode(RoundingMode.DOWN);
+        graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(numberFormat, numberFormat));
 
-        series.setOnDataPointTapListener(new OnDataPointTapListener() {
+
+        seriesRunTime.setOnDataPointTapListener(new OnDataPointTapListener() {
             @Override
             public void onTap(Series series, DataPointInterface dataPoint) {
                 Dialog dialog = new Dialog(view2.getContext());
@@ -133,8 +177,7 @@ public class BatteryStatsGraph extends Fragment {
                 popup_entry = entryList.get((int) dataPoint.getX());
 
                 int entry = (int) dataPoint.getX();
-                //timeSeconds = Long.parseLong(popup_entry.getRunTime());
-                timeSeconds = Long.parseLong(Integer.toString(3876));
+                timeSeconds = Long.parseLong(popup_entry.getRunTime());
 
                 if ((timeSeconds / 60) >= 60) {          //more than one hour
                     int hours;
@@ -180,7 +223,13 @@ public class BatteryStatsGraph extends Fragment {
                     }
                     txtBatteryRunTime.setText(strMinutes + ":" + strSeconds);
                 } else {
-                    txtBatteryRunTime.setText("00:" + Long.toString(timeSeconds));
+                    int seconds = Integer.parseInt(Long.toString(timeSeconds));
+                    if (seconds < 10) {
+                        txtBatteryRunTime.setText("00:0" + seconds);
+                    } else {
+                        txtBatteryRunTime.setText("00:" + seconds);
+                    }
+
                 }
 
                 txtEntryNumber.setText(Integer.toString(entry));
@@ -193,7 +242,9 @@ public class BatteryStatsGraph extends Fragment {
             }
         }) ;
 
-        graph.addSeries(series);
+        //graph.addSeries(seriesCharge);
+        graph.addSeries(seriesRunTime);
+
 
     }
 }
