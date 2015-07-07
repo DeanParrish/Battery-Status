@@ -22,17 +22,6 @@
         </activity>
         <!-- Search results activity -->
         <activity
-            android:name=".SearchResultsActivity"
-            android:parentActivityName=".SearchResultsActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
-        <activity
             android:name=".CreateEntry"
             android:label="@string/title_activity_create_entry"
             android:parentActivityName=".MainActivity" />

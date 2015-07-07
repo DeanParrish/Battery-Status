@@ -113,6 +113,16 @@ public class SaveData {
         return batteries;
     }
 
+    public void update(){
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+
+        db = dbcon.getWritableDatabase();
+
+        dbcon.onUpgrade(db, 1, 2);
+
+        db.close();
+    }
+
     public void deleteBattery(String name){
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         String query = "DELETE FROM " + batteryTableName + " WHERE name = ?";

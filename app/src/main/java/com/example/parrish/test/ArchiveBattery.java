@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
+import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +38,12 @@ public class ArchiveBattery extends Activity {
     CharSequence toastText = "Battery deleted";
     CharSequence toastTextError = "Select a battery";
 
+    List<Battery> batteries;
+    Battery battery;
+    String[] batteryNames;
+
+    ArrayAdapter<String> adapterSearch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,12 +58,13 @@ public class ArchiveBattery extends Activity {
         actionBar.setDisplayShowTitleEnabled(false);
 
         //region Populate List from database
-        List<Battery> batteries;
-        Battery battery;
-        String[] batteryNames;
+//        List<Battery> batteries;
+//        Battery battery;
+//        String[] batteryNames;
         //start population of drop down list
         save = new SaveData(getApplicationContext());
         //gets all batteries in a List<Battery>
+        //batteries = save.getAllBatteries();
         batteries = save.getAllBatteries();
 
         if (batteries.size() == 0) {
@@ -99,7 +108,32 @@ public class ArchiveBattery extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_archive_battery, menu);
-        return true;
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+//        ListView batteryList = (ListView) findViewById(R.id.listView);
+        ListView batteryList = (ListView) findViewById(R.id.listView);
+
+        adapterSearch = new ArrayAdapter<>(ArchiveBattery.this, android.R.layout.simple_list_item_single_choice, batteryNames);
+        adapterSearch.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        batteryList.setAdapter(adapterSearch);
+        batteryList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String arg0) {
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String arg0) {
+                ArchiveBattery.this.adapterSearch.getFilter().filter(arg0);
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -146,17 +180,17 @@ public class ArchiveBattery extends Activity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_archive) {
             if (batteryName != null) {
-            // show alert dialog
+                // show alert dialog
                 alertDialog.show();
-            }else{
-                createToast(toastTextError,duration);
+            } else {
+                createToast(toastTextError, duration);
             }
         }
         return super.onOptionsItemSelected(item);
     }
 
     //methods
-    public void createToast(CharSequence text, Integer duration){
+    public void createToast(CharSequence text, Integer duration) {
         Toast toast = Toast.makeText(getApplicationContext(), text, duration);
         toast.show();
     }
