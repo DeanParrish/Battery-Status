@@ -250,6 +250,7 @@ public class CreateBattery extends Activity {
                     batteryCycle = parseInt(txtCycle.getText().toString());
                     //add the battery to the database
                     try {
+                        //save.upgrade(2, 3);
                         save.addBattery(batteryName, batteryCells, batteryMah, batteryCycle, type);
                         toastCreate.show();
                         finish();

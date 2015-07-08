@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,11 +27,12 @@ public class SaveData {
     private static String batteryCycles = "cycles";
     private static String batteryType = "type";
     private static String entryTableName = "entries";
-    private static String entryID = "id";
     private static String chargeTime = "time";
     private static String chargeStart = "start";
     private static String chargeEnd = "end";
-    private FeedReaderDbHelper dbconnn;
+    private static String entryDate = "date";
+    private static String entryTime = "dateTime";
+    private static String entryNotes = "notes";
 
     public SaveData() {
 
@@ -37,7 +40,7 @@ public class SaveData {
 
     public SaveData(Context con) {
         context = con;
-        dbconnn = new FeedReaderDbHelper(con);
+        //dbconnn = new FeedReaderDbHelper(con);
     }
 
     public void addBattery(String name, int cells, int mah, int cycles, String type) {
@@ -149,9 +152,16 @@ public class SaveData {
         }
     }
 
-    public void addEntry(String name, long time, int start, int end) {
+    public void addEntry(String name, long time, int start, int end, String notes) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         ContentValues values = new ContentValues();
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        String date = dateFormat.format(calendar.getTime());
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+        String dateTime = timeFormat.format(calendar.getTime());
+
+
         int runTime;
 
         runTime = Integer.parseInt(Long.toString(time));
@@ -161,6 +171,10 @@ public class SaveData {
         values.put(chargeTime, runTime);
         values.put(chargeStart, start);
         values.put(chargeEnd, end);
+        values.put(entryDate, date);
+        values.put(entryTime, dateTime);
+        values.put(entryNotes, notes);
+
 
         db = dbcon.getWritableDatabase();
 
@@ -190,6 +204,9 @@ public class SaveData {
                 entry.setRunTime(cursor.getInt(2));
                 entry.setStartCharge(Integer.parseInt(cursor.getString(3)));
                 entry.setEndCharge(Integer.parseInt(cursor.getString(4)));
+                entry.setEntryDate(cursor.getString(5));
+                entry.setEntryTime(cursor.getString(6));
+                entry.setNotes(cursor.getString(7));
 
                 entries.add(entry);
             } while (cursor.moveToNext());
@@ -218,12 +235,22 @@ public class SaveData {
                 entry.setRunTime(cursor.getInt(2));
                 entry.setStartCharge(Integer.parseInt(cursor.getString(3)));
                 entry.setEndCharge(Integer.parseInt(cursor.getString(4)));
+                entry.setEntryDate(cursor.getString(5));
+                entry.setEntryTime(cursor.getString(6));
+                entry.setNotes(cursor.getString(7));
 
                 entries.add(entry);
             } while (cursor.moveToNext());
         }
 
         return entries;
+    }
+
+    public void upgrade(int oldVer, int newVer){
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        db = dbcon.getWritableDatabase();
+        dbcon.onUpgrade(db, oldVer, newVer);
+        db.close();
     }
 }
 

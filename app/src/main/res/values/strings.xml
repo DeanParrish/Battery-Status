@@ -35,7 +35,7 @@
         <item>NiCd</item>
         <item>LiFe</item>
     </array>
-    <array name="cell_number">
+    <string-array name="cell_number">
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -44,7 +44,21 @@
         <item>6</item>
         <item>7</item>
         <item>8</item>
-    </array>
+    </string-array>
+
+    <string-array name="MAH">
+        <item>0</item>
+        <item>1000</item>
+        <item>2000</item>
+        <item>3000</item>
+        <item>4000</item>
+        <item>5000</item>
+        <item>6000</item>
+        <item>7000</item>
+        <item>8000</item>
+        <item>9000</item>
+        <item>10000</item>
+    </string-array>
 
     <string name="title_activity_edit_battery">EditBattery</string>
 

@@ -10,6 +10,9 @@ public class Entry implements Serializable {
     private int runTime;
     private int startCharge;
     private int endCharge;
+    private String entryDate;
+    private String entryTime;
+    private String notes;
 
     public Entry() {
     }
@@ -39,6 +42,12 @@ public class Entry implements Serializable {
         this.endCharge = charge;
     }
 
+    public void setEntryDate(String date){this.entryDate = date; }
+
+    public void setEntryTime(String time){this.entryTime = time; }
+
+    public void setNotes(String notes){ this.notes = notes; }
+
     //getters
     public String getBatteryName(){
         return this.batteryName;
@@ -54,4 +63,7 @@ public class Entry implements Serializable {
     public String getEndCharge(){
         return  Integer.toString(this.endCharge);
     }
+    public String getEntryDate() {return this.entryDate; }
+    public String getEntryTime() {return  this.entryTime; }
+    public String getNotes() {return this.notes; }
 }

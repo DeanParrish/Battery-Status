@@ -90,15 +90,13 @@ public class CreateEntry extends Activity {
                 timeSave = persistentTime;
                 chronoTime.setBase(SystemClock.elapsedRealtime() - timeSave);
                 buttonStopPressed.setImageResource(R.mipmap.ic_stop_pressed);
-            }
-            else{
+            } else {
                 buttonStopPressed.setImageResource(R.mipmap.ic_stop);
             }
         }
 
         //Seekbar start
-        seekBar_start.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-                                                 {
+        seekBar_start.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                                                      int progress = 0;
 
                                                      @Override
@@ -274,9 +272,9 @@ public class CreateEntry extends Activity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Saving variables
         savedInstanceState.putLong("timerTime", persistentTime);
-        savedInstanceState.putBoolean("submitTimer",submitTimer);
-        savedInstanceState.putBoolean("startTimer",startTimer);
-        savedInstanceState.putString("stringTime",stringTime);
+        savedInstanceState.putBoolean("submitTimer", submitTimer);
+        savedInstanceState.putBoolean("startTimer", startTimer);
+        savedInstanceState.putString("stringTime", stringTime);
 
 
         // Call at the end
@@ -434,14 +432,17 @@ public class CreateEntry extends Activity {
         Spinner ddlName = (Spinner) findViewById(R.id.ddlName);
         Chronometer chronoTime = (Chronometer) findViewById(R.id.chronoTime);
         TextView lblStartPercent = (TextView) findViewById(R.id.lblPercentStart);
+        TextView txtNotes = (TextView) findViewById(R.id.txtNotes);
         Boolean isValidTextPercent = true;
         Boolean isValidTimeText;
+        Boolean isValidNotes = true;
         String name;
         Integer seekStart;
         Integer seekEnd;
         Integer start;
         Integer end;
         Integer time;
+        String notes;
         Context context = getApplicationContext();
         SaveData save = new SaveData(context);
         CharSequence toastText = "Entry created!";
@@ -478,15 +479,23 @@ public class CreateEntry extends Activity {
             isValidTextPercent = false;
         }
 
-        if (isValidTimeText == true && isValidTextPercent == true) {
+        if (txtNotes.getText().length() > 200) {
+            txtNotes.setError("Notes cannot be longer than 200 characters");
+            isValidNotes = false;
+        } else {
+            isValidNotes = true;
+        }
+
+        if (isValidTimeText == true && isValidTextPercent == true && isValidNotes == true) {
             try {
                 name = ddlName.getSelectedItem().toString();
                 start = Integer.valueOf(txtStart.getText().toString());//txtStart.getText().toString().substring(0, txtStart.length() - 1));
                 end = Integer.valueOf(txtEnd.getText().toString());//.substring(0, txtEnd.length() - 1));
                 time = totalSeconds;//(chronoTime.getBase() - SystemClock.elapsedRealtime()) * -1;
+                notes = txtNotes.getText().toString();
 
                 try {
-                    save.addEntry(name, time, start, end);
+                    save.addEntry(name, time, start, end, notes);
                     toast.show();
                     finish();
                 } catch (SQLiteException e) {
