@@ -34,6 +34,14 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/listEntries"
                 android:layout_margin="10dp" />
+<!--            <com.baoyz.swipemenulistview.SwipeMenuListView
+                android:id="@+id/listEntries"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/title"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp" />-->
         </LinearLayout>
     </LinearLayout>
 

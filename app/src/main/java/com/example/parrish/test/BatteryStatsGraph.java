@@ -30,6 +30,7 @@ import com.jjoe64.graphview.series.Series;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -183,7 +184,6 @@ public class BatteryStatsGraph extends Fragment {
                 TextView txtBatteryStart = (TextView) dialog.findViewById(R.id.txtBatteryStart);
                 TextView txtBatteryEnd = (TextView) dialog.findViewById(R.id.txtBatteryEnd);
                 TextView txtEntryNumber = (TextView) dialog.findViewById(R.id.txtEntryNumber);
-                //TextView txtNotes = (TextView) dialog.findViewById(R.id.txtNotes);
                 EditText txtNotes = (EditText) dialog.findViewById(R.id.txtNotes);
                 TextView txtDate = (TextView) dialog.findViewById(R.id.txtDate);
                 TextView txtTime = (TextView) dialog.findViewById(R.id.txtTime);
@@ -273,7 +273,7 @@ public class BatteryStatsGraph extends Fragment {
             entryDates[i] = entry.getEntryDate() + " " + entry.getEntryTime();
         }
 
-        Arrays.sort(entryDates);
+        Arrays.sort(entryDates, Collections.reverseOrder());
         ListView entryList = (ListView) view.findViewById(R.id.listEntries);
 
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(BatteryStatsGraph.this, android.R.layout.simple_list_item_single_choice, entryDates);

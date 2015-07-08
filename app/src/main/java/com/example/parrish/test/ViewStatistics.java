@@ -111,7 +111,108 @@ public class ViewStatistics extends Activity {
 
         Arrays.sort(batteryNames);*/
 //        ListView batteryList = (ListView) findViewById(R.id.listView);
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_view_statistics, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+//        ListView batteryList = (ListView) findViewById(R.id.listView);
+/*        SwipeMenuListView batteryListSwipe = (SwipeMenuListView) findViewById(R.id.listView);
+        // Adding items to listview
+        adapterSearch = new ArrayAdapter<>(ViewStatistics.this, android.R.layout.simple_list_item_1, batteryNames);
+        batteryListSwipe.setAdapter(adapterSearch);*/
+     //   batteryListSwipe.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String arg0) {
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String arg0) {
+                ViewStatistics.this.adapterSearch.getFilter().filter(arg0);
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+/*        if (id == R.id.action_details) {
+            if (batteryName != null) {
+                Intent intent = new Intent(context, BatteryStatistics.class);
+                intent.putExtra("battery",batteryName);
+                startActivity(intent);
+            } else {
+                createToast(toastText, duration);
+            }
+        }*/
+        if (id == R.id.action_filter){
+            handleFilter();
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    //methods
+    public void createToast(CharSequence text, Integer duration) {
+        Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+        toast.show();
+    }
+
+    //handles battery list display
+    public void displayList(ListView list, List<Battery> batteries ){
+        Battery battery;
+        String[] batteryNames = new String[batteries.size()];
+        //loops through the List<Battery>
+        for (int i = 0; i < batteries.size(); i++) {
+            //gets the battery into the object battery
+            battery = batteries.get(i);
+            //appends the battery name to the batteryName array
+            batteryNames[i] = battery.getName();
+        }
+
+        Arrays.sort(batteryNames);
+
         final SwipeMenuListView batteryListSwipe = (SwipeMenuListView) findViewById(R.id.listView);
+        // Adding items to listview
+        adapterSearch = new ArrayAdapter<>(ViewStatistics.this, android.R.layout.simple_list_item_1, batteryNames);
+        batteryListSwipe.setAdapter(adapterSearch);
+/*        batteryList = (ListView) findViewById(R.id.listView);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewStatistics.this, android.R.layout.simple_list_item_single_choice, batteryNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        batteryList.setAdapter(adapter);
+        batteryList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);*/
+
+/*        // listening to single list item on click
+        batteryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+
+                // populating class with selected item
+                String name = ((TextView) view).getText().toString();
+                batteryName = name;
+                pBattery.setName(name);
+            }
+        });*/
+
+        //final SwipeMenuListView batteryListSwipe = (SwipeMenuListView) findViewById(R.id.listView);
 
         // listening to single list item on click
 //        batteryListSwipe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -259,99 +360,6 @@ public class ViewStatistics extends Activity {
             @Override
             public void onSwipeEnd(int position) {
                 // swipe end
-            }
-        });
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_view_statistics, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-//        ListView batteryList = (ListView) findViewById(R.id.listView);
-        SwipeMenuListView batteryListSwipe = (SwipeMenuListView) findViewById(R.id.listView);
-        // Adding items to listview
-        adapterSearch = new ArrayAdapter<>(ViewStatistics.this, android.R.layout.simple_list_item_1, batteryNames);
-        batteryListSwipe.setAdapter(adapterSearch);
-//        batteryListSwipe.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String arg0) {
-
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String arg0) {
-                ViewStatistics.this.adapterSearch.getFilter().filter(arg0);
-                return false;
-            }
-        });
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_details) {
-            if (batteryName != null) {
-                Intent intent = new Intent(context, BatteryStatistics.class);
-                intent.putExtra("battery",batteryName);
-                startActivity(intent);
-            } else {
-                createToast(toastText, duration);
-            }
-        } else if (id == R.id.action_filter){
-            handleFilter();
-        }
-
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    //methods
-    public void createToast(CharSequence text, Integer duration) {
-        Toast toast = Toast.makeText(getApplicationContext(), text, duration);
-        toast.show();
-    }
-
-    //handles battery list display
-    public void displayList(ListView list, List<Battery> batteries ){
-        Battery battery;
-        String[] batteryNames = new String[batteries.size()];
-        //loops through the List<Battery>
-        for (int i = 0; i < batteries.size(); i++) {
-            //gets the battery into the object battery
-            battery = batteries.get(i);
-            //appends the battery name to the batteryName array
-            batteryNames[i] = battery.getName();
-        }
-
-        Arrays.sort(batteryNames);
-        batteryList = (ListView) findViewById(R.id.listView);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewStatistics.this, android.R.layout.simple_list_item_single_choice, batteryNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-        batteryList.setAdapter(adapter);
-        batteryList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
-        // listening to single list item on click
-        batteryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                // populating class with selected item
-                String name = ((TextView) view).getText().toString();
-                batteryName = name;
-                pBattery.setName(name);
             }
         });
     }
