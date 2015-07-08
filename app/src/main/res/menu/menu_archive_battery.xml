@@ -6,10 +6,11 @@
         android:icon="@mipmap/ic_search"
         android:orderInCategory="0"
         android:showAsAction="ifRoom"
-        android:title="@string/activity_search" />
+        android:title="@string/activity_search"
+        android:actionViewClass="android.widget.SearchView"/>
     <item
         android:id="@+id/action_archive"
-        android:icon="@mipmap/ic_archive"
+        android:icon="@mipmap/ic_delete"
         android:orderInCategory="0"
         android:showAsAction="ifRoom"
         android:title="@string/activity_archive" />

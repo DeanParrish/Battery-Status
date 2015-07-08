@@ -58,32 +58,24 @@ public class MainActivity extends Activity {
         //start population of drop down list
         save = new SaveData(getApplicationContext());
         //gets all batteries in a List<Battery>
-        batteries = save.getAllBatteries();
+        try {
+            batteries = save.getAllBatteries();
 
-        if (batteries.size() == 0) {
-            noBatteryFlag = true;
+
+            if (batteries.size() == 0) {
+                noBatteryFlag = true;
 //            Intent intent = new Intent(this, MainActivity.class);
 //            intent.putExtra("no_batteries", true);
 //            startActivity(intent);
-        } else {
-            noBatteryFlag = false;  //batteries exist
-        }
+            } else {
+                noBatteryFlag = false;  //batteries exist
+            }
+        } catch (
+                Exception e
+                ) {
+            Log.e("Main Activity no_batter", e.toString());
 
-//        try {
-//            Boolean no_battery = getIntent().getExtras().getBoolean("no_batteries");
-//
-//            if (no_battery == true) {
-//                CharSequence toastText = "Please create a battery first!";
-//                int duration = Toast.LENGTH_LONG;
-//                Toast toast = Toast.makeText(getApplicationContext(), toastText, duration);
-//                toast.show();
-//            }
-//        } catch (
-//                Exception e
-//                )
-//        {
-//            Log.e("Main Activity no_batter", e.toString());
-//        }
+        }
     }
 
     @Override
@@ -158,7 +150,7 @@ public class MainActivity extends Activity {
         btn_entry_remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if (noBatteryFlag ==false) {
+                if (noBatteryFlag == false) {
                     Intent intent = new Intent(context, RemoveEntry.class);
                     startActivity(intent);
                 } else {
@@ -202,7 +194,7 @@ public class MainActivity extends Activity {
     }
 
     //methods
-    public void createToast(CharSequence text, Integer duration){
+    public void createToast(CharSequence text, Integer duration) {
         Toast toast = Toast.makeText(getApplicationContext(), text, duration);
         toast.show();
     }
