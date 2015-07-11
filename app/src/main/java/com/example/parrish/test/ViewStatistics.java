@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,6 +39,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import fr.ganfra.materialspinner.MaterialSpinner;
+
 
 import Classes.Battery;
 import Classes.SaveData;
@@ -77,7 +80,8 @@ public class ViewStatistics extends Activity {
             // Enabling Up / Back navigation
             actionBar.setDisplayHomeAsUpEnabled(true);
             //hide label in action bar
-            actionBar.setDisplayShowTitleEnabled(false);
+//            actionBar.setDisplayShowTitleEnabled(false);
+            setTitle("Menu");
         } catch (NullPointerException e) {
             Log.e("actionbar", e.toString());
         }
@@ -366,15 +370,16 @@ public class ViewStatistics extends Activity {
 
     public void handleFilter(){
         final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.popup_filter_battery);
-        dialog.setTitle("Filter Batteries");
+//        dialog.setTitle("Filter Batteries");
 
         final Spinner ddlType = (Spinner) dialog.findViewById(R.id.ddlBatteryType);
         final Spinner ddlCells = (Spinner) dialog.findViewById(R.id.ddlBatteryCells);
         final Spinner ddlMahHigh = (Spinner) dialog.findViewById(R.id.ddlMAHHigh);
         final Spinner ddlMahLow = (Spinner) dialog.findViewById(R.id.ddlMAHLow);
         final Button btnFilter = (Button) dialog.findViewById(R.id.btnFilter);
-        final  Button btnClearFilter = (Button) dialog.findViewById(R.id.btnClearFilter);
+        final Button btnClearFilter = (Button) dialog.findViewById(R.id.btnClearFilter);
         final CheckBox chkCells = (CheckBox) dialog.findViewById(R.id.chkCells);
         final CheckBox chkMAH = (CheckBox) dialog.findViewById(R.id.chkMAH);
         final CheckBox chkType = (CheckBox) dialog.findViewById(R.id.chkBatteryType);

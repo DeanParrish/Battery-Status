@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
         addListenerOnButton();
         addListenerOnButton2();
         addListenerOnButton3();
-        addListenerOnButton4();
+//        addListenerOnButton4();
         addListenerOnButton5();
         addListenerOnButton6();
 
@@ -144,21 +144,21 @@ public class MainActivity extends Activity {
         });
     }
 
-    public void addListenerOnButton4() {
-//        final Context context = this;
-        btn_entry_remove = (Button) findViewById(R.id.button9);
-        btn_entry_remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                if (noBatteryFlag == false) {
-                    Intent intent = new Intent(context, RemoveEntry.class);
-                    startActivity(intent);
-                } else {
-                    createToast(toastText, duration);
-                }
-            }
-        });
-    }
+//    public void addListenerOnButton4() {
+////        final Context context = this;
+//        btn_entry_remove = (Button) findViewById(R.id.button9);
+//        btn_entry_remove.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View arg0) {
+//                if (noBatteryFlag == false) {
+//                    Intent intent = new Intent(context, RemoveEntry.class);
+//                    startActivity(intent);
+//                } else {
+//                    createToast(toastText, duration);
+//                }
+//            }
+//        });
+//    }
 
     public void addListenerOnButton5() {
 //        final Context context = this;

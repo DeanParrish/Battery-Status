@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation='horizontal'
@@ -43,14 +44,15 @@
             android:paddingBottom="10dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:paddingTop="10dp">
+            android:paddingTop="5dp"
+            android:weightSum="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".15"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_height="0dp"
+                android:layout_weight=".2"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
                 <TextView
                     android:id="@+id/textView"
@@ -58,26 +60,25 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/title"
-                    android:layout_gravity="center_vertical"
                     android:text="Select your Battery:"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <Spinner
                     android:id="@+id/ddlName"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/textView"
-                    android:layout_gravity="center_vertical"
                     android:layout_toEndOf="@+id/textView"
                     android:spinnerMode="dropdown"
-                    android:text="20dp" />
+                    android:text="20dp"
+                    android:gravity="center_vertical" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".3"
+                android:layout_weight=".4"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
@@ -96,7 +97,7 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".3"
+                android:layout_weight=".4"
                 android:gravity="center_vertical|center_horizontal"
                 android:orientation="horizontal"
                 android:padding="5dp"
@@ -151,13 +152,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight=".5"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp">
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".17"
-                android:gravity="center_vertical|center_horizontal"
+                android:layout_weight=".1"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="2dp">
 
@@ -167,9 +172,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@+id/textView3"
                     android:layout_centerVertical="true"
-                    android:text="Starting Charge:"
+                    android:text="Start Charge:"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/txtStart"
@@ -178,34 +183,34 @@
                     android:gravity="bottom|right"
                     android:text="0"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/lblPercent"
+                    android:id="@+id/lblPercent2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="%"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
-            <SeekBar
-                android:id="@+id/seekBar"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignStart="@+id/seekBar2"
-                android:layout_gravity="center_horizontal"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp" />
+            <!--<SeekBar-->
+                <!--android:id="@+id/seekBar"-->
+                <!--android:layout_width="200dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_alignStart="@+id/seekBar2"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:paddingBottom="5dp"-->
+                <!--android:paddingTop="5dp" />-->
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_weight=".17"
-                android:gravity="center_vertical|center_horizontal"
+                android:layout_weight=".1"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="2dp">
 
@@ -215,9 +220,9 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/seekBar"
                     android:layout_toStartOf="@+id/btnReset"
-                    android:text="Ending Charge:"
+                    android:text="End Charge:"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/txtEnd"
@@ -226,7 +231,7 @@
                     android:gravity="bottom|right"
                     android:text="0"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/lblPercent"
@@ -234,19 +239,78 @@
                     android:layout_height="wrap_content"
                     android:text="%"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
-            <SeekBar
-                android:id="@+id/seekBar2"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/txtEnd"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center_horizontal"
-                android:paddingTop="5dp"
-                android:paddingBottom="15dp" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".25"
+                android:gravity="center_horizontal">
+
+                <com.appyvet.rangebar.RangeBar
+                    xmlns:custom="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/rangebar"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    custom:tickStart="0"
+                    custom:tickInterval="1"
+                    custom:tickEnd="100"
+                    custom:tickColor="#5f030303"
+                    custom:tickHeight="0dp"
+                    custom:barColor="#5f030303"
+                    custom:barWeight="3dp"
+                    custom:pinColor="#ff1b9c7b"
+                    custom:textColor="#fff"
+                    custom:selectorSize="2dp"
+                    custom:connectingLineColor="#ff1b9c7b"
+                    custom:selectorColor="#ff1b9c7b" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".25">
+
+                <ScrollView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/scrollView2" >
+
+                    <com.rey.material.widget.EditText
+                        style="@style/Material.Widget.EditText.Light"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtNotes"
+                        android:inputType="textMultiLine"
+                        android:textColor="#FF000000"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                        android:hint="Notes"
+                        android:textSize="20sp"
+                        app:et_inputId="@+id/txtNotes_input"
+                        app:et_labelTextColor="#8d030303"
+                        app:et_supportMode="charCounter"
+                        app:et_supportMaxChars="150"
+                        app:et_supportTextErrorColor="#FFFF0000"
+                        app:et_dividerErrorColor="#FFFF0000" />
+                </ScrollView>
+
+            </LinearLayout>
+
+            <!--<SeekBar-->
+                <!--android:id="@+id/seekBar2"-->
+                <!--android:layout_width="200dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_above="@+id/txtEnd"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:paddingTop="5dp"-->
+                <!--android:paddingBottom="15dp" />-->
         </LinearLayout>
     </LinearLayout>
 

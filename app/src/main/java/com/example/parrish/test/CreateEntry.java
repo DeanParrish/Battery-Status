@@ -14,13 +14,15 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Chronometer;
-import android.widget.EditText;
+//import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -35,15 +37,18 @@ import Classes.Battery;
 import Classes.Entry;
 import Classes.SaveData;
 
+import com.appyvet.rangebar.RangeBar;
+import com.rey.material.widget.EditText;
+
 
 public class CreateEntry extends Activity {
 
-    SeekBar seekBar_start;
     TextView textView_start;
-    SeekBar seekBar_end;
     TextView textView_end;
     SaveData save;
     long timeSave = 0L;
+
+    int orientation;
     Boolean startTimer = false;
     Boolean stopTimer = true;
     Boolean pauseTimer = false;
@@ -53,7 +58,7 @@ public class CreateEntry extends Activity {
     Boolean pauseToggle = false;
     long persistentTime = 0L;
 
-//    Chronometer chronoTime = (Chronometer) findViewById(R.id.chronoTime);
+    private RangeBar rangebar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,14 +75,16 @@ public class CreateEntry extends Activity {
         }
         initializeVariables();
 
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         // hides shadow from action bar
         ActionBar actionBar = getActionBar();
         actionBar.setElevation(0);
         // Enabling Up / Back navigation
         actionBar.setDisplayHomeAsUpEnabled(true);
         //hide label in action bar
-        actionBar.setDisplayShowTitleEnabled(false);
-
+//        actionBar.setDisplayShowTitleEnabled(false);
+        setTitle("Menu");
         final ImageButton buttonStopPressed = (ImageButton) findViewById(R.id.btnStop);
 
         if (savedInstanceState != null) {
@@ -95,51 +102,16 @@ public class CreateEntry extends Activity {
             }
         }
 
-        //Seekbar start
-        seekBar_start.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                                                     int progress = 0;
-
-                                                     @Override
-                                                     public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                                                         progress = progresValue;
-                                                         textView_start.setText(seekBar.getProgress() + "");
-                                                     }
-
-                                                     @Override
-                                                     public void onStartTrackingTouch(SeekBar seekBar) {
-                                                         textView_start.setText(seekBar.getProgress() + "");
-                                                     }
-
-                                                     @Override
-                                                     public void onStopTrackingTouch(SeekBar seekBar) {
-                                                         textView_start.setText(seekBar.getProgress() + "");
-                                                     }
-                                                 }
-
-        );
-
-        //seekbar end
-        seekBar_end.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                                                   int progress = 0;
-
-                                                   @Override
-                                                   public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                                                       progress = progresValue;
-                                                       textView_end.setText(seekBar.getProgress() + "");
-                                                   }
-
-                                                   @Override
-                                                   public void onStartTrackingTouch(SeekBar seekBar) {
-                                                       textView_end.setText(seekBar.getProgress() + "");
-                                                   }
-
-                                                   @Override
-                                                   public void onStopTrackingTouch(SeekBar seekBar) {
-                                                       textView_end.setText(seekBar.getProgress() + "");
-                                                   }
-                                               }
-
-        );
+        rangebar = (RangeBar) findViewById(R.id.rangebar);
+        rangebar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+            @Override
+            public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex,
+                                              int rightPinIndex,
+                                              String leftPinValue, String rightPinValue) {
+                textView_end.setText("" + leftPinIndex);
+                textView_start.setText("" + rightPinIndex);
+            }
+        });
 
         //start population of drop down list
         save = new SaveData(getApplicationContext());
@@ -158,7 +130,6 @@ public class CreateEntry extends Activity {
         for (
                 int i = 0;
                 i < batteries.size(); i++)
-
         {
             //gets the battery into the object battery
             battery = batteries.get(i);
@@ -173,7 +144,6 @@ public class CreateEntry extends Activity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateEntry.this, android.R.layout.simple_spinner_dropdown_item, batteryNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ddlBatteryName.setAdapter(adapter);
-
         //end population
     }
 
@@ -276,7 +246,6 @@ public class CreateEntry extends Activity {
         savedInstanceState.putBoolean("startTimer", startTimer);
         savedInstanceState.putString("stringTime", stringTime);
 
-
         // Call at the end
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -295,39 +264,30 @@ public class CreateEntry extends Activity {
 
     // A private method to help us initialize our variables.
     private void initializeVariables() {
-        seekBar_start = (SeekBar) findViewById(R.id.seekBar);
         textView_start = (TextView) findViewById(R.id.txtStart);
-        seekBar_end = (SeekBar) findViewById(R.id.seekBar2);
         textView_end = (TextView) findViewById(R.id.txtEnd);
     }
 
     public void onClickChronometer(View view) {
         Chronometer chronoTime = (Chronometer) findViewById(R.id.chronoTime);
 
-        Long stopTimeSave;
         final Handler handler = new Handler();
-
         final ImageButton buttonStartPressed = (ImageButton) findViewById(R.id.btnStart);
-//        buttonStartPressed.setImageResource(R.mipmap.ic_start_pressed);
-//        buttonStartPressed.setImageResource(R.mipmap.ic_start);
-
-
         final ImageButton buttonStopPressed = (ImageButton) findViewById(R.id.btnStop);
-//        buttonStopPressed.setImageResource(R.mipmap.ic_stop_pressed);
-//        buttonStopPressed.setImageResource(R.mipmap.ic_stop);
-
-        ImageButton buttonPausePressed = (ImageButton) findViewById(R.id.btnPause);
-//        buttonPausePressed.setImageResource(R.mipmap.ic_pause_pressed);
-//        buttonPausePressed.setImageResource(R.mipmap.ic_pause);
-
+        final ImageButton buttonPausePressed = (ImageButton) findViewById(R.id.btnPause);
         final ImageButton buttonResetPressed = (ImageButton) findViewById(R.id.btnReset);
-//        buttonResetPressed.setImageResource(R.mipmap.ic_reset_pressed);
-//        buttonResetPressed.setImageResource(R.mipmap.ic_reset);
 
         switch (view.getId()) {
             case R.id.btnStart:
                 if (stopTimer == true && pauseTimer != true) {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+                    orientation = this.getResources().getConfiguration().orientation;
+                    if (orientation == 1)
+                    {
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    }else if (orientation == 2){
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    }
+
                     buttonStartPressed.setImageResource(R.mipmap.ic_start_pressed);
                     buttonPausePressed.setImageResource(R.mipmap.ic_pause);
                     buttonResetPressed.setImageResource(R.mipmap.ic_reset);
@@ -394,7 +354,6 @@ public class CreateEntry extends Activity {
                 chronoTime.setBase(SystemClock.elapsedRealtime());
                 chronoTime.stop();
                 chronoTime.start();
-//                startTimer = true;
                 stopTimer = false;
                 submitTimer = false;
                 pauseTimer = false;
@@ -430,12 +389,10 @@ public class CreateEntry extends Activity {
         TextView txtStart = (TextView) findViewById(R.id.txtStart);
         TextView txtEnd = (TextView) findViewById(R.id.txtEnd);
         Spinner ddlName = (Spinner) findViewById(R.id.ddlName);
-        Chronometer chronoTime = (Chronometer) findViewById(R.id.chronoTime);
-        TextView lblStartPercent = (TextView) findViewById(R.id.lblPercentStart);
-        TextView txtNotes = (TextView) findViewById(R.id.txtNotes);
+        EditText txtNotes = (EditText) findViewById(R.id.txtNotes);
         Boolean isValidTextPercent = true;
         Boolean isValidTimeText;
-        Boolean isValidNotes = true;
+        Boolean isValidNotes;
         String name;
         Integer seekStart;
         Integer seekEnd;
@@ -454,8 +411,8 @@ public class CreateEntry extends Activity {
         String toastTimeStop = "Timer was not stopped";
         String toastStart = "Starting charge can not be 0 or less than end charge";
 
-        seekStart = seekBar_start.getProgress();
-        seekEnd = seekBar_end.getProgress();
+        seekStart = Integer.valueOf(txtStart.getText().toString());
+        seekEnd = Integer.valueOf(txtEnd.getText().toString());
 
         if (submitTimer == true) { //stopped
             if (isValidTime(stringTime) != 0) {
@@ -479,8 +436,8 @@ public class CreateEntry extends Activity {
             isValidTextPercent = false;
         }
 
-        if (txtNotes.getText().length() > 200) {
-            txtNotes.setError("Notes cannot be longer than 200 characters");
+        if (txtNotes.getText().length() > 150) {
+            txtNotes.setError("Notes cannot be longer than 150 characters");
             isValidNotes = false;
         } else {
             isValidNotes = true;
@@ -508,7 +465,6 @@ public class CreateEntry extends Activity {
     }
 
     public final Integer isValidTime(String time) {
-
         Integer seconds;
         Integer minutes;
         Integer hours;

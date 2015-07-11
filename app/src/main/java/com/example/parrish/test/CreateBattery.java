@@ -16,7 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+//import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,26 +30,76 @@ import Classes.SaveData;
 
 import static java.lang.Integer.*;
 
+import com.rey.material.widget.EditText;
+
 
 public class CreateBattery extends Activity {
 
     Integer editFlag;
     SaveData save;
 
+    public static boolean isValidBattery(CharSequence target) {
+        Boolean stringMatch;
+        if (TextUtils.isEmpty(target) == true) {
+            return false;
+        } else {
+            String namePattern = ".{1,16}";
+            Pattern pattern = Pattern.compile(namePattern);
+            Matcher matcher = pattern.matcher(target);
+            stringMatch = matcher.matches();
+            return stringMatch;
+        }
+    }
+
+    public static boolean isValidMah(CharSequence target) {
+        Boolean stringMatch;
+        Integer intTarget;
+        String stringTarget;
+        if (TextUtils.isEmpty(target) == true) {
+            return false;
+        } else {
+            intTarget = parseInt(target.toString());
+            stringTarget = intTarget.toString();
+            String mahPattern = "[0-9]{3,5}";
+            Pattern pattern = Pattern.compile(mahPattern);
+            Matcher matcher = pattern.matcher(stringTarget);
+            stringMatch = matcher.matches();
+            return stringMatch;
+        }
+    }
+
+    public static boolean isValidCycles(CharSequence target) {
+        Boolean stringMatch;
+        Integer intTarget;
+        String stringTarget;
+        if (TextUtils.isEmpty(target) == true) {
+            return false;
+        } else {
+            intTarget = parseInt(target.toString());
+            stringTarget = intTarget.toString();
+            String cyclesPattern = "[0-9]{2,4}";
+            Pattern pattern = Pattern.compile(cyclesPattern);
+            Matcher matcher = pattern.matcher(stringTarget);
+            stringMatch = matcher.matches();
+            return stringMatch;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_battery);
 
-        try{
+        try {
             //       hides shadow from action bar
             ActionBar actionBar = getActionBar();
             actionBar.setElevation(0);
             // Enabling Up / Back navigation
             actionBar.setDisplayHomeAsUpEnabled(true);
             //hide label in action bar
-            actionBar.setDisplayShowTitleEnabled(false);
-        } catch (NullPointerException e){
+//            actionBar.setDisplayShowTitleEnabled(false);
+            setTitle("Menu");
+        } catch (NullPointerException e) {
             Log.e("actionbar", e.toString());
         }
 
@@ -94,14 +144,14 @@ public class CreateBattery extends Activity {
             Spinner lblCellValue = (Spinner) findViewById(R.id.ddlCells);
             lblCellValue.setSelection(spinnerPositionCells);
 
-            TextView lblMahValue = (TextView) findViewById(R.id.txtMah);
+            EditText lblMahValue = (EditText) findViewById(R.id.txtMah);
             lblMahValue.setText(mbattery.getMah());
 
             spinnerPositionType = adapter.getPosition(mbattery.getType());
             Spinner lblTypeValue = (Spinner) findViewById(R.id.ddlType);
             lblTypeValue.setSelection(spinnerPositionType);
 
-            TextView lblCyclesValue = (TextView) findViewById(R.id.txtCycles);
+            EditText lblCyclesValue = (EditText) findViewById(R.id.txtCycles);
             lblCyclesValue.setText(mbattery.getCycles());
 
 
@@ -209,6 +259,8 @@ public class CreateBattery extends Activity {
         Boolean isValidCycles = true;
         String type;
         String batteryName;
+        String capBatteryName;
+        String uncapBatteryName;
         int batteryCells;
         int batteryMah;
         int batteryCycle;
@@ -224,6 +276,7 @@ public class CreateBattery extends Activity {
         EditText txtMah = (EditText) findViewById(R.id.txtMah);
         EditText txtCycle = (EditText) findViewById(R.id.txtCycles);
 
+        String toastInvalid = "Fill in all fields and correct any errors";
         String toastBattery = "Enter a valid name";
         String toastMah = "Enter a valid number between 100 and 99999";
         String toastCycles = "Enter a valid number between 10 and 9999";
@@ -243,8 +296,12 @@ public class CreateBattery extends Activity {
         if (isValidText == true && isValidCycles == true && isValidMah == true) {
             if (editFlag == 1) {
                 try {
+                    //Capitalize first letter of battery name
+                    uncapBatteryName = txtBattName.getText().toString();
+                    capBatteryName = uncapBatteryName.substring(0, 1).toUpperCase() + uncapBatteryName.substring(1);
+
                     type = spinnerType.getSelectedItem().toString();
-                    batteryName = txtBattName.getText().toString();
+                    batteryName = capBatteryName;//txtBattName.getText().toString();
                     batteryCells = parseInt(ddlCells.getSelectedItem().toString());
                     batteryMah = parseInt((txtMah.getText().toString()));
                     batteryCycle = parseInt(txtCycle.getText().toString());
@@ -272,52 +329,15 @@ public class CreateBattery extends Activity {
                 toastUpdate.show();
                 finish();
             }
+        } else {
+            createToast(toastInvalid, duration);
         }
-
     }
 
     //methods
     public void createToast(CharSequence text, Integer duration) {
         Toast toast = Toast.makeText(getApplicationContext(), text, duration);
         toast.show();
-    }
-
-    public static boolean isValidBattery(CharSequence target) {
-        return !TextUtils.isEmpty(target);
-    }
-
-    public static boolean isValidMah(CharSequence target) {
-        Boolean stringMatch;
-        Integer intTarget;
-        String stringTarget;
-        if (TextUtils.isEmpty(target) == true) {
-            return false;
-        } else {
-            intTarget = parseInt(target.toString());
-            stringTarget = intTarget.toString();
-            String mahPattern = "[0-9]{3,5}";
-            Pattern pattern = Pattern.compile(mahPattern);
-            Matcher matcher = pattern.matcher(stringTarget);
-            stringMatch = matcher.matches();
-            return stringMatch;
-        }
-    }
-
-    public static boolean isValidCycles(CharSequence target) {
-        Boolean stringMatch;
-        Integer intTarget;
-        String stringTarget;
-        if (TextUtils.isEmpty(target) == true) {
-            return false;
-        } else {
-            intTarget = parseInt(target.toString());
-            stringTarget = intTarget.toString();
-            String cyclesPattern = "[0-9]{2,4}";
-            Pattern pattern = Pattern.compile(cyclesPattern);
-            Matcher matcher = pattern.matcher(stringTarget);
-            stringMatch = matcher.matches();
-            return stringMatch;
-        }
     }
 
 }

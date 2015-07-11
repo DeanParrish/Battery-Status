@@ -19,12 +19,12 @@
         android:orderInCategory="0"
         android:showAsAction="ifRoom"
         android:title="@string/activity_search" />-->
-    <item
-        android:id="@+id/action_details"
-        android:icon="@mipmap/ic_details"
-        android:orderInCategory="2"
-        android:showAsAction="ifRoom"
-        android:title="@string/activity_details" />
+    <!--<item-->
+        <!--android:id="@+id/action_details"-->
+        <!--android:icon="@mipmap/ic_details"-->
+        <!--android:orderInCategory="2"-->
+        <!--android:showAsAction="ifRoom"-->
+        <!--android:title="@string/activity_details" />-->
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

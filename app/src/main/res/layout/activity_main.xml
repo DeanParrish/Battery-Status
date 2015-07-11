@@ -38,19 +38,19 @@
                 android:layout_margin="3dp"
                 android:layout_weight=".1" />
 
-            <Button
-                android:id="@+id/button9"
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_alignParentTop="false"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:background="#ffeb4d3d"
-                android:drawableStart="@mipmap/ic_entry_remove"
-                android:text="Remove Entry"
-                android:textColor="#FFFFFFFF"
-                android:layout_margin="3dp"
-                android:layout_weight=".1" />
+            <!--<Button-->
+                <!--android:id="@+id/button9"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_alignParentTop="false"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:background="#ffeb4d3d"-->
+                <!--android:drawableStart="@mipmap/ic_entry_remove"-->
+                <!--android:text="Remove Entry"-->
+                <!--android:textColor="#FFFFFFFF"-->
+                <!--android:layout_margin="3dp"-->
+                <!--android:layout_weight=".1" />-->
 
             <Button
                 android:id="@+id/button10"

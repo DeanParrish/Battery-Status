@@ -47,7 +47,8 @@ public class BatteryStatistics extends FragmentActivity {
             // Enabling Up / Back navigation
             actionBar.setDisplayHomeAsUpEnabled(true);
             //hide label in action bar
-            actionBar.setDisplayShowTitleEnabled(false);
+//            actionBar.setDisplayShowTitleEnabled(false);
+            setTitle("Battery List");
             //endregion
         } catch (NullPointerException e){
             Log.e("actionbar", e.toString());

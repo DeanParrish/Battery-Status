@@ -27,6 +27,7 @@
         android:id="@+id/listView"
         android:layout_below="@+id/title"
         android:layout_centerHorizontal="true"
-        android:cacheColorHint="#ff7f8c8d"/>
+        android:cacheColorHint="#ff7f8c8d"
+        android:paddingTop="15dp" />
 
 </RelativeLayout>

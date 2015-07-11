@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -177,6 +178,7 @@ public class BatteryStatsGraph extends Fragment {
                 Entry popup_entry;
                 Long timeSeconds;
                 //set dialog instance view to layout
+                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.popup_view_statistics);
 
                 TextView txtBatteryName = (TextView) dialog.findViewById(R.id.txtBatteryName);

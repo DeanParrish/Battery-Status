@@ -51,7 +51,8 @@ public class EditBattery extends Activity {
         // Enabling Up / Back navigation
         actionBar.setDisplayHomeAsUpEnabled(true);
         //hide label in action bar
-        actionBar.setDisplayShowTitleEnabled(false);
+//        actionBar.setDisplayShowTitleEnabled(false);
+        setTitle("Menu");
 
         //region Populate List from database
 //        List<Battery> batteries;
