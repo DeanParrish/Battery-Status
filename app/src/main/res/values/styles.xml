@@ -12,4 +12,11 @@
         <item name="android:textSize">29sp</item>
         <item name="android:gravity">center</item>
     </style>
+    <!--    <style name="MyCustomTheme" parent="@android:style/Theme.Holo.Light">
+            <item name="android:actionBarStyle">@style/MyActionBarTheme</item>
+        </style>
+
+        <style name="MyActionBarTheme" parent="@android:style/Widget.Holo.Light.ActionBar">
+            <item name="android:background">#ffffff</item>
+        </style>-->
 </resources>

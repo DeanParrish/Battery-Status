@@ -325,11 +325,11 @@ public class ViewStatistics extends Activity {
                                     public void onClick(DialogInterface dialog, int id) {
                                         try {
                                             delete.deleteBattery(batteryName);
-                                            createToast(toastText, duration);
+                                            createToast("Battery Deleted!", duration);
                                             finish();
                                             startActivity(getIntent());
                                         } catch (SQLiteException e) {
-                                            Log.e("Add Battery", e.toString());
+                                            Log.e("Delete Battery", e.toString());
                                         }
                                     }
                                 })

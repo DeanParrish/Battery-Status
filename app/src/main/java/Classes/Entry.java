@@ -13,6 +13,7 @@ public class Entry implements Serializable {
     private String entryDate;
     private String entryTime;
     private String notes;
+    private int id;
 
     public Entry() {
     }
@@ -47,6 +48,9 @@ public class Entry implements Serializable {
     public void setEntryTime(String time){this.entryTime = time; }
 
     public void setNotes(String notes){ this.notes = notes; }
+    public void setId (int id){
+        this.id = id;
+    }
 
     //getters
     public String getBatteryName(){
@@ -66,4 +70,5 @@ public class Entry implements Serializable {
     public String getEntryDate() {return this.entryDate; }
     public String getEntryTime() {return  this.entryTime; }
     public String getNotes() {return this.notes; }
+    public String getId(){return Integer.toString(this.id); }
 }

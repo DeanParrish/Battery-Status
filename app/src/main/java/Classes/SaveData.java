@@ -128,7 +128,6 @@ public class SaveData {
 
     public void deleteBattery(String name){
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
-        String query = "DELETE FROM " + batteryTableName + " WHERE name = ?";
         String[] whereArgs = new String[] {
                 name,
         };
@@ -241,6 +240,7 @@ public class SaveData {
         if (cursor.moveToFirst()) {
             do {
                 entry = new Entry();
+                entry.setId(Integer.parseInt(cursor.getString(0)));
                 entry.setBatteryName(cursor.getString(1));
                 entry.setRunTime(cursor.getInt(2));
                 entry.setStartCharge(Integer.parseInt(cursor.getString(3)));
@@ -254,6 +254,19 @@ public class SaveData {
         }
 
         return entries;
+    }
+
+    public void deleteEntry(int id) {
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        String[] whereArgs = new String[] {
+                Integer.toString(id),
+        };
+
+        db = dbcon.getWritableDatabase();
+
+        db.delete(entryTableName, "id = ?", whereArgs);
+        db.close();
+
     }
 
     public void upgrade(int oldVer, int newVer){

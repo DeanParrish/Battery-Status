@@ -1,6 +1,10 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:floatingactionbutton="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/batteryStatsGraph"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:tag="BatteryStatsGraph"
     tools:context="com.example.parrish.test.battery_stats_graph"
     android:padding="0dp">
 
@@ -28,21 +32,58 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight=".5">
+<!--            <ImageButton
+                android:id="@+id/btnAction"
+                android:layout_width="@dimen/fab_size_normal"
+                android:layout_height="@dimen/fab_size_normal"
+                android:layout_gravity="bottom|right"
+                android:src="@android:drawable/ic_input_add"
+                />-->
 
             <ListView
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/listEntries"
-                android:layout_margin="10dp" />
+                android:layout_margin="10dp"
+                android:listSelector="@color/selected"/>
+
+
+
 <!--            <com.baoyz.swipemenulistview.SwipeMenuListView
                 android:id="@+id/listEntries"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_below="@+id/title"
                 android:layout_centerHorizontal="true"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp" />-->
         </LinearLayout>
+
     </LinearLayout>
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/actionMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        floatingactionbutton:menu_colorNormal="#9b59b6"
+        floatingactionbutton:menu_colorPressed="#509b59b6"
+        floatingactionbutton:menu_backgroundColor="#00FFFFFF">
+
+        <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/fabEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_entry_remove"
+        />
+
+    </com.github.clans.fab.FloatingActionMenu>
+<!--    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/btnAction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:drawable="@mipmap/ic_fab_icon_w"
+        android:visibility="invisible"
+        />-->
 
 </FrameLayout>
