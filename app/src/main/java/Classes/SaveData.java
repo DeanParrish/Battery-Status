@@ -33,6 +33,8 @@ public class SaveData {
     private static String entryDate = "date";
     private static String entryTime = "dateTime";
     private static String entryNotes = "notes";
+    private static String entryEditDate = "editDate";
+    private static String entryEditTime = "editTime";
 
     public SaveData() {
 
@@ -170,7 +172,6 @@ public class SaveData {
         SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
         String dateTime = timeFormat.format(calendar.getTime());
 
-
         int runTime;
 
         runTime = Integer.parseInt(Long.toString(time));
@@ -182,6 +183,8 @@ public class SaveData {
         values.put(chargeEnd, end);
         values.put(entryDate, date);
         values.put(entryTime, dateTime);
+        values.put(entryEditDate, "");
+        values.put(entryEditTime, "");
         values.put(entryNotes, notes);
 
 
@@ -194,9 +197,36 @@ public class SaveData {
         db.close();
     }
 
+    public Entry getEntry(int id) {
+        Entry entry;
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+
+        String query = "Select * FROM " + entryTableName + " WHERE id = ?";
+        String[] whereArgs = new String[] {
+                Integer.toString(id),
+        };
+
+        db = dbcon.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, whereArgs);
+        entry = new Entry();
+        if (cursor.moveToFirst()){
+            entry.setBatteryName(cursor.getString(1));
+            entry.setRunTime(cursor.getInt(2));
+            entry.setStartCharge(Integer.parseInt(cursor.getString(3)));
+            entry.setEndCharge(Integer.parseInt(cursor.getString(4)));
+            entry.setEntryDate(cursor.getString(5));
+            entry.setEntryTime(cursor.getString(6));
+            entry.setEditDate(cursor.getString(7));
+            entry.setEditDate(cursor.getString(8));
+            entry.setNotes(cursor.getString(9));
+        }
+
+        return entry;
+    }
+
     public List<Entry> getAllEntries() {
         List<Entry> entries = new LinkedList<>();
-        int runTime;
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
 
         String query = "SELECT * FROM " + entryTableName;
@@ -215,7 +245,9 @@ public class SaveData {
                 entry.setEndCharge(Integer.parseInt(cursor.getString(4)));
                 entry.setEntryDate(cursor.getString(5));
                 entry.setEntryTime(cursor.getString(6));
-                entry.setNotes(cursor.getString(7));
+                entry.setEditDate(cursor.getString(7));
+                entry.setEditTime(cursor.getString(8));
+                entry.setNotes(cursor.getString(9));
 
                 entries.add(entry);
             } while (cursor.moveToNext());
@@ -247,7 +279,9 @@ public class SaveData {
                 entry.setEndCharge(Integer.parseInt(cursor.getString(4)));
                 entry.setEntryDate(cursor.getString(5));
                 entry.setEntryTime(cursor.getString(6));
-                entry.setNotes(cursor.getString(7));
+                entry.setEditDate(cursor.getString(7));
+                entry.setEditTime(cursor.getString(8));
+                entry.setNotes(cursor.getString(9));
 
                 entries.add(entry);
             } while (cursor.moveToNext());
@@ -267,6 +301,34 @@ public class SaveData {
         db.delete(entryTableName, "id = ?", whereArgs);
         db.close();
 
+    }
+
+    public void updateEntry(int id, String name, String time, int start, int end, String notes){
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        String date = dateFormat.format(calendar.getTime());
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+        String dateTime = timeFormat.format(calendar.getTime());
+
+        String[] whereArgs = new String[] {
+                Integer.toString(id),
+        };
+        ContentValues values = new ContentValues();
+
+        values.put(batteryName, name);
+        values.put(chargeTime, time);
+        values.put(chargeStart, start);
+        values.put(chargeEnd, end);
+        values.put(entryEditDate, date);
+        values.put(entryEditTime, dateTime);
+        values.put(entryNotes, notes);
+
+        db = dbcon.getWritableDatabase();
+
+        db.update(entryTableName, values, "id = ?", whereArgs);
+
+        db.close();
     }
 
     public void upgrade(int oldVer, int newVer){

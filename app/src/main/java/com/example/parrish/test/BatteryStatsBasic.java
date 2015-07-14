@@ -1,5 +1,6 @@
 package com.example.parrish.test;
 
+import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -48,8 +49,9 @@ public class BatteryStatsBasic extends Fragment {
                              Bundle savedInstanceState) {
         this.batteryName = this.getArguments().getString("batteryName");
         save = new SaveData(container.getContext());
+        View view;
 
-        View view = inflater.inflate(R.layout.fragment_battery_stats_basic, container, false);
+        view = inflater.inflate(R.layout.fragment_battery_stats_basic, container, false);
         txtviewBatteryName = (TextView) view.findViewById(R.id.txtBatteryName);
         txtviewBatteryCells = (TextView) view.findViewById(R.id.txtBatteryCells);
         txtviewBatteryMAH = (TextView) view.findViewById(R.id.txtBatteryMAH);

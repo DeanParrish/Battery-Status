@@ -33,7 +33,9 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                         "start INT, " +
                         "end INT, " +
                         "date TEXT, " +
-                        "dateTime TEXT," +
+                        "dateTime TEXT, " +
+                        "editDate TEXT, " +
+                        "editTime TEXT, " +
                         "notes TEXT )";
 
 

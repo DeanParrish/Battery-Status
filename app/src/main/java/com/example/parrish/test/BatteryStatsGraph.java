@@ -7,8 +7,10 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -46,6 +48,7 @@ import com.jjoe64.graphview.series.Series;
 
 import java.math.RoundingMode;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -55,6 +58,16 @@ import Classes.Battery;
 import Classes.Entry;
 import Classes.SaveData;
 import Classes.SlidingTabLayout;
+import lecho.lib.hellocharts.formatter.AxisValueFormatter;
+import lecho.lib.hellocharts.formatter.SimpleAxisValueFormatter;
+import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.ValueShape;
+import lecho.lib.hellocharts.view.LineChartView;
 
 public class BatteryStatsGraph extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -66,12 +79,15 @@ public class BatteryStatsGraph extends Fragment {
     ArrayAdapter<String> adapterSearch;
     FloatingActionMenu floatingActionMenu;
     FloatingActionButton fabEdit;
+    private FloatingActionButton fabDelete;
     private boolean boolFabShown = false;
     private ViewPager pager;
     Entry selectedEntry;
     List<Entry> entriesForBattery;
     boolean boolGraphDrawn = false;
     private int selectedPos;
+    private LineChartView chart;
+    private ListView entryListView;
 
     public static BatteryStatsGraph newInstance(String batteryName) {
         BatteryStatsGraph fragment = new BatteryStatsGraph();
@@ -96,12 +112,20 @@ public class BatteryStatsGraph extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view;
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_battery_stats_graph, container, false);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            view = inflater.inflate(R.layout.fragment_battery_stats_graph, container, false);
+        } else {
+            view = inflater.inflate(R.layout.fragment_battery_stats_graph_l, container, false);
+        }
+
         pager = (ViewPager) view.findViewById(R.id.pager);
         this.batteryName = this.getArguments().getString("batteryName");
         this.floatingActionMenu = (FloatingActionMenu) view.findViewById(R.id.actionMenu);
         this.fabEdit = (FloatingActionButton) view.findViewById(R.id.fabEdit);
+        this.fabDelete = (FloatingActionButton) view.findViewById(R.id.fabDelete);
+        this.chart = (LineChartView) view.findViewById(R.id.chart);
         floatingActionMenu.setVisibility(View.INVISIBLE);
         SaveData save = new SaveData(view.getContext());
         entriesForBattery = save.getAllEntriesForBattery(this.batteryName);
@@ -140,88 +164,65 @@ public class BatteryStatsGraph extends Fragment {
         final List<Entry> entryList;
         Iterator<Entry> iterator;
         Entry entry;
-        DataPoint point;
+        //DataPoint point;
+        PointValue point;
         int iteratorCount = 0;
         double highestPoint = 0;
         double minutes;
         int chargeUsed;
         save = new SaveData(view.getContext());
-        graph = (GraphView) view.findViewById(R.id.graph);
+        //graph = (GraphView) view.findViewById(R.id.graph);
         SecondScale secondScale;
         final View view2 = view;
 
         entryList = save.getAllEntriesForBattery(batteryName);
-        DataPoint[] pointsRunTime = new DataPoint[entryList.size()];
-        DataPoint[] pointsCharge = new DataPoint[entryList.size()];
+/*        DataPoint[] pointsRunTime = new DataPoint[entryList.size()];
+        DataPoint[] pointsCharge = new DataPoint[entryList.size()];*/
+        List<PointValue> pointsRunTime = new ArrayList<>();
+        List<PointValue> pointsCharge = new ArrayList<>();
+        List<AxisValue> axisValuesEntry = new ArrayList<>();
+        List<AxisValue> axisValuesRunTime = new ArrayList<>();
 
         iterator = entryList.listIterator();
-        //sets datapoints for the graph; includes BOTH series
+        //sets data points for the graph; includes BOTH series
         while (iterator.hasNext()) {
             entry = iterator.next();
             minutes = Double.parseDouble(entry.getRunTime()) / 60;
-            point = new DataPoint(Double.parseDouble(Integer.toString(iteratorCount)), minutes);
-            pointsRunTime[iteratorCount] = point;
+            point = new PointValue(Float.parseFloat(Integer.toString(iteratorCount)), Float.parseFloat(Double.toString(minutes)));
+            axisValuesRunTime.add(new AxisValue(Float.parseFloat(Double.toString(minutes))));
+            pointsRunTime.add(point);
             if (minutes > highestPoint) {
                 highestPoint = minutes;  //for respectful view for y-axis
             }
             chargeUsed = Integer.parseInt(entry.getStartCharge()) - Integer.parseInt(entry.getEndCharge());
-            point = new DataPoint(Double.parseDouble(Integer.toString(iteratorCount)), Double.parseDouble(Integer.toString(chargeUsed)));
-            pointsCharge[iteratorCount] = point;
+            point = new PointValue(Float.parseFloat(Integer.toString(iteratorCount)), Float.parseFloat(Integer.toString(chargeUsed)));
+            pointsCharge.add(point);
+            axisValuesEntry.add(new AxisValue(Float.parseFloat(Integer.toString(iteratorCount))));
             iteratorCount++;
         }
 
-        //setting attributes of series
-        LineGraphSeries<DataPoint> seriesRunTime = new LineGraphSeries<>(pointsRunTime);
-        PointsGraphSeries<DataPoint> seriesCharge = new PointsGraphSeries<>(pointsCharge);
-        seriesRunTime.setDrawDataPoints(true);
-        seriesCharge.setColor(Color.parseColor("#FFB2B2"));     //light red for bar chart
-        seriesRunTime.setTitle("Run Time");
-        seriesCharge.setTitle("Charge Used");
+        List<Line> lines = new ArrayList<>();
 
-        //changing viewport for appropriate view
-        Viewport viewPort = graph.getViewport();
-        viewPort.setMinY(0);
-        viewPort.setYAxisBoundsManual(true);
-        viewPort.setScrollable(true);
-        highestPoint = 5 * (Math.ceil(Math.abs(highestPoint / 5))); //rounds to nearest increment of 5 for runtime
-        viewPort.setMaxY(highestPoint);
-        viewPort.setMaxX(Double.parseDouble(Integer.toString(iteratorCount)));
-        viewPort.setScalable(true);
+        Line line = new Line(pointsRunTime);
+        line.setColor(Color.RED);
+        line.setShape(ValueShape.CIRCLE);
 
-        if (boolGraphDrawn == true){
-            List<Series> dummySeries;
-            secondScale = graph.getSecondScale();
-            dummySeries = secondScale.getSeries();
-            dummySeries.remove(0);
-        }
+        lines.add(line);
+        LineChartData chartData = new LineChartData(lines);
 
-        //setting second scale for charge used
-        secondScale = graph.getSecondScale();
-        secondScale.addSeries(seriesCharge);
-        secondScale.setMinY(0);
-        secondScale.setMaxY(100);
+        Axis axisX = new Axis();
+        Axis axisY = new Axis();
 
-        //legend
-        graph.getLegendRenderer().setVisible(true);
-        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-        graph.onDataChanged(false, true);
+        axisX.setName("Entry");
+        axisX.setValues(axisValuesEntry);
 
-        //makes label number whole values
-        graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+        axisY.setName("Run Time");
+        axisY.setValues(axisValuesRunTime);
+
+
+        chart.setOnValueTouchListener(new LineChartOnValueSelectListener() {
             @Override
-            public String formatLabel(double value, boolean isValueX) {
-                if ((value % 1) != 0) {
-                    return super.formatLabel(Math.ceil(value), isValueX);
-                } else {
-                    return super.formatLabel(value, isValueX);
-                }
-            }
-        });
-
-        //tap handler for runTime series
-        seriesRunTime.setOnDataPointTapListener(new OnDataPointTapListener() {
-            @Override
-            public void onTap(Series series, DataPointInterface dataPoint) {
+            public void onValueSelected(int i, int i1, PointValue pointValue) {
                 Dialog dialog = new Dialog(view2.getContext());
                 Entry popup_entry;
                 Long timeSeconds;
@@ -239,10 +240,10 @@ public class BatteryStatsGraph extends Fragment {
                 TextView txtDate = (TextView) dialog.findViewById(R.id.txtDate);
                 TextView txtTime = (TextView) dialog.findViewById(R.id.txtTime);
 
-                popup_entry = entryList.get((int) dataPoint.getX());
+                popup_entry = entryList.get(i1);
                 String date = popup_entry.getEntryDate();
 
-                int entry = (int) dataPoint.getX();
+                //int entry = (int) dataPoint.getX();
                 timeSeconds = Long.parseLong(popup_entry.getRunTime());
 
                 if ((timeSeconds / 60) >= 60) {          //more than one hour
@@ -297,7 +298,7 @@ public class BatteryStatsGraph extends Fragment {
                     }
                 }
 
-                txtEntryNumber.setText(Integer.toString(entry));
+                txtEntryNumber.setText(Integer.toString(i1));
                 txtBatteryName.setText(popup_entry.getBatteryName());
                 txtBatteryStart.setText(popup_entry.getStartCharge() + "%");
                 txtBatteryEnd.setText(popup_entry.getEndCharge() + "%");
@@ -306,12 +307,20 @@ public class BatteryStatsGraph extends Fragment {
                 txtTime.setText(popup_entry.getEntryTime());
 
                 dialog.show();
+
+            }
+
+            @Override
+            public void onValueDeselected() {
+
             }
         });
 
-        graph.addSeries(seriesRunTime);
-        boolGraphDrawn = true;
+        chartData.setAxisXBottom(axisX);
+        chartData.setAxisYLeft(axisY);
+        chartData.setBaseValue(Float.NEGATIVE_INFINITY);
 
+        chart.setLineChartData(chartData);
     }
 
     //handles battery list display
@@ -329,19 +338,19 @@ public class BatteryStatsGraph extends Fragment {
 
         Arrays.sort(entryDates, Collections.reverseOrder());
         //final SwipeMenuListView entryList = (SwipeMenuListView) view2.findViewById(R.id.listEntries);
-        final ListView entryList = (ListView) view.findViewById(R.id.listEntries);
+        entryListView = (ListView) view.findViewById(R.id.listEntries);
         adapterSearch = new ArrayAdapter<String>(view2.getContext(), android.R.layout.simple_list_item_1, entryDates);
-        entryList.setAdapter(adapterSearch);
+        entryListView.setAdapter(adapterSearch);
 
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(BatteryStatsGraph.this, android.R.layout.simple_list_item_single_choice, entryDates);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_selectable_list_item, entryDates);
         adapter.setDropDownViewResource(android.R.layout.simple_selectable_list_item);
-        entryList.setAdapter(adapter);
-        entryList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        entryListView.setAdapter(adapter);
+        entryListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
 
         // listening to single list item on click
-        entryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        entryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // populating class with selected item
@@ -350,23 +359,16 @@ public class BatteryStatsGraph extends Fragment {
                 //String str = (String) entriesForBattery.get(position));
                 if (boolFabShown == false) {
                     floatingActionMenu.setVisibility(View.VISIBLE);
-                    //floatingActionMenu.showMenuButton(true);
                     floatingActionMenu.setBackgroundColor(Color.parseColor("#01FFFFFF"));
-/*                    floatingActionButton.hide(false);*/
                     floatingActionMenu.setAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fab_slide_in_from_right));
-/*                    floatingActionButton.show(true);*/
                     boolFabShown = true;
                 }
-/*                view.setSelected(true);
-                floatingActionButton.show(true);*/
-
-                //batteryName = name;
             }
         });
     }
 
     public void handleActionMenu(final View view, final List<Entry> entryList) {
-        fabEdit.setOnClickListener(new View.OnClickListener() {
+        fabDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -402,11 +404,9 @@ public class BatteryStatsGraph extends Fragment {
                                     textView.setBackgroundColor(color);
                                     toast.show();
                                     displayList(view, save.getAllEntriesForBattery(batteryName));
-                                    graph.removeAllSeries();
-                                    graph.refreshDrawableState();
                                     plotChart(view);
                                 } catch (SQLiteException e) {
-                                    Log.e("Add Battery", e.toString());
+                                    Log.e("Delete entry", e.toString());
                                 }
                             }
                         })
@@ -420,6 +420,27 @@ public class BatteryStatsGraph extends Fragment {
                 // create alert dialog
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
+
+            }
+        });
+
+        fabEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (selectedEntry == null) {
+                    Toast toast = Toast.makeText(view.getContext(), "Please select an entry", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+
+                try {
+                    Intent intent = new Intent(view.getContext(), EditBattery.class);
+                    intent.putExtra("edit", true);
+                    intent.putExtra("id", selectedEntry.getId());
+                    startActivity(intent);
+                } catch (SQLiteException e) {
+                    Log.e("Edit entry", e.toString());
+                }
 
             }
         });

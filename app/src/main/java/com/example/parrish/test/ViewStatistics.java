@@ -370,9 +370,9 @@ public class ViewStatistics extends Activity {
 
     public void handleFilter(){
         final Dialog dialog = new Dialog(context);
+        boolean boolMahError = false;
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.popup_filter_battery);
-//        dialog.setTitle("Filter Batteries");
 
         final Spinner ddlType = (Spinner) dialog.findViewById(R.id.ddlBatteryType);
         final Spinner ddlCells = (Spinner) dialog.findViewById(R.id.ddlBatteryCells);
@@ -447,73 +447,78 @@ public class ViewStatistics extends Activity {
                 boolChkCells = chkCells.isChecked();
                 boolChkMah = chkMAH.isChecked();
 
-                //get filtration mode
-                if (chkType.isChecked()) {
-                    filterMode = filterMode + 1;
-                }
-                if (chkCells.isChecked()) {
-                    filterMode = filterMode + 2;
-                }
-                if (chkMAH.isChecked()) {
-                    filterMode = filterMode + 5;
-                }
+                if (Integer.parseInt(batteryMahLow) > Integer.parseInt(batteryMahHigh)){
+                    createToast("MAH low cannot be higher than MAH high", Toast.LENGTH_SHORT);
+                } else {
 
-                iterator = allBatteries.iterator();
-
-                while (iterator.hasNext()) {
-                    battery = iterator.next();
-
-                    //filter mode guide:
-                    // 1 = filtering by Battery Type
-                    // 2 = filtering by Cells
-                    // 5 = filtering by MAH
-                    // all of these can be combined for more filteration (IE: 7 = filtering by Cells AND MAH)
-                    switch (filterMode) {
-                        case 1:
-                            if (battery.getType().equals(batteryType)) {
-                                filteredBatteries.add(battery);
-                            }
-                            break;
-                        case 2:
-                            if (battery.getCells().equals(batteryCells)) {
-                                filteredBatteries.add(battery);
-                            }
-                            break;
-                        case 3:
-                            if (battery.getType().equals(batteryType) && battery.getCells().equals(batteryCells)) {
-                                filteredBatteries.add(battery);
-                            }
-                            break;
-                        case 5:
-                            if (Integer.parseInt(battery.getMah()) >= Integer.parseInt(batteryMahLow) &&
-                                    Integer.parseInt(battery.getMah()) <= Integer.parseInt(batteryMahHigh)) {
-                                filteredBatteries.add(battery);
-                            }
-                            break;
-                        case 6:
-                            if (battery.getType().equals(batteryType) && Integer.parseInt(battery.getMah()) >= Integer.parseInt(batteryMahLow) &&
-                                    Integer.parseInt(battery.getMah()) <= Integer.parseInt(batteryMahHigh)) {
-                                filteredBatteries.add(battery);
-                            }
-                            break;
-                        case 7:
-                            if (battery.getCells().equals(batteryCells) && Integer.parseInt(battery.getMah()) >= Integer.parseInt(batteryMahLow) &&
-                                    Integer.parseInt(battery.getMah()) <= Integer.parseInt(batteryMahHigh)) {
-                                filteredBatteries.add(battery);
-                            }
-                            break;
-                        case 8:
-                            if (battery.getCells().equals(batteryCells) && battery.getType().equals(batteryType) && Integer.parseInt(battery.getMah()) >= Integer.parseInt(batteryMahLow) &&
-                                    Integer.parseInt(battery.getMah()) <= Integer.parseInt(batteryMahHigh)) {
-                                filteredBatteries.add(battery);
-                            }
-                            break;
-                        default:
-                            filteredBatteries.add(battery);
+                    //get filtration mode
+                    if (chkType.isChecked()) {
+                        filterMode = filterMode + 1;
                     }
+                    if (chkCells.isChecked()) {
+                        filterMode = filterMode + 2;
+                    }
+                    if (chkMAH.isChecked()) {
+                        filterMode = filterMode + 5;
+                    }
+
+                    iterator = allBatteries.iterator();
+
+                    while (iterator.hasNext()) {
+                        battery = iterator.next();
+
+                        //filter mode guide:
+                        // 1 = filtering by Battery Type
+                        // 2 = filtering by Cells
+                        // 5 = filtering by MAH
+                        // all of these can be combined for more filteration (IE: 7 = filtering by Cells AND MAH)
+                        switch (filterMode) {
+                            case 1:
+                                if (battery.getType().equals(batteryType)) {
+                                    filteredBatteries.add(battery);
+                                }
+                                break;
+                            case 2:
+                                if (battery.getCells().equals(batteryCells)) {
+                                    filteredBatteries.add(battery);
+                                }
+                                break;
+                            case 3:
+                                if (battery.getType().equals(batteryType) && battery.getCells().equals(batteryCells)) {
+                                    filteredBatteries.add(battery);
+                                }
+                                break;
+                            case 5:
+                                if (Integer.parseInt(battery.getMah()) >= Integer.parseInt(batteryMahLow) &&
+                                        Integer.parseInt(battery.getMah()) <= Integer.parseInt(batteryMahHigh)) {
+                                    filteredBatteries.add(battery);
+                                }
+                                break;
+                            case 6:
+                                if (battery.getType().equals(batteryType) && Integer.parseInt(battery.getMah()) >= Integer.parseInt(batteryMahLow) &&
+                                        Integer.parseInt(battery.getMah()) <= Integer.parseInt(batteryMahHigh)) {
+                                    filteredBatteries.add(battery);
+                                }
+                                break;
+                            case 7:
+                                if (battery.getCells().equals(batteryCells) && Integer.parseInt(battery.getMah()) >= Integer.parseInt(batteryMahLow) &&
+                                        Integer.parseInt(battery.getMah()) <= Integer.parseInt(batteryMahHigh)) {
+                                    filteredBatteries.add(battery);
+                                }
+                                break;
+                            case 8:
+                                if (battery.getCells().equals(batteryCells) && battery.getType().equals(batteryType) && Integer.parseInt(battery.getMah()) >= Integer.parseInt(batteryMahLow) &&
+                                        Integer.parseInt(battery.getMah()) <= Integer.parseInt(batteryMahHigh)) {
+                                    filteredBatteries.add(battery);
+                                }
+                                break;
+                            default:
+                                filteredBatteries.add(battery);
+                        }
+                    }
+                    displayList(batteryList, filteredBatteries);
+                    dialog.dismiss();
                 }
-                displayList(batteryList, filteredBatteries);
-                dialog.dismiss();
             }
         });
 

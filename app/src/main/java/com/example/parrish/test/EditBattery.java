@@ -45,6 +45,9 @@ public class EditBattery extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_battery);
 
+        String id = getIntent().getExtras().getString("id");
+        boolean edit = getIntent().getExtras().getBoolean("edit");
+
         // hides shadow from action bar
         ActionBar actionBar = getActionBar();
         actionBar.setElevation(0);
