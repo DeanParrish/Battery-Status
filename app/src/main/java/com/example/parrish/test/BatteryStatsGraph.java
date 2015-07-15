@@ -216,7 +216,7 @@ public class BatteryStatsGraph extends Fragment {
         axisX.setName("Entry");
         axisX.setValues(axisValuesEntry);
 
-        axisY.setName("Run Time");
+        axisY.setName("Run Time (m)");
         axisY.setValues(axisValuesRunTime);
 
 
@@ -434,9 +434,10 @@ public class BatteryStatsGraph extends Fragment {
                 }
 
                 try {
-                    Intent intent = new Intent(view.getContext(), EditBattery.class);
+                    Intent intent = new Intent(view.getContext(), CreateEntry.class);
                     intent.putExtra("edit", true);
-                    intent.putExtra("id", selectedEntry.getId());
+                    intent.putExtra("id", Integer.parseInt(selectedEntry.getId()));
+                    intent.putExtra("batteryName",batteryName);
                     startActivity(intent);
                 } catch (SQLiteException e) {
                     Log.e("Edit entry", e.toString());

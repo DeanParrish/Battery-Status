@@ -72,69 +72,179 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".15"
                 android:orientation="vertical"
-                android:gravity="center_vertical">
-
-                <Chronometer
-                    android:id="@+id/chronoTime"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/ddlName"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:autoText="false"
-                    android:padding="5dp"
-                    android:textSize="40sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".13"
-                android:orientation="horizontal"
-                android:padding="5dp"
-                android:weightSum=".8"
-                android:gravity="center_vertical|center_horizontal">
+                android:layout_weight=".275">
 
-                <ImageButton
-                    android:id="@+id/btnPause"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".1"
-                    android:background="@null"
-                    android:src="@mipmap/ic_pause"
-                    android:onClick="onClickChronometer" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/timeLayout">
 
-                <ImageButton
-                    android:id="@+id/btnStop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".1"
-                    android:background="@null"
-                    android:src="@mipmap/ic_stop"
-                    android:onClick="onClickChronometer" />
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/createLayout">
 
-                <ImageButton
-                    android:id="@+id/btnReset"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".1"
-                    android:background="@null"
-                    android:src="@mipmap/ic_reset"
-                    android:nestedScrollingEnabled="false"
-                    android:onClick="onClickChronometer" />
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight=".2"
+                            android:orientation="vertical"
+                            android:gravity="center_vertical"
+                            android:id="@+id/createChrono">
 
-                <ImageButton
-                    android:id="@+id/btnStart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".1"
-                    android:background="@null"
-                    android:src="@mipmap/ic_start"
-                    android:onClick="onClickChronometer" />
+                            <Chronometer
+                                android:id="@+id/chronoTime"
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:layout_alignParentStart="true"
+                                android:layout_below="@+id/ddlName"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:autoText="false"
+                                android:padding="5dp"
+                                android:textSize="40sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight=".2"
+                            android:orientation="horizontal"
+                            android:padding="5dp"
+                            android:weightSum=".8"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:id="@+id/createButton">
+
+                            <ImageButton
+                                android:id="@+id/btnPause"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".1"
+                                android:background="@null"
+                                android:src="@mipmap/ic_pause"
+                                android:onClick="onClickChronometer" />
+
+                            <ImageButton
+                                android:id="@+id/btnStop"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".1"
+                                android:background="@null"
+                                android:src="@mipmap/ic_stop"
+                                android:onClick="onClickChronometer" />
+
+                            <ImageButton
+                                android:id="@+id/btnReset"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".1"
+                                android:background="@null"
+                                android:src="@mipmap/ic_reset"
+                                android:nestedScrollingEnabled="false"
+                                android:onClick="onClickChronometer" />
+
+                            <ImageButton
+                                android:id="@+id/btnStart"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".1"
+                                android:background="@null"
+                                android:src="@mipmap/ic_start"
+                                android:onClick="onClickChronometer" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/editLayout">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight=".6"
+                            android:id="@+id/editTime"
+                            android:weightSum=".8"
+                            android:gravity="center_horizontal">
+
+                            <NumberPicker
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/np_hh"
+                                android:layout_weight=".1"
+                                android:orientation="vertical" />
+
+                            <NumberPicker
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/np_mm"
+                                android:layout_weight=".1"
+                                android:orientation="vertical"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp" />
+
+                            <NumberPicker
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/np_ss"
+                                android:layout_weight=".1"
+                                android:orientation="vertical" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight=".1"
+                            android:weightSum=".8"
+                            android:gravity="center_horizontal"
+                            android:id="@+id/editText">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:text="HH"
+                                android:id="@+id/textView19"
+                                android:layout_weight=".1"
+                                android:gravity="center_horizontal"
+                                android:textSize="18sp"
+                                android:textColor="#4DD0E1" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:text="MM"
+                                android:id="@+id/textView21"
+                                android:layout_weight=".1"
+                                android:gravity="center_horizontal"
+                                android:layout_marginLeft="40dp"
+                                android:layout_marginRight="40dp"
+                                android:textSize="18sp"
+                                android:textColor="#4DD0E1" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:text="SS"
+                                android:id="@+id/textView22"
+                                android:layout_weight=".1"
+                                android:gravity="center_horizontal"
+                                android:textSize="18sp"
+                                android:textColor="#4DD0E1" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -242,7 +352,7 @@
                 custom:selectorSize="2dp"
                 custom:connectingLineColor="#ff1b9c7b"
                 custom:selectorColor="#ff1b9c7b"
-                android:layout_weight=".17" />
+                android:layout_weight=".3" />
             <!--<SeekBar-->
                 <!--android:id="@+id/seekBar"-->
                 <!--android:layout_width="300dp"-->

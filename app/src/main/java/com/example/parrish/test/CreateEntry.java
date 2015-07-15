@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -19,11 +20,14 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Chronometer;
 //import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -57,8 +61,20 @@ public class CreateEntry extends Activity {
     Integer totalSeconds;
     Boolean pauseToggle = false;
     long persistentTime = 0L;
+    Boolean inEditMode = false;
+    Integer inEditId;
+    String inEditBatteryName;
+    Entry inEditEntry;
 
     private RangeBar rangebar;
+
+    public final static boolean isValidStartCharge(Integer start, Integer end) {
+        if (start < 1 || start <= end) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,20 +101,99 @@ public class CreateEntry extends Activity {
         //hide label in action bar
 //        actionBar.setDisplayShowTitleEnabled(false);
         setTitle("Menu");
-        final ImageButton buttonStopPressed = (ImageButton) findViewById(R.id.btnStop);
 
-        if (savedInstanceState != null) {
-            persistentTime = savedInstanceState.getLong("timerTime");
-            submitTimer = savedInstanceState.getBoolean("submitTimer");
-            startTimer = savedInstanceState.getBoolean("startTimer");
-            stringTime = savedInstanceState.getString("stringTime");
-            if (persistentTime != 0L) {
-                Chronometer chronoTime = (Chronometer) findViewById(R.id.chronoTime);
-                timeSave = persistentTime;
-                chronoTime.setBase(SystemClock.elapsedRealtime() - timeSave);
-                buttonStopPressed.setImageResource(R.mipmap.ic_stop_pressed);
-            } else {
-                buttonStopPressed.setImageResource(R.mipmap.ic_stop);
+        inEditMode = getIntent().getExtras().getBoolean("edit");
+
+        if (inEditMode == true) {
+            inEditId = getIntent().getExtras().getInt("id");
+            inEditBatteryName = getIntent().getExtras().getString("batteryName");
+        }
+
+        if (inEditMode == true) {
+            save = new SaveData(getApplicationContext());
+            inEditEntry = save.getEntry(inEditId);
+
+            TextView textViewToChange = (TextView) findViewById(R.id.title);
+            textViewToChange.setText("EDIT ENTRY");
+            textViewToChange.setBackgroundColor(Color.parseColor("#1976D2"));
+
+            LinearLayout createChrono = (LinearLayout) findViewById(R.id.createChrono);
+            createChrono.setVisibility(View.GONE);
+            LinearLayout createButton = (LinearLayout) findViewById(R.id.createButton);
+            createButton.setVisibility(View.GONE);
+
+            Integer runtimeValue = Integer.parseInt(inEditEntry.getRunTime());
+//            Integer runtimeValue = 3725;// 1 hour 15 min
+            Integer npValueHours = 0;
+            Integer npValueMinutes = 0;
+            Integer npValueSeconds = 0;
+            if (runtimeValue <= 7200) {
+                npValueHours = runtimeValue / 3600;
+                npValueMinutes = Math.abs(runtimeValue % 3600 / 60);
+                npValueSeconds = runtimeValue % 60;
+            }
+            NumberPicker npHours = (NumberPicker) findViewById(R.id.np_hh);
+            npHours.setMaxValue(2);
+            npHours.setMinValue(0);
+            npHours.setValue(npValueHours);
+            npHours.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+            NumberPicker npMinutes = (NumberPicker) findViewById(R.id.np_mm);
+            npMinutes.setMaxValue(59);
+            npMinutes.setMinValue(0);
+            npMinutes.setValue(npValueMinutes);
+            npMinutes.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+            NumberPicker npSeconds = (NumberPicker) findViewById(R.id.np_ss);
+            npSeconds.setMaxValue(59);
+            npSeconds.setMinValue(0);
+            npSeconds.setValue(npValueSeconds);
+            npSeconds.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+            rangebar = (RangeBar) findViewById(R.id.rangebar);
+            rangebar.setRangePinsByIndices(Integer.parseInt(inEditEntry.getEndCharge()), Integer.parseInt(inEditEntry.getStartCharge()));
+
+            EditText textNotes = (EditText) findViewById(R.id.txtNotes);
+            textNotes.setText(inEditEntry.getNotes());
+
+            textView_end.setText("" + inEditEntry.getEndCharge());
+            textView_start.setText("" + inEditEntry.getStartCharge());
+
+//            Integer spinnerPositionName = adapterCells.getPosition(Integer.parseInt(inEditEntry.getBatteryName()));
+//            Spinner lblCellName = (Spinner) findViewById(R.id.ddlName);
+//            lblCellName.setSelection(spinnerPositionName);
+//
+//            ArrayAdapter<CharSequence> adapterName = ArrayAdapter.createFromResource(this,, android.R.layout.simple_spinner_dropdown_item);
+//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//            ddlBatteryType.setAdapter(adapter);
+
+        } else {
+            LinearLayout editText = (LinearLayout) findViewById(R.id.editText);
+            editText.setVisibility(View.GONE);
+            LinearLayout editTime = (LinearLayout) findViewById(R.id.editTime);
+            editTime.setVisibility(View.GONE);
+
+            LinearLayout createChrono = (LinearLayout) findViewById(R.id.createChrono);
+            createChrono.setVisibility(View.VISIBLE);
+
+            LinearLayout createButton = (LinearLayout) findViewById(R.id.createButton);
+            createButton.setVisibility(View.VISIBLE);
+
+            final ImageButton buttonStopPressed = (ImageButton) findViewById(R.id.btnStop);
+
+            if (savedInstanceState != null) {
+                persistentTime = savedInstanceState.getLong("timerTime");
+                submitTimer = savedInstanceState.getBoolean("submitTimer");
+                startTimer = savedInstanceState.getBoolean("startTimer");
+                stringTime = savedInstanceState.getString("stringTime");
+                if (persistentTime != 0L) {
+                    Chronometer chronoTime = (Chronometer) findViewById(R.id.chronoTime);
+                    timeSave = persistentTime;
+                    chronoTime.setBase(SystemClock.elapsedRealtime() - timeSave);
+                    buttonStopPressed.setImageResource(R.mipmap.ic_stop_pressed);
+                } else {
+                    buttonStopPressed.setImageResource(R.mipmap.ic_stop);
+                }
             }
         }
 
@@ -129,8 +224,7 @@ public class CreateEntry extends Activity {
         //loops through the List<Battery>
         for (
                 int i = 0;
-                i < batteries.size(); i++)
-        {
+                i < batteries.size(); i++) {
             //gets the battery into the object battery
             battery = batteries.get(i);
             //appends the battery name to the batteryName array
@@ -143,6 +237,13 @@ public class CreateEntry extends Activity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateEntry.this, android.R.layout.simple_spinner_dropdown_item, batteryNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        if (inEditMode == true) {
+            ddlBatteryName.setEnabled(false);
+            ddlBatteryName.setClickable(false);
+            String inEditName = inEditEntry.getBatteryName();
+            Integer spinnerPositionName = adapter.getPosition(inEditName);
+            ddlBatteryName.setSelection(spinnerPositionName);
+        }
         ddlBatteryName.setAdapter(adapter);
         //end population
     }
@@ -269,6 +370,9 @@ public class CreateEntry extends Activity {
     }
 
     public void onClickChronometer(View view) {
+        Display display = ((WindowManager)
+                getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int screenOrientation;
         Chronometer chronoTime = (Chronometer) findViewById(R.id.chronoTime);
 
         final Handler handler = new Handler();
@@ -280,12 +384,14 @@ public class CreateEntry extends Activity {
         switch (view.getId()) {
             case R.id.btnStart:
                 if (stopTimer == true && pauseTimer != true) {
+                    screenOrientation = display.getRotation();
                     orientation = this.getResources().getConfiguration().orientation;
-                    if (orientation == 1)
-                    {
+                    if (screenOrientation == 0 || screenOrientation == 2) {
                         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                    }else if (orientation == 2){
+                    } else if (screenOrientation == 1) {
                         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    } else if (screenOrientation == 3) {
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
                     }
 
                     buttonStartPressed.setImageResource(R.mipmap.ic_start_pressed);
@@ -391,7 +497,7 @@ public class CreateEntry extends Activity {
         Spinner ddlName = (Spinner) findViewById(R.id.ddlName);
         EditText txtNotes = (EditText) findViewById(R.id.txtNotes);
         Boolean isValidTextPercent = true;
-        Boolean isValidTimeText;
+        Boolean isValidTimeText = true;
         Boolean isValidNotes;
         String name;
         Integer seekStart;
@@ -403,31 +509,47 @@ public class CreateEntry extends Activity {
         Context context = getApplicationContext();
         SaveData save = new SaveData(context);
         CharSequence toastText = "Entry created!";
+        CharSequence toastUpdate = "Entry updated!";
         int duration = Toast.LENGTH_SHORT;
         int duration_l = Toast.LENGTH_LONG;
         Toast toast = Toast.makeText(context, toastText, duration);
 
         String toastTimeStart = "Timer was not started";
         String toastTimeStop = "Timer was not stopped";
+        String toastTimeLong = "Time can not exceed 2 hours";
+        String toastTimeShort = "Time must be at least be 1 second";
         String toastStart = "Starting charge can not be 0 or less than end charge";
 
         seekStart = Integer.valueOf(txtStart.getText().toString());
         seekEnd = Integer.valueOf(txtEnd.getText().toString());
 
-        if (submitTimer == true) { //stopped
-            if (isValidTime(stringTime) != 0) {
-                isValidTimeText = true;
-            } else {
-                createToast(toastTimeStart, duration);
-                isValidTimeText = false;
+        if (inEditMode == false) {
+            if (submitTimer == true) { //stopped
+                if (isValidTime(stringTime) != 0) {
+                    isValidTimeText = true;
+                } else {
+                    createToast(toastTimeStart, duration);
+                    isValidTimeText = false;
+                }
+            } else {                            //start
+                if (isValidTime(stringTime) != 0) {
+                    createToast(toastTimeStop, duration);
+                    isValidTimeText = false;
+                } else {
+                    createToast(toastTimeStart, duration);
+                    isValidTimeText = false;
+                }
             }
-        } else {                            //start
-            if (isValidTime(stringTime) != 0) {
-                createToast(toastTimeStop, duration);
+        } else { // entry is in edit mode
+            if (isValidTime() == 1) {
+                isValidTimeText = true;
+            }else if(isValidTime() == 2){
                 isValidTimeText = false;
-            } else {
-                createToast(toastTimeStart, duration);
+                createToast(toastTimeShort, duration);
+            }
+            else{ //validtime == 3
                 isValidTimeText = false;
+                createToast(toastTimeLong, duration);
             }
         }
 
@@ -443,23 +565,45 @@ public class CreateEntry extends Activity {
             isValidNotes = true;
         }
 
-        if (isValidTimeText == true && isValidTextPercent == true && isValidNotes == true) {
-            try {
-                name = ddlName.getSelectedItem().toString();
-                start = Integer.valueOf(txtStart.getText().toString());//txtStart.getText().toString().substring(0, txtStart.length() - 1));
-                end = Integer.valueOf(txtEnd.getText().toString());//.substring(0, txtEnd.length() - 1));
-                time = totalSeconds;//(chronoTime.getBase() - SystemClock.elapsedRealtime()) * -1;
-                notes = txtNotes.getText().toString();
-
+        if (inEditMode == false) {
+            if (isValidTimeText == true && isValidTextPercent == true && isValidNotes == true) {
                 try {
-                    save.addEntry(name, time, start, end, notes);
-                    toast.show();
-                    finish();
-                } catch (SQLiteException e) {
+                    name = ddlName.getSelectedItem().toString();
+                    start = Integer.valueOf(txtStart.getText().toString());//txtStart.getText().toString().substring(0, txtStart.length() - 1));
+                    end = Integer.valueOf(txtEnd.getText().toString());//.substring(0, txtEnd.length() - 1));
+                    time = totalSeconds;//(chronoTime.getBase() - SystemClock.elapsedRealtime()) * -1;
+                    notes = txtNotes.getText().toString();
+
+                    try {
+                        save.addEntry(name, time, start, end, notes);
+                        toast.show();
+                        finish();
+                    } catch (SQLiteException e) {
+                        Log.e("Add Entry", e.toString());
+                    }
+                } catch (IllegalStateException e) {
                     Log.e("Add Entry", e.toString());
                 }
-            } catch (IllegalStateException e) {
-                Log.e("Add Entry", e.toString());
+            }
+        } else {  //in edit mode
+            if (isValidTimeText == true && isValidTextPercent == true && isValidNotes == true) {
+                try {
+                    name = ddlName.getSelectedItem().toString();
+                    start = Integer.valueOf(txtStart.getText().toString());//txtStart.getText().toString().substring(0, txtStart.length() - 1));
+                    end = Integer.valueOf(txtEnd.getText().toString());//.substring(0, txtEnd.length() - 1));
+                    time = totalSeconds;//(chronoTime.getBase() - SystemClock.elapsedRealtime()) * -1;
+                    notes = txtNotes.getText().toString();
+
+                    try {
+                        save.updateEntry(inEditId, name, time, start, end, notes);
+                        createToast(toastUpdate, duration);
+                        finish();
+                    } catch (SQLiteException e) {
+                        Log.e("Add Entry", e.toString());
+                    }
+                } catch (IllegalStateException e) {
+                    Log.e("Add Entry", e.toString());
+                }
             }
         }
     }
@@ -496,16 +640,27 @@ public class CreateEntry extends Activity {
         }
     }
 
-    public final static boolean isValidStartCharge(Integer start, Integer end) {
-        if (start < 1 || start <= end) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     public void createToast(CharSequence text, Integer duration) {
         Toast toast = Toast.makeText(getApplicationContext(), text, duration);
         toast.show();
+    }
+
+    public final Integer isValidTime() {
+        NumberPicker npHours = (NumberPicker) findViewById(R.id.np_hh);
+        NumberPicker npMinutes = (NumberPicker) findViewById(R.id.np_mm);
+        NumberPicker npSeconds = (NumberPicker) findViewById(R.id.np_ss);
+
+        Integer hours = npHours.getValue();
+        Integer minutes = npMinutes.getValue();
+        Integer seconds = npSeconds.getValue();
+
+        totalSeconds = hours * 3600 + minutes * 60 + seconds;
+        if (totalSeconds > 7200) {  //checks to make sure no more than 2 hours is saved
+            return 3;
+        } else if (totalSeconds < 1) {
+            return 2;
+        } else{
+            return 1;
+        }
     }
 }

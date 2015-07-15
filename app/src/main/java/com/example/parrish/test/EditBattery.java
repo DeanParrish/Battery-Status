@@ -45,12 +45,9 @@ public class EditBattery extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_battery);
 
-        String id = getIntent().getExtras().getString("id");
-        boolean edit = getIntent().getExtras().getBoolean("edit");
-
         // hides shadow from action bar
         ActionBar actionBar = getActionBar();
-        actionBar.setElevation(0);
+        actionBar.setElevation(1);
         // Enabling Up / Back navigation
         actionBar.setDisplayHomeAsUpEnabled(true);
         //hide label in action bar
@@ -156,6 +153,7 @@ public class EditBattery extends Activity {
         if (id == android.R.id.home) {
             Intent intent = new Intent(context, MainActivity.class);
             startActivity(intent);
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

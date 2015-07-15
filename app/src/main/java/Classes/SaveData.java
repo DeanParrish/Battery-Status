@@ -303,7 +303,7 @@ public class SaveData {
 
     }
 
-    public void updateEntry(int id, String name, String time, int start, int end, String notes){
+    public void updateEntry(int id, String name, long time, int start, int end, String notes){
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");

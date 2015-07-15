@@ -136,6 +136,7 @@ public class MainActivity extends Activity {
             public void onClick(View arg0) {
                 if (noBatteryFlag == false) {
                     Intent intent = new Intent(context, CreateEntry.class);
+                    intent.putExtra("edit",false);
                     startActivity(intent);
                 } else {
                     createToast(toastText, duration);
