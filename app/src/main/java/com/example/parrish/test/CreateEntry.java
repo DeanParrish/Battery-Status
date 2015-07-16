@@ -213,11 +213,11 @@ public class CreateEntry extends Activity {
         //gets all batteries in a List<Battery>
         batteries = save.getAllBatteries();
 
-        if (batteries.size() == 0) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("no_batteries", true);
-            startActivity(intent);
-        }
+//        if (batteries.size() == 0) {
+//            Intent intent = new Intent(this, MainActivity.class);
+//            intent.putExtra("no_batteries", true);
+//            startActivity(intent);
+//        }
         //new string for battery names
         batteryNames = new String[batteries.size()];
 

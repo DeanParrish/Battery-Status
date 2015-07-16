@@ -183,7 +183,9 @@ public class CreateBattery extends Activity {
                     public void onClick(DialogInterface dialog, int id) {
                         if (editFlag == 0) {
                             finish();
+                            return;
                         } else {
+                            finish();
                             Intent intent = new Intent(context, MainActivity.class);
                             startActivity(intent);
                         }
@@ -230,7 +232,9 @@ public class CreateBattery extends Activity {
                         public void onClick(DialogInterface dialog, int id) {
                             if (editFlag == 0) {
                                 finish();
+                                return;
                             } else {
+                                finish();
                                 Intent intent = new Intent(context, MainActivity.class);
                                 startActivity(intent);
                             }
@@ -251,6 +255,7 @@ public class CreateBattery extends Activity {
     }
 
     public void onSubmitClick(MenuItem item) {
+        final Context context = this;
         SaveData save = new SaveData(getApplicationContext());
         Boolean isValidText = true;
         Boolean isValidMah = true;
@@ -309,6 +314,8 @@ public class CreateBattery extends Activity {
                         save.addBattery(batteryName, batteryCells, batteryMah, batteryCycle, type);
                         toastCreate.show();
                         finish();
+//                        Intent intent = new Intent(context, MainActivity.class);
+//                        startActivity(intent);
                     } catch (SQLiteException e) {
                         Log.e("Add Battery", e.toString());
                     }
@@ -328,6 +335,15 @@ public class CreateBattery extends Activity {
                 finish();
             }
         } else {
+            Integer intMah = parseInt(txtMah.getText().toString());
+            Integer intCycles = parseInt(txtCycle.getText().toString());
+
+            EditText lblMahValue = (EditText) findViewById(R.id.txtMah);
+            lblMahValue.setText(intMah.toString());
+
+            EditText lblCyclesValue = (EditText) findViewById(R.id.txtCycles);
+            lblCyclesValue.setText(intCycles.toString());
+
             createToast(toastInvalid, duration);
         }
     }
@@ -337,5 +353,4 @@ public class CreateBattery extends Activity {
         Toast toast = Toast.makeText(getApplicationContext(), text, duration);
         toast.show();
     }
-
 }

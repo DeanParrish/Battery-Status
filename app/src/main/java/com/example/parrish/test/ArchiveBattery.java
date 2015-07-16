@@ -160,7 +160,6 @@ public class ArchiveBattery extends Activity {
                         try {
                             delete.deleteBattery(batteryName);
                             createToast(toastText, duration);
-                            finish();
                             startActivity(getIntent());
                         } catch (SQLiteException e) {
                             Log.e("Add Battery", e.toString());

@@ -31,25 +31,23 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/scrollView"
-        android:layout_below="@+id/title">
+        android:layout_below="@+id/title"
+        android:padding="24dp">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/title"
-            android:paddingLeft="15dp"
-            android:paddingTop="10dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="10dp"
             android:minHeight="450dp"
-            android:measureWithLargestChild="false">
+            android:measureWithLargestChild="false"
+            android:weightSum=".8">
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".2">
+                android:layout_weight=".1">
 
                 <!--<TextView-->
                     <!--android:layout_width="wrap_content"-->
@@ -102,7 +100,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".2"
+                android:layout_weight=".1"
                 android:gravity="center_vertical"
                 android:paddingBottom="20dp">
 
@@ -133,7 +131,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".2">
+                android:layout_weight=".1">
 
                 <!--<TextView-->
                     <!--android:layout_width="wrap_content"-->
@@ -180,7 +178,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".2">
+                android:layout_weight=".1">
 
                 <!--<TextView-->
                     <!--android:layout_width="wrap_content"-->
@@ -224,7 +222,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".2"
+                android:layout_weight=".1"
                 android:gravity="center_vertical">
 
                 <TextView

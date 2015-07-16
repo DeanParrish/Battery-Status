@@ -10,9 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.List;
@@ -22,16 +19,12 @@ import Classes.SaveData;
 
 public class MainActivity extends Activity {
 
+    final Context context = this;
     Button btn_battery_create;
     Button btn_battery_archive;
     Button btn_entry_create;
-    Button btn_entry_remove;
     Button btn_view_stats;
-
     SaveData save;
-    Boolean noBatteryFlag;
-
-    final Context context = this;
     CharSequence toastText = "Please create a battery first!";
     int duration = Toast.LENGTH_LONG;
 
@@ -39,10 +32,10 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        onResume();
         addListenerOnButton();
         addListenerOnButton2();
         addListenerOnButton3();
-//        addListenerOnButton4();
         addListenerOnButton5();
         addListenerOnButton6();
 
@@ -50,32 +43,6 @@ public class MainActivity extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setElevation(0);
         actionBar.hide();
-
-        //region Populate List from database
-        List<Battery> batteries;
-        Battery battery;
-        String[] batteryNames;
-        //start population of drop down list
-        save = new SaveData(getApplicationContext());
-        //gets all batteries in a List<Battery>
-        try {
-            batteries = save.getAllBatteries();
-
-
-            if (batteries.size() == 0) {
-                noBatteryFlag = true;
-//            Intent intent = new Intent(this, MainActivity.class);
-//            intent.putExtra("no_batteries", true);
-//            startActivity(intent);
-            } else {
-                noBatteryFlag = false;  //batteries exist
-            }
-        } catch (
-                Exception e
-                ) {
-            Log.e("Main Activity no_batter", e.toString());
-
-        }
     }
 
     @Override
@@ -100,25 +67,24 @@ public class MainActivity extends Activity {
     }
 
     public void addListenerOnButton() {
-//        final Context context = this;
+
         btn_battery_create = (Button) findViewById(R.id.button11);
         btn_battery_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Intent intent = new Intent(context, CreateBattery.class);
-                intent.putExtra("create_battery", 1);  // sets flag for create battery
-                startActivity(intent);
+                Intent intentCreate = new Intent(context, CreateBattery.class);
+                intentCreate.putExtra("create_battery", 1);  // sets flag for create battery
+                startActivity(intentCreate);
             }
         });
     }
 
     public void addListenerOnButton2() {
-//        final Context context = this;
         btn_battery_archive = (Button) findViewById(R.id.button12);
         btn_battery_archive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if (noBatteryFlag == false) {
+                if (hasNoBatteries() == false) {
                     Intent intent = new Intent(context, ArchiveBattery.class);
                     startActivity(intent);
                 } else {
@@ -129,14 +95,13 @@ public class MainActivity extends Activity {
     }
 
     public void addListenerOnButton3() {
-//        final Context context = this;
         btn_entry_create = (Button) findViewById(R.id.button8);
         btn_entry_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if (noBatteryFlag == false) {
+                if (hasNoBatteries() == false) {
                     Intent intent = new Intent(context, CreateEntry.class);
-                    intent.putExtra("edit",false);
+                    intent.putExtra("edit", false);
                     startActivity(intent);
                 } else {
                     createToast(toastText, duration);
@@ -145,29 +110,12 @@ public class MainActivity extends Activity {
         });
     }
 
-//    public void addListenerOnButton4() {
-////        final Context context = this;
-//        btn_entry_remove = (Button) findViewById(R.id.button9);
-//        btn_entry_remove.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View arg0) {
-//                if (noBatteryFlag == false) {
-//                    Intent intent = new Intent(context, RemoveEntry.class);
-//                    startActivity(intent);
-//                } else {
-//                    createToast(toastText, duration);
-//                }
-//            }
-//        });
-//    }
-
     public void addListenerOnButton5() {
-//        final Context context = this;
         btn_view_stats = (Button) findViewById(R.id.button10);
         btn_view_stats.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if (noBatteryFlag == false) {
+                if (hasNoBatteries() == false) {
                     Intent intent = new Intent(context, ViewStatistics.class);
                     startActivity(intent);
                 } else {
@@ -178,14 +126,12 @@ public class MainActivity extends Activity {
     }
 
     public void addListenerOnButton6() {
-//        final Context context = this;
         btn_battery_create = (Button) findViewById(R.id.button1);
         btn_battery_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if (noBatteryFlag == false) {
+                if (hasNoBatteries() == false) {
                     Intent intent = new Intent(context, EditBattery.class);
-//                    intent.putExtra("create_battery", 0);  // sets flag for create battery
                     startActivity(intent);
                 } else {
                     createToast(toastText, duration);
@@ -198,5 +144,25 @@ public class MainActivity extends Activity {
     public void createToast(CharSequence text, Integer duration) {
         Toast toast = Toast.makeText(getApplicationContext(), text, duration);
         toast.show();
+    }
+
+    public Boolean hasNoBatteries() {
+        List<Battery> batteries;
+        //start population of drop down list
+        save = new SaveData(getApplicationContext());
+        //gets all batteries in a List<Battery>
+        try {
+            batteries = save.getAllBatteries();
+            if (batteries.size() == 0) {
+                return true;
+            } else {
+                return false;  //batteries exist
+            }
+        } catch (
+                Exception e
+                ) {
+            Log.e("Main Activity no_batter", e.toString());
+        }
+        return true;
     }
 }
