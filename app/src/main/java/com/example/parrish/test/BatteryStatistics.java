@@ -16,7 +16,6 @@ import Classes.SlidingTabLayout;
 
 public class BatteryStatistics extends FragmentActivity {
 
-    SaveData save;
     ViewPager viewPager;
     MyPagerAdapter mPagerAdapter;
     SlidingTabLayout mtabs;
@@ -33,7 +32,7 @@ public class BatteryStatistics extends FragmentActivity {
         String stringBattery  = intent.getStringExtra("battery");
 
         viewPager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), stringBattery);
+        mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), stringBattery, getApplicationContext());
         viewPager.setAdapter(mPagerAdapter);
         mtabs = (SlidingTabLayout) findViewById(R.id.tabs);
         mtabs.setDistributeEvenly(true);
@@ -47,7 +46,6 @@ public class BatteryStatistics extends FragmentActivity {
             // Enabling Up / Back navigation
             actionBar.setDisplayHomeAsUpEnabled(true);
             //hide label in action bar
-//            actionBar.setDisplayShowTitleEnabled(false);
             setTitle("Battery List");
             //endregion
         } catch (NullPointerException e){
@@ -76,7 +74,6 @@ public class BatteryStatistics extends FragmentActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        final Context context = this;
 
         //noinspection SimplifiableIfStatement
         if (id == android.R.id.home) {

@@ -1,11 +1,14 @@
 package Classes;
 
+import android.content.Context;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.parrish.test.BatteryStatsBasic;
 import com.example.parrish.test.BatteryStatsGraph;
+import com.jjoe64.graphview.series.PointsGraphSeries;
 
 /**
  * Created by Parrish on 6/23/2015.
@@ -13,15 +16,24 @@ import com.example.parrish.test.BatteryStatsGraph;
 
 public class MyPagerAdapter extends FragmentPagerAdapter {
     String batteryName;
-    public MyPagerAdapter(FragmentManager fragmentManager, String batteryName) {
+    int entries;
+    Context context;
+    public MyPagerAdapter(FragmentManager fragmentManager, String batteryName, Context con) {
         super(fragmentManager);
         this.batteryName = batteryName;
+        this.context = con;
+        SaveData save = new SaveData(context);
+        this.entries = save.getAllEntriesForBattery(batteryName).size();
     }
 
     // Returns total number of pages
     @Override
     public int getCount() {
-        return 2;
+        if (entries >= 1) {
+            return 2;
+        } else {
+            return 1;
+        }
     }
 
     // Returns the fragment to display for that page
@@ -29,13 +41,12 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                // Top Rated fragment activity
+                // Battery fragment activity
                 return BatteryStatsBasic.newInstance(batteryName);
             case 1:
-                // Games fragment activity
+                // Entries fragment activity
                 return BatteryStatsGraph.newInstance(batteryName);
-            case 2:
-                // Movies fragment activity
+
 
             default: return new Fragment();
         }
