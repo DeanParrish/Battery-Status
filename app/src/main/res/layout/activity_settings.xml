@@ -1,9 +1,124 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.example.parrish.test.Settings">
 
-</RelativeLayout>
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Settings"
+        android:id="@+id/title"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center_horizontal"
+        android:textColor="#ffffff"
+        android:background="#B71C1C"
+        android:layout_alignParentStart="true"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:gravity="center_horizontal">
+
+            <ImageButton
+                android:layout_width="75dp"
+                android:layout_height="fill_parent"
+                android:id="@+id/imageButton1"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:background="#01579B"
+                android:src="@mipmap/ic_cloud_upload_w"
+                android:scaleType="fitCenter"
+                android:layout_columnWeight=".1"
+                android:layout_rowWeight=".1"
+                android:layout_marginRight="50dp" />
+
+            <ImageButton
+                android:layout_width="75dp"
+                android:layout_height="fill_parent"
+                android:id="@+id/imageButton2"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:background="#01579B"
+                android:src="@mipmap/ic_cloud_download_w"
+                android:scaleType="fitCenter"
+                android:layout_columnWeight=".1"
+                android:layout_marginLeft="50dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight=".7">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".3"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Local records updated:"
+                    android:id="@+id/textView26"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Monday September 12, 2015 @ 07:18 PM "
+                    android:id="@+id/textView30"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Records on cloud updated: "
+                    android:id="@+id/textView27"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="20sp"
+                    android:layout_marginTop="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Thursday July 02, 2015 @ 11:20 AM "
+                    android:id="@+id/textView31"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

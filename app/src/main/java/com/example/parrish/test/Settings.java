@@ -1,17 +1,28 @@
 package com.example.parrish.test;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
-public class Settings extends ActionBarActivity {
+public class Settings extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        ActionBar actionBar = getActionBar();
+        actionBar.setElevation(1);
+        // Enabling Up / Back navigation
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        //hide label in action bar
+        setTitle("Menu");
     }
 
     @Override
@@ -29,10 +40,25 @@ public class Settings extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == android.R.id.home) {
+            finish();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    //methods
+    public void createToast(CharSequence text, Integer duration) {
+        Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+        toast.show();
     }
 }

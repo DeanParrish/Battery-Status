@@ -159,14 +159,6 @@ public class CreateEntry extends Activity {
             textView_end.setText("" + inEditEntry.getEndCharge());
             textView_start.setText("" + inEditEntry.getStartCharge());
 
-//            Integer spinnerPositionName = adapterCells.getPosition(Integer.parseInt(inEditEntry.getBatteryName()));
-//            Spinner lblCellName = (Spinner) findViewById(R.id.ddlName);
-//            lblCellName.setSelection(spinnerPositionName);
-//
-//            ArrayAdapter<CharSequence> adapterName = ArrayAdapter.createFromResource(this,, android.R.layout.simple_spinner_dropdown_item);
-//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//            ddlBatteryType.setAdapter(adapter);
-
         } else {
             LinearLayout editText = (LinearLayout) findViewById(R.id.editText);
             editText.setVisibility(View.GONE);
@@ -237,6 +229,8 @@ public class CreateEntry extends Activity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateEntry.this, android.R.layout.simple_spinner_dropdown_item, batteryNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ddlBatteryName.setAdapter(adapter);
+
         if (inEditMode == true) {
             ddlBatteryName.setEnabled(false);
             ddlBatteryName.setClickable(false);
@@ -244,7 +238,6 @@ public class CreateEntry extends Activity {
             Integer spinnerPositionName = adapter.getPosition(inEditName);
             ddlBatteryName.setSelection(spinnerPositionName);
         }
-        ddlBatteryName.setAdapter(adapter);
         //end population
     }
 
@@ -253,6 +246,11 @@ public class CreateEntry extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_create_entry, menu);
         return true;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     @Override

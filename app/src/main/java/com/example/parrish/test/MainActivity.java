@@ -24,6 +24,7 @@ public class MainActivity extends Activity {
     Button btn_battery_archive;
     Button btn_entry_create;
     Button btn_view_stats;
+    Button btn_settings;
     SaveData save;
     CharSequence toastText = "Please create a battery first!";
     int duration = Toast.LENGTH_LONG;
@@ -38,6 +39,7 @@ public class MainActivity extends Activity {
         addListenerOnButton3();
         addListenerOnButton5();
         addListenerOnButton6();
+        addListenerOnButton7();
 
         // hides shadow from action bar
         ActionBar actionBar = getActionBar();
@@ -136,6 +138,17 @@ public class MainActivity extends Activity {
                 } else {
                     createToast(toastText, duration);
                 }
+            }
+        });
+    }
+
+    public void addListenerOnButton7() {
+        btn_settings = (Button) findViewById(R.id.btn_settings);
+        btn_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                Intent intent = new Intent(context, Settings.class);
+                startActivity(intent);
             }
         });
     }
