@@ -24,6 +24,20 @@
             android:orientation="vertical">
 
             <Button
+                android:id="@+id/button11"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_alignStart="@+id/button10"
+                android:layout_below="@+id/button10"
+                android:layout_centerHorizontal="true"
+                android:background="#ff34495e"
+                android:drawableStart="@mipmap/ic_battery_create"
+                android:text="Create Battery"
+                android:textColor="#fffcffff"
+                android:layout_margin="3dp"
+                android:layout_weight=".1" />
+
+            <Button
                 android:id="@+id/button8"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
@@ -67,21 +81,6 @@
                 android:layout_weight=".1" />
 
             <Button
-                android:id="@+id/button11"
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_alignStart="@+id/button10"
-                android:layout_below="@+id/button10"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center_horizontal"
-                android:background="#ff34495e"
-                android:drawableStart="@mipmap/ic_battery_create"
-                android:text="Create Battery"
-                android:textColor="#fffcffff"
-                android:layout_margin="3dp"
-                android:layout_weight=".1" />
-
-            <Button
                 android:id="@+id/button1"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
@@ -103,8 +102,8 @@
                 android:layout_below="@+id/button11"
                 android:layout_gravity="center_horizontal"
                 android:background="#ff7f8c8d"
-                android:drawableStart="@mipmap/ic_battery_remove"
-                android:text="Archive Battery"
+                android:drawableStart="@mipmap/ic_delete_white"
+                android:text="Delete Battery"
                 android:textColor="#ffffffff"
                 android:layout_margin="3dp"
                 android:layout_weight=".1" />
