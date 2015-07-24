@@ -9,11 +9,13 @@ import android.graphics.Paint;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.security.GeneralSecurityException;
 
@@ -40,6 +42,7 @@ public class Login extends Activity {
             setContentView(R.layout.activity_login_l);
         }
         addListenerOnButtonLogin();
+        handleSignUpClick();
 
         // hides shadow from action bar
         ActionBar actionBar = getActionBar();
@@ -62,12 +65,40 @@ public class Login extends Activity {
         });
     }
 
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_login, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
     public void addListenerOnButtonLogin() {
         Button btn_login = (Button) findViewById(R.id.btn_login);
+        final TextView textViewEmail = (TextView) findViewById(R.id.txt_email);
+        final TextView textViewPassword = (TextView) findViewById(R.id.txt_password);
+
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                try {
+/*                try {
 
                     byte[] encrypted = encrypt(KEY, PLAIN_TEXT);
                     Log.i("FOO", "Encrypted: " + bytesToHex(encrypted));
@@ -77,7 +108,34 @@ public class Login extends Activity {
 
                 } catch (GeneralSecurityException e) {
                     e.printStackTrace();
+                }*/
+
+                String txtEmail = textViewEmail.getText().toString();
+                String txtPassword = textViewPassword.getText().toString();
+
+                if (txtEmail.isEmpty()){
+                    textViewEmail.setError("Please enter an email!");
                 }
+
+                if (txtPassword.isEmpty()){
+                    textViewPassword.setError("Please enter your password!");
+                }
+
+                if (!isEmailValid(txtEmail)){
+                    textViewEmail.setError("Please enter a valid email!");
+                }
+            }
+        });
+    }
+
+    public void handleSignUpClick(){
+        TextView textViewSignUp = (TextView) findViewById(R.id.lbl_sign_up);
+
+        textViewSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), RegisterAccount.class);
+                startActivity(intent);
             }
         });
     }
@@ -95,7 +153,7 @@ public class Login extends Activity {
 //            e.printStackTrace();
 //        }
 //    }
-
+/*
     private byte[] encrypt(String key, String plainText) throws GeneralSecurityException {
 
         SecretKey secret_key = new SecretKeySpec(key.getBytes(), ALGORITM);
@@ -131,27 +189,14 @@ public class Login extends Activity {
                 str = str + java.lang.Integer.toHexString(data[i] & 0xFF);
         }
         return str;
+    }*/
+
+    public void createToast(CharSequence text, Integer duration) {
+        Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+        toast.show();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public boolean isEmailValid(CharSequence email){
+        return Patterns.EMAIL_ADDRESS. matcher(email).matches();
     }
 }

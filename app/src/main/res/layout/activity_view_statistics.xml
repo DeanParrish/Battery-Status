@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:floatingactionbutton="http://schemas.android.com/apk/res-auto"
@@ -26,9 +26,11 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#ffffff"
         android:focusable="false"/>
-<!--<FrameLayout
+
+
+<FrameLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">-->
+    android:layout_height="match_parent">
       <!--<ListView-->
       <ListView
           android:id="@+id/batteryListView"
@@ -54,6 +56,8 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:src="@drawable/ic_delete"
+              floatingactionbutton:fab_colorNormal="#ff7f8c8d"
+              floatingactionbutton:fab_colorPressed="#B2BABB"
               />
 
           <com.github.clans.fab.FloatingActionButton
@@ -74,5 +78,5 @@
               floatingactionbutton:fab_colorPressed="#509b59b6"/>
 
       </com.github.clans.fab.FloatingActionMenu>
-<!--    </FrameLayout>-->
-</FrameLayout>
+    </FrameLayout>
+</LinearLayout>

@@ -61,6 +61,26 @@
         <item>10000</item>
     </string-array>
 
+    <string-array name="securityQuestions">
+        <item>Recovery Question</item>
+        <item>What was your favorite place to visit as a child?</item>
+        <item>Who is your favorite actor, musician, or artist?</item>
+        <item>What is the name of your favorite pet?</item>
+        <item>In what city were you born?</item>
+        <item>What high school did you attend?</item>
+        <item>What is the name of your first school?</item>
+        <item>What is your favorite movie?</item>
+        <item>What is your mother\'s maiden name?</item>
+        <item>What street did you grow up on?</item>
+        <item>What was the make of your first car?</item>
+        <item>When is your anniversary?</item>
+        <item>What is your favorite color?</item>
+        <item>What is your father\'s middle name?</item>
+        <item>What is the name of your first grade teacher?</item>
+        <item>What was your high school mascot?</item>
+        <item>Which is your favorite web browser?</item>
+    </string-array>
+
     <string name="title_activity_edit_battery">EditBattery</string>
 
     <string-array name="tabs">
@@ -72,4 +92,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_login">Login</string>
+    <string name="title_activity_register_account">Register Account</string>
 </resources>

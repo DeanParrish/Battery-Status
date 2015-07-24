@@ -56,8 +56,9 @@
         android:id="@+id/fabEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-            android:src="@drawable/ic_edit"
+        android:src="@drawable/ic_edit"
         floatingactionbutton:fab_colorNormal="#1976D2"
+        floatingactionbutton:fab_colorPressed="#9EC5EC"
         />
 
         <com.github.clans.fab.FloatingActionButton

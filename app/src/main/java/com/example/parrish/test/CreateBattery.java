@@ -21,6 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -269,9 +271,11 @@ public class CreateBattery extends Activity {
         int batteryCycle;
         CharSequence toastTextCreate = "Battery created!";
         CharSequence toastTextEdit = "Battery updated!";
+        CharSequence toastTextDuplicateBattery = "Battery already exists!";
         int duration = Toast.LENGTH_SHORT;
         Toast toastCreate = Toast.makeText(getApplicationContext(), toastTextCreate, duration);
         Toast toastUpdate = Toast.makeText(getApplicationContext(), toastTextEdit, duration);
+        Toast toastDuplicateBattery = Toast.makeText(getApplicationContext(),toastTextDuplicateBattery, duration);
         //Screen fields and conversions
         Spinner spinnerType = (Spinner) findViewById(R.id.ddlType);
         Spinner ddlCells = (Spinner) findViewById(R.id.ddlCells);
@@ -283,6 +287,7 @@ public class CreateBattery extends Activity {
         String toastBattery = "Enter a valid name";
         String toastMah = "Enter a valid number between 100 and 99999";
         String toastCycles = "Enter a valid number between 10 and 9999";
+        String toastDuplicateBattery2 = "Battery already exists!";
 
         if (isValidBattery(txtBattName.getText().toString()) != true) {
             txtBattName.setError(toastBattery);
@@ -310,12 +315,26 @@ public class CreateBattery extends Activity {
                     batteryCycle = parseInt(txtCycle.getText().toString());
                     //add the battery to the database
                     try {
-                        //save.upgrade(1,2);
-                        save.addBattery(batteryName, batteryCells, batteryMah, batteryCycle, type);
-                        toastCreate.show();
-                        finish();
-//                        Intent intent = new Intent(context, MainActivity.class);
-//                        startActivity(intent);
+                        List<Battery> listBatteries = save.getAllBatteries();
+                        Battery compareBattery;
+                        boolean addBattery = true;
+                        Iterator<Battery> iterator = listBatteries.iterator();
+                        //iterate and compare battery names; if exists, set flag to not add battery; kick back an error message
+                        while (iterator.hasNext()){
+                            compareBattery = iterator.next();
+                            if (compareBattery.getName().equals(batteryName)){
+                                addBattery = false;
+                            }
+                        }
+                        if (addBattery == true) {
+                            save.addBattery(batteryName, batteryCells, batteryMah, batteryCycle, type);
+                            toastCreate.show();
+                            finish();
+                        } else {
+                            txtBattName.setError(toastDuplicateBattery2);
+                            txtBattName.requestFocus();
+                            createToast(toastDuplicateBattery2, duration);
+                        }
                     } catch (SQLiteException e) {
                         Log.e("Add Battery", e.toString());
                     }

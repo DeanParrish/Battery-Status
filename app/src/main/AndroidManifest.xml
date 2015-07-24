@@ -16,6 +16,7 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -51,9 +52,13 @@
             android:name=".Settings"
             android:label="@string/title_activity_settings" >
         </activity>
+        <activity android:name=".MainActivity" >
+
+            <!-- android:label="@string/title_activity_login" > -->
+        </activity>
         <activity
-            android:name=".MainActivity">
-            <!--android:label="@string/title_activity_login" >-->
+            android:name=".RegisterAccount"
+            android:label="@string/title_activity_register_account" >
         </activity>
     </application>
 

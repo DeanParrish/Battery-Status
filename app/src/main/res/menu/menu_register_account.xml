@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.parrish.test.RegisterAccount">
+<!--    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="100" app:showAsAction="never" />-->
+    <item
+        android:id="@+id/action_save"
+        android:icon="@mipmap/ic_save"
+        android:orderInCategory="0"
+        android:showAsAction="ifRoom"
+        android:title="@string/activity_save"
+        android:onClick="onSubmitClick" />
+</menu>

@@ -19,15 +19,19 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
           final String SQL_CREATE_BATTERY =
                 "CREATE TABLE batteries ( " +
-                        "name TEXT PRIMARY KEY, " +
+                        "userid TEXT NOT NULL, " +
+                        "name TEXT NOT NULL, " +
                         "cells TEXT, " +
                         "mah TEXT, " +
                         "cycles TEXT, " +
-                        "type TEXT )";
+                        "type TEXT, " +
+                        "PRIMARY KEY ( userid, name )" +
+                        "FOREIGN KEY(userid) REFERENCES users(id) )";
 
         final String SQL_CREATE_ENTRY =
                 "CREATE TABLE entries ( " +
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "userid TEXT NOT NULL, " +
+                        "id INTEGER AUTOINCREMENT, " +
                         "name TEXT, " +
                         "time LONG, " + //changed from INT
                         "start INT, " +
@@ -36,11 +40,29 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                         "dateTime TEXT, " +
                         "editDate TEXT, " +
                         "editTime TEXT, " +
-                        "notes TEXT )";
+                        "notes TEXT, "  +
+                        "PRIMARY KEY ( userid, id )" +
+                        "FOREIGN KEY (userid) REFERENCES users(id) )";
 
+        final String SQL_CREATE_USERS =
+                "CREATE TABLE users ( " +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "email TEXT, " +
+                        "password TEXT, " +
+                        "question1 TEXT, " +
+                        "answer1 TEXT, " +
+                        "question2 TEXT, " +
+                        "answer2 TEXT, " +
+                        "question3 TEXT, " +
+                        "answer3 TEXT, " +
+                        "active TEXT, " +
+                        "recent TEXT " +
+                        "createDate TEXT, " +
+                        "loginDate TEXT )";
 
         db.execSQL(SQL_CREATE_BATTERY);
         db.execSQL(SQL_CREATE_ENTRY);
+        db.execSQL(SQL_CREATE_USERS);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -48,9 +70,5 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS entries");
         this.onCreate(db);
     }
-
-/*    public String insert(ContentValues values){
-
-    }*/
 }
 
