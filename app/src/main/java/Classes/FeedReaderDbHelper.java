@@ -19,19 +19,19 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
           final String SQL_CREATE_BATTERY =
                 "CREATE TABLE batteries ( " +
-                        "userid TEXT NOT NULL, " +
+                        "userid INTEGER NOT NULL, " +
                         "name TEXT NOT NULL, " +
                         "cells TEXT, " +
                         "mah TEXT, " +
                         "cycles TEXT, " +
                         "type TEXT, " +
-                        "PRIMARY KEY ( userid, name )" +
+                        "PRIMARY KEY ( userid, name ), " +
                         "FOREIGN KEY(userid) REFERENCES users(id) )";
 
         final String SQL_CREATE_ENTRY =
                 "CREATE TABLE entries ( " +
-                        "userid TEXT NOT NULL, " +
-                        "id INTEGER AUTOINCREMENT, " +
+                        "userid INTEGER NOT NULL, " +
+                        "id INTEGER, " +
                         "name TEXT, " +
                         "time LONG, " + //changed from INT
                         "start INT, " +
@@ -41,7 +41,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                         "editDate TEXT, " +
                         "editTime TEXT, " +
                         "notes TEXT, "  +
-                        "PRIMARY KEY ( userid, id )" +
+                        "PRIMARY KEY ( userid, id ), " +
                         "FOREIGN KEY (userid) REFERENCES users(id) )";
 
         final String SQL_CREATE_USERS =
@@ -56,7 +56,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                         "question3 TEXT, " +
                         "answer3 TEXT, " +
                         "active TEXT, " +
-                        "recent TEXT " +
+                        "recent TEXT, " +
                         "createDate TEXT, " +
                         "loginDate TEXT )";
 
@@ -68,6 +68,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS batteries");
         db.execSQL("DROP TABLE IF EXISTS entries");
+        db.execSQL("DROP TABLE IF EXISTS users");
         this.onCreate(db);
     }
 }

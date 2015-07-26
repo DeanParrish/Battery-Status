@@ -63,7 +63,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Password"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-                android:textColor="#FF000000" />
+                android:textColor="#FF000000"
+                android:inputType="textPassword"/>
 
         </LinearLayout>
 
@@ -81,7 +82,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Confirm Password"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-                android:textColor="#FF000000" />
+                android:textColor="#FF000000"
+                android:inputType="textPassword" />
 
         </LinearLayout>
 

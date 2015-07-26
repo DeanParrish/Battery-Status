@@ -35,7 +35,19 @@ public class SaveData {
     private static String entryNotes = "notes";
     private static String entryEditDate = "editDate";
     private static String entryEditTime = "editTime";
-
+    private static String usersTableName = "users";
+    private static String userEmail = "email";
+    private static String userpassword = "password";
+    private static String userQuestion1 = "question1";
+    private static String userAnswer1 = "answer1";
+    private static String userQuestion2 = "question2";
+    private static String userAnswer2 = "answer2";
+    private static String userQuestion3 = "question3";
+    private static String userAnswer3 = "answer3";
+    private static String userActive = "active";
+    private static String userRecent = "recent";
+    private static String userCreateDate = "createDate";
+    private static String userLoginDate = "loginDate";
     public SaveData() {
 
     }
@@ -329,6 +341,111 @@ public class SaveData {
         db.update(entryTableName, values, "id = ?", whereArgs);
 
         db.close();
+    }
+
+    public void addUser(String email, String password, String question1, String answer1, String question2, String answer2,
+                        String question3, String answer3){
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        ContentValues values = new ContentValues();
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        String date = dateFormat.format(calendar.getTime());
+
+        values.put(userEmail, email);
+        values.put(userpassword, password);
+        values.put(userQuestion1, question1);
+        values.put(userAnswer1, answer1);
+        values.put(userQuestion2, question2);
+        values.put(userAnswer2, answer2);
+        values.put(userQuestion3, question3);
+        values.put(userAnswer3, answer3);
+        values.put(userActive, "X");
+        values.put(userRecent, "X");
+        values.put(userCreateDate, date);
+        values.put(userLoginDate, date);
+
+        db = dbcon.getWritableDatabase();
+
+        db.insert(usersTableName, null, values);
+
+        db.close();
+    }
+
+    public User getUser(int id){
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+
+        String query = "Select * FROM " + usersTableName + " WHERE id = ?";
+        String[] whereArgs = new String[] {
+                Integer.toString(id),
+        };
+
+        db = dbcon.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, whereArgs);
+        User user = new User();
+        if (cursor.moveToFirst()){
+            user.setEmail(cursor.getString(1));
+            user.setPassword(cursor.getString(2));
+            user.setQuestion1(cursor.getString(3));
+            user.setAnswer1(cursor.getString(4));
+            user.setQuestion2(cursor.getString(5));
+            user.setAnswer2(cursor.getString(6));
+            user.setQuestion3(cursor.getString(7));
+            user.setAnswer3(cursor.getString(8));
+            user.setActive(cursor.getString(9));
+            user.setRecent(cursor.getString(10));
+            user.setCreateDate(cursor.getString(11));
+            user.setLoginDate(cursor.getString(12));
+        }
+
+        return user;
+    }
+
+    public List<String> getAllUsersEmail(){
+        List<String> listEmail = new LinkedList<>();
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+
+        String query = "Select " + userEmail + " FROM " + usersTableName;
+
+        db = dbcon.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        while (cursor.moveToNext()){
+            listEmail.add(cursor.getString(0));
+        }
+
+        return listEmail;
+    }
+
+    public List<User> getAllUsers(){
+        List<User> listUsers = new LinkedList<>();
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+
+        String query = "SELECT * FROM " + usersTableName;
+
+        db = dbcon.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+        User user;
+
+        while (cursor.moveToNext()){
+            user = new User();
+            user.setEmail(cursor.getString(1));
+            user.setPassword(cursor.getString(2));
+            user.setQuestion1(cursor.getString(3));
+            user.setAnswer1(cursor.getString(4));
+            user.setQuestion2(cursor.getString(5));
+            user.setAnswer2(cursor.getString(6));
+            user.setQuestion3(cursor.getString(7));
+            user.setAnswer3(cursor.getString(8));
+            user.setActive(cursor.getString(9));
+            user.setRecent(cursor.getString(10));
+            user.setCreateDate(cursor.getString(11));
+            user.setLoginDate(cursor.getString(12));
+            listUsers.add(user);
+        }
+        return listUsers;
     }
 
     public void upgrade(int oldVer, int newVer){
