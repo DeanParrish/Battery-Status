@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Paint;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,10 +20,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.security.GeneralSecurityException;
+import java.util.List;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+
+import Classes.SaveData;
+import Classes.User;
 
 
 public class Login extends Activity {
@@ -35,6 +41,13 @@ public class Login extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //check for network connection
+        if (hasNetworkConnection() == false){
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra("userID", "");
+            startActivity(intent);
+            finish();
+        }
         if (getResources().getConfiguration().orientation ==
                 Configuration.ORIENTATION_PORTRAIT) {
             setContentView(R.layout.activity_login);
@@ -61,11 +74,10 @@ public class Login extends Activity {
             public void onClick(View arg0) {
                 Intent intent = new Intent(context, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,6 +103,7 @@ public class Login extends Activity {
 
 
     public void addListenerOnButtonLogin() {
+
         Button btn_login = (Button) findViewById(R.id.btn_login);
         final TextView textViewEmail = (TextView) findViewById(R.id.txt_email);
         final TextView textViewPassword = (TextView) findViewById(R.id.txt_password);
@@ -98,6 +111,7 @@ public class Login extends Activity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
+                boolean boolLogin = true;
 /*                try {
 
                     byte[] encrypted = encrypt(KEY, PLAIN_TEXT);
@@ -115,15 +129,31 @@ public class Login extends Activity {
 
                 if (txtEmail.isEmpty()){
                     textViewEmail.setError("Please enter an email!");
+                    boolLogin = false;
                 }
 
                 if (txtPassword.isEmpty()){
                     textViewPassword.setError("Please enter your password!");
+                    boolLogin = false;
                 }
 
                 if (!isEmailValid(txtEmail)){
                     textViewEmail.setError("Please enter a valid email!");
+                    boolLogin = false;
                 }
+
+                if (boolLogin == true){
+                    SaveData save = new SaveData(getApplicationContext());
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    User user = save.getUserByEmail(textViewEmail.getText().toString().trim());
+                    user.logIn(getApplicationContext());
+                    List<User> userList = save.getAllUsers();
+                    intent.putExtra("userEmail", textViewEmail.getText().toString().trim());
+                    intent.putExtra("userID", user.getId());
+                    startActivity(intent);
+                }
+
+
             }
         });
     }
@@ -136,6 +166,7 @@ public class Login extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), RegisterAccount.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -198,5 +229,23 @@ public class Login extends Activity {
 
     public boolean isEmailValid(CharSequence email){
         return Patterns.EMAIL_ADDRESS. matcher(email).matches();
+    }
+
+    private boolean hasNetworkConnection(){
+        boolean hasConnectedWiFi = false;
+        boolean hasConnectedMobile = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfo = connectivityManager.getAllNetworkInfo();
+        for (NetworkInfo ni : networkInfo){
+            if (ni.getTypeName().equalsIgnoreCase("WIFI")){
+                hasConnectedWiFi = true;
+            }
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE")){
+                hasConnectedMobile = true;
+            }
+        }
+        //return hasConnectedWiFi || hasConnectedMobile;
+        return false;
     }
 }

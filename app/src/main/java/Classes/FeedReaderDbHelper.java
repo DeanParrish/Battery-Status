@@ -19,28 +19,30 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
           final String SQL_CREATE_BATTERY =
                 "CREATE TABLE batteries ( " +
-                        "userid INTEGER NOT NULL, " +
+                        "userid INTEGER, " +
                         "name TEXT NOT NULL, " +
                         "cells TEXT, " +
                         "mah TEXT, " +
                         "cycles TEXT, " +
                         "type TEXT, " +
+                        "synced TEXT, " +
                         "PRIMARY KEY ( userid, name ), " +
                         "FOREIGN KEY(userid) REFERENCES users(id) )";
 
         final String SQL_CREATE_ENTRY =
                 "CREATE TABLE entries ( " +
-                        "userid INTEGER NOT NULL, " +
-                        "id INTEGER, " +
+                        "userid INTEGER, " +
+                        "id INTEGER NOT NULL, " +
                         "name TEXT, " +
-                        "time LONG, " + //changed from INT
+                        "time LONG, " +
                         "start INT, " +
                         "end INT, " +
                         "date TEXT, " +
                         "dateTime TEXT, " +
                         "editDate TEXT, " +
                         "editTime TEXT, " +
-                        "notes TEXT, "  +
+                        "notes TEXT, " +
+                        "synced TEXT, "  +
                         "PRIMARY KEY ( userid, id ), " +
                         "FOREIGN KEY (userid) REFERENCES users(id) )";
 

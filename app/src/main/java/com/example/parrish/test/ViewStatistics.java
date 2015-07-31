@@ -71,6 +71,8 @@ public class ViewStatistics extends Activity {
     private FloatingActionButton fabDelete;
    // private ListView batteryListView;
     ArrayAdapter<String> adapterSearch;
+    String userEmail;
+    Integer userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,44 +94,23 @@ public class ViewStatistics extends Activity {
 
         //region Populate List from database
 
-        Battery battery;
-        String[] batteryNames;
         batteryList = (ListView) findViewById(R.id.listView);
         this.fabDetails = (FloatingActionButton) findViewById(R.id.fabDetails);
         this.fabEdit = (FloatingActionButton) findViewById(R.id.fabEdit);
         this.fabDelete= (FloatingActionButton) findViewById(R.id.fabDelete);
-        //this.batteryListView = (ListView) findViewById(R.id.batteryListView);
-
-        //batteryListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        this.userEmail = getIntent().getExtras().getString("userEmail");
+        this.userID = getIntent().getExtras().getInt("userID");
 
         //start population of drop down list
         save = new SaveData(getApplicationContext());
         //gets all batteries in a List<Battery>
-        allBatteries = save.getAllBatteries();
+        allBatteries = save.getAllBatteriesUser(userID);
 
         if (allBatteries.size() == 0) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("no_batteries", true);
-            startActivity(intent);
+            finish();
         }
         displayList(batteryList, allBatteries);
         handleActionMenu();
-
-/*        //new string for battery names
-        batteryNames = new String[batteries.size()];
-
-        //loops through the List<Battery>
-        for (int i = 0; i < batteries.size(); i++) {
-            //gets the battery into the object battery
-            battery = batteries.get(i);
-            //appends the battery name to the batteryName array
-            batteryNames[i] = battery.getName();
-        }
-
-        Arrays.sort(batteryNames);*/
-//        ListView batteryList = (ListView) findViewById(R.id.listView);
-
-
     }
 
     @Override
@@ -137,13 +118,6 @@ public class ViewStatistics extends Activity {
         getMenuInflater().inflate(R.menu.menu_view_statistics, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-//        ListView batteryList = (ListView) findViewById(R.id.listView);
-/*        SwipeMenuListView batteryListSwipe = (SwipeMenuListView) findViewById(R.id.listView);
-        // Adding items to listview
-        adapterSearch = new ArrayAdapter<>(ViewStatistics.this, android.R.layout.simple_list_item_1, batteryNames);
-        batteryListSwipe.setAdapter(adapterSearch);*/
-        //   batteryListSwipe.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -168,20 +142,14 @@ public class ViewStatistics extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-/*        if (id == R.id.action_details) {
-            if (batteryName != null) {
-                Intent intent = new Intent(context, BatteryStatistics.class);
-                intent.putExtra("battery",batteryName);
-                startActivity(intent);
-            } else {
-                createToast(toastText, duration);
-            }
-        }*/
         if (id == R.id.action_filter){
             handleFilter();
         }
 
+        if (id == android.R.id.home){
+            finish();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -216,186 +184,9 @@ public class ViewStatistics extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 batteryName = batteryNames[position];
-                //String x = batteryListView.getSelected
-                //String name = batteryListView.getSelectedItem().toString();
-                //batteryName = batteryListView.getSelectedItem().toString();
             }
         });
 
-
-/*        final SwipeMenuListView batteryListSwipe = (SwipeMenuListView) findViewById(R.id.listView);
-        // Adding items to listview
-        adapterSearch = new ArrayAdapter<>(ViewStatistics.this, android.R.layout.simple_list_item_1, batteryNames);
-        batteryListSwipe.setAdapter(adapterSearch);
-*//*        batteryList = (ListView) findViewById(R.id.listView);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewStatistics.this, android.R.layout.simple_list_item_single_choice, batteryNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-        batteryList.setAdapter(adapter);
-        batteryList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);*//*
-
-*//*        // listening to single list item on click
-        batteryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                // populating class with selected item
-                String name = ((TextView) view).getText().toString();
-                batteryName = name;
-                pBattery.setName(name);
-            }
-        });*//*
-
-        //final SwipeMenuListView batteryListSwipe = (SwipeMenuListView) findViewById(R.id.listView);
-
-        // listening to single list item on click
-//        batteryListSwipe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            public void onItemClick(AdapterView<?> parent, View view,
-//                                    int position, long id) {
-//
-//                // populating class with selected item
-//                String name = ((TextView) view).getText().toString();
-//                batteryName = name;
-//                pBattery.setName(name);
-//            }
-//        });
-
-        SwipeMenuCreator creator = new SwipeMenuCreator() {
-            @Override
-            public void create(SwipeMenu menu) {
-                // create item details
-                SwipeMenuItem viewDetails = new SwipeMenuItem(
-                        getApplicationContext());
-                // set item background
-                viewDetails.setBackground(new ColorDrawable(Color.parseColor("#ff9b59b6")));
-                // set item width
-                viewDetails.setWidth(150);
-                // set a icon
-                viewDetails.setIcon(R.mipmap.ic_details_white);
-                // add to menu
-                menu.addMenuItem(viewDetails);
-
-
-                // create "open" item
-                SwipeMenuItem editItem = new SwipeMenuItem(
-                        getApplicationContext());
-                // set item background
-                editItem.setBackground(new ColorDrawable(Color.parseColor("#f39c12")));
-                // set item width
-                editItem.setWidth(150);
-                // set a icon
-                editItem.setIcon(R.mipmap.ic_edit);
-
-                // add to menu
-                menu.addMenuItem(editItem);
-
-                // create "delete" item
-                SwipeMenuItem deleteItem = new SwipeMenuItem(
-                        getApplicationContext());
-                // set item background
-                deleteItem.setBackground(new ColorDrawable(Color.parseColor("#ff7f8c8d")));
-                // set item width
-                deleteItem.setWidth(150);
-                // set a icon
-                deleteItem.setIcon(R.mipmap.ic_delete_white);
-                // add to menu
-                menu.addMenuItem(deleteItem);
-            }
-        };
-
-        // set creator
-        batteryListSwipe.setMenuCreator(creator);
-
-// step 2. listener item click event
-        batteryListSwipe.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                switch (index) {
-                    case 0:
-                        //view details
-//                        if (id == R.id.action_details) {
-                        batteryName = batteryListSwipe.getItemAtPosition(position).toString();
-                        if (batteryName != null) {
-                            Intent intent = new Intent(context, BatteryStatistics.class);
-                            intent.putExtra("battery", batteryName);
-                            startActivity(intent);
-                        } else {
-                            createToast(toastText, duration);
-                        }
-//                        }
-                        break;
-                    case 1:
-                        //edit battery
-                        batteryName = batteryListSwipe.getItemAtPosition(position).toString();
-                        if (batteryName != null) {
-                            Intent intent = new Intent(context, CreateBattery.class);
-                            intent.putExtra("create_battery", 0);  // sets flag for create battery
-                            intent.putExtra("battery", batteryName);
-                            startActivity(intent);
-                        } else {
-                            createToast(toastText, duration);
-                        }
-
-                        break;
-                    case 2://delete
-                        batteryName = batteryListSwipe.getItemAtPosition(position).toString();
-                        final SaveData delete = new SaveData(getApplicationContext());
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-
-                        // set icon
-                        alertDialogBuilder.setIcon(R.mipmap.ic_alert);
-                        // set title
-                        alertDialogBuilder.setTitle("Delete battery?");
-
-                        // set dialog message
-                        alertDialogBuilder
-                                .setMessage("This action can't be undone and will delete all associated entries.")
-                                .setCancelable(false)
-                                .setPositiveButton(R.string.alert_confirm, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        try {
-                                            delete.deleteBattery(batteryName);
-                                            createToast("Battery Deleted!", duration);
-                                            finish();
-                                            startActivity(getIntent());
-                                        } catch (SQLiteException e) {
-                                            Log.e("Delete Battery", e.toString());
-                                        }
-                                    }
-                                })
-                                .setNegativeButton(R.string.alert_cancel, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // if this button is clicked, just close
-                                        // the dialog box and do nothing
-                                        dialog.cancel();
-                                    }
-                                });
-                        // create alert dialog
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
-                        break;
-                    default: {
-
-                    }
-                }
-                return false;
-            }
-        });
-
-
-        // set SwipeListener
-        batteryListSwipe.setOnSwipeListener(new SwipeMenuListView.OnSwipeListener() {
-
-            @Override
-            public void onSwipeStart(int position) {
-                // swipe start
-            }
-
-            @Override
-            public void onSwipeEnd(int position) {
-                // swipe end
-            }
-        });*/
     }
 
     public void handleActionMenu() {
@@ -405,6 +196,8 @@ public class ViewStatistics extends Activity {
                 if (batteryName != null) {
                     Intent intent = new Intent(context, BatteryStatistics.class);
                     intent.putExtra("battery", batteryName);
+                    intent.putExtra("userEmail", userEmail);
+                    intent.putExtra("userID", userID);
                     startActivity(intent);
                 } else {
                     createToast(toastText, duration);
@@ -419,6 +212,7 @@ public class ViewStatistics extends Activity {
                     Intent intent = new Intent(context, CreateBattery.class);
                     intent.putExtra("create_battery", 0);  // sets flag for create battery
                     intent.putExtra("battery", batteryName);
+                    intent.putExtra("userID", userID);
                     startActivity(intent);
                 } else {
                     createToast(toastText, duration);
@@ -446,7 +240,7 @@ public class ViewStatistics extends Activity {
                             .setPositiveButton(R.string.alert_confirm, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     try {
-                                        delete.deleteBattery(batteryName);
+                                        delete.deleteBattery(userID, batteryName);
                                         createToast("Battery Deleted!", duration);
                                         finish();
                                         startActivity(getIntent());

@@ -15,15 +15,17 @@ import com.jjoe64.graphview.series.PointsGraphSeries;
  */
 
 public class MyPagerAdapter extends FragmentPagerAdapter {
+    Integer userID;
     String batteryName;
     int entries;
     Context context;
-    public MyPagerAdapter(FragmentManager fragmentManager, String batteryName, Context con) {
+    public MyPagerAdapter(FragmentManager fragmentManager, Integer userID,  String batteryName, Context con) {
         super(fragmentManager);
         this.batteryName = batteryName;
+        this.userID = userID;
         this.context = con;
         SaveData save = new SaveData(context);
-        this.entries = save.getAllEntriesForBattery(batteryName).size();
+        this.entries = save.getAllEntriesForBattery(userID, batteryName).size();
     }
 
     // Returns total number of pages
@@ -42,10 +44,10 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 // Battery fragment activity
-                return BatteryStatsBasic.newInstance(batteryName);
+                return BatteryStatsBasic.newInstance(userID, batteryName);
             case 1:
                 // Entries fragment activity
-                return BatteryStatsGraph.newInstance(batteryName);
+                return BatteryStatsGraph.newInstance(userID, batteryName);
 
 
             default: return new Fragment();

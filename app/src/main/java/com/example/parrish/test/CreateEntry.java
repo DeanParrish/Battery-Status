@@ -40,6 +40,7 @@ import java.util.List;
 import Classes.Battery;
 import Classes.Entry;
 import Classes.SaveData;
+import Classes.User;
 
 import com.appyvet.rangebar.RangeBar;
 import com.rey.material.widget.EditText;
@@ -65,6 +66,8 @@ public class CreateEntry extends Activity {
     Integer inEditId;
     String inEditBatteryName;
     Entry inEditEntry;
+    String userEmail;
+    Integer userID;
 
     private RangeBar rangebar;
 
@@ -103,6 +106,8 @@ public class CreateEntry extends Activity {
         setTitle("Menu");
 
         inEditMode = getIntent().getExtras().getBoolean("edit");
+        userEmail = getIntent().getExtras().getString("userEmail");
+        userID = getIntent().getExtras().getInt("userID");
 
         if (inEditMode == true) {
             inEditId = getIntent().getExtras().getInt("id");
@@ -111,7 +116,7 @@ public class CreateEntry extends Activity {
 
         if (inEditMode == true) {
             save = new SaveData(getApplicationContext());
-            inEditEntry = save.getEntry(inEditId);
+            inEditEntry = save.getEntry(userID, inEditId);
 
             TextView textViewToChange = (TextView) findViewById(R.id.title);
             textViewToChange.setText("EDIT ENTRY");
@@ -203,7 +208,7 @@ public class CreateEntry extends Activity {
         //start population of drop down list
         save = new SaveData(getApplicationContext());
         //gets all batteries in a List<Battery>
-        batteries = save.getAllBatteries();
+        batteries = save.getAllBatteriesUser(userID);
 
 //        if (batteries.size() == 0) {
 //            Intent intent = new Intent(this, MainActivity.class);
@@ -573,7 +578,8 @@ public class CreateEntry extends Activity {
                     notes = txtNotes.getText().toString();
 
                     try {
-                        save.addEntry(name, time, start, end, notes);
+                        int entryID = save.getLastEntryId(userID);
+                        save.addEntry(userID, entryID, name, time, start, end, notes);
                         toast.show();
                         finish();
                     } catch (SQLiteException e) {
@@ -593,7 +599,7 @@ public class CreateEntry extends Activity {
                     notes = txtNotes.getText().toString();
 
                     try {
-                        save.updateEntry(inEditId, name, time, start, end, notes);
+                        save.updateEntry(userID, inEditId, name, time, start, end, notes);
                         createToast(toastUpdate, duration);
                         finish();
                     } catch (SQLiteException e) {

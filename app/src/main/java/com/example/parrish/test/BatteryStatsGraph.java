@@ -54,6 +54,7 @@ import lecho.lib.hellocharts.view.ComboLineColumnChartView;
 
 public class BatteryStatsGraph extends Fragment {
 
+    private Integer userID;
     private String batteryName;
     SaveData save;
     FloatingActionMenu floatingActionMenu;
@@ -69,9 +70,10 @@ public class BatteryStatsGraph extends Fragment {
     private View lastView;
     private int listSelected;
 
-    public static BatteryStatsGraph newInstance(String batteryName) {
+    public static BatteryStatsGraph newInstance(Integer userID, String batteryName) {
         BatteryStatsGraph fragment = new BatteryStatsGraph();
         Bundle args = new Bundle();
+        args.putInt("userID", userID);
         args.putString("batteryName", batteryName);
         fragment.setArguments(args);
         return fragment;
@@ -100,6 +102,7 @@ public class BatteryStatsGraph extends Fragment {
             view = inflater.inflate(R.layout.fragment_battery_stats_graph_l, container, false);
         }
 
+        this.userID = this.getArguments().getInt("userID");
         this.batteryName = this.getArguments().getString("batteryName");
         this.floatingActionMenu = (FloatingActionMenu) view.findViewById(R.id.actionMenu);
         this.fabEdit = (FloatingActionButton) view.findViewById(R.id.fabEdit);
@@ -107,7 +110,7 @@ public class BatteryStatsGraph extends Fragment {
         this.chart = (ComboLineColumnChartView) view.findViewById(R.id.chart);
         floatingActionMenu.setVisibility(View.INVISIBLE);
         SaveData save = new SaveData(view.getContext());
-        entriesForBattery = save.getAllEntriesForBattery(this.batteryName);
+        entriesForBattery = save.getAllEntriesForBattery(this.userID, this.batteryName);
         displayList(view, entriesForBattery);
         plotChart(view, -1);
 
@@ -129,10 +132,9 @@ public class BatteryStatsGraph extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (lastView != null && entriesForBattery.size() > 1){
-            displayList(lastView, save.getAllEntriesForBattery(batteryName));
+        if (lastView != null && entriesForBattery.size() >= 1){
+            displayList(lastView, save.getAllEntriesForBattery(userID, batteryName));
             plotChart(lastView, selectedPos);
-            //entryListView.performItemClick(lastView, listSelected, R.id.listEntries);
         }
     }
 
@@ -154,7 +156,7 @@ public class BatteryStatsGraph extends Fragment {
         int chargeUsed;
         save = new SaveData(view.getContext());
 
-        entryList = save.getAllEntriesForBattery(batteryName);
+        entryList = save.getAllEntriesForBattery(userID, batteryName);
         List<PointValue> pointsRunTime = new ArrayList<>();
         List<SubcolumnValue> pointsCharge;
         List<Column> columns = new ArrayList<>();
@@ -303,15 +305,7 @@ public class BatteryStatsGraph extends Fragment {
                 txtDate.setText(popup_entry.getEntryDate());
                 txtTime.setText(popup_entry.getEntryTime());
 
-
-
-                //entryListView.requestFocusFromTouch();
-                //int selected = entryListView.getCount() - i1 - 1;
                 listSelected = entryListView.getCount() - i1 - 1;
-               // entryListView.setSelection(selected);
-                //entryListView.smoothScrollToPosition(listSelected);
-                //entryListView.scrolltoPos
-                //entryListView.smoothScrollToPosition(listSelected);
                 entryListView.setSelection(listSelected);
                 Handler handler;
                 handler = new Handler();
@@ -322,7 +316,6 @@ public class BatteryStatsGraph extends Fragment {
                     }
                 }, 50);
 
-               // entryListView.setFocusableInTouchMode(true);
                 handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -379,7 +372,8 @@ public class BatteryStatsGraph extends Fragment {
             entry = entries.get(i);
             listValues = new HashMap<>(2);
             listValues.put("entryDate", entry.getEntryDate() + " " + entry.getEntryTime());
-            if (!entry.getEditDate().equals("") && !entry.getEditDate().equals(entry.getEntryDate()) ){
+            if (!entry.getEditDate().equals("") &&
+                !entry.getEditTime().equals("") && !entry.getEditTime().equals(entry.getEntryTime())){
                 listValues.put("editDate", "Last Edited: " + entry.getEditDate() + " " + entry.getEditTime());
             }
             adapter.add(listValues);
@@ -463,7 +457,7 @@ public class BatteryStatsGraph extends Fragment {
                         .setPositiveButton(R.string.alert_confirm, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 try {
-                                    save.deleteEntry(Integer.parseInt(selectedEntry.getId()));
+                                    save.deleteEntry(userID, Integer.parseInt(selectedEntry.getId()));
                                     entriesForBattery.remove(selectedPos);
                                     floatingActionMenu.close(true);
                                     floatingActionMenu.setAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fab_slide_out_to_right));
@@ -475,7 +469,7 @@ public class BatteryStatsGraph extends Fragment {
                                     int color = toastView.getSolidColor();
                                     textView.setBackgroundColor(color);
                                     toast.show();
-                                    displayList(view, save.getAllEntriesForBattery(batteryName));
+                                    displayList(view, save.getAllEntriesForBattery(userID, batteryName));
                                     plotChart(view, -1);
                                 } catch (SQLiteException e) {
                                     Log.e("Delete entry", e.toString());
@@ -512,7 +506,8 @@ public class BatteryStatsGraph extends Fragment {
                     intent.putExtra("batteryName",batteryName);
                     lastView = view;
                     startActivity(intent);
-                    displayList(view, save.getAllEntriesForBattery(batteryName));
+                    displayList(view, save.getAllEntriesForBattery(userID, batteryName));
+                    plotChart(view, -1);
                 } catch (SQLiteException e) {
                     Log.e("Edit entry", e.toString());
                 }

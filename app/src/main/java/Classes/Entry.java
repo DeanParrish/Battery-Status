@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Created by Dean Parrish on 6/18/2015.
  */
 public class Entry implements Serializable {
+    private int userID;
     private String batteryName;
     private int runTime;
     private int startCharge;
@@ -16,6 +17,7 @@ public class Entry implements Serializable {
     private int id;
     private String editDate;
     private String editTime;
+    private String synced;
 
     public Entry() {
     }
@@ -29,6 +31,8 @@ public class Entry implements Serializable {
     }
 
     //setters
+    public void setUserID(Integer id){this.userID = id;}
+
     public void setBatteryName(String name) {
         this.batteryName = name;
     }
@@ -59,8 +63,10 @@ public class Entry implements Serializable {
     public void setEditTime(String time){
         this.editTime = time;
     }
+    public void setSynced(String synced){ this.synced = synced; }
 
     //getters
+    public Integer getUserID(){return this.userID; }
     public String getBatteryName(){
         return this.batteryName;
     }
@@ -85,4 +91,5 @@ public class Entry implements Serializable {
     public String getEditTime() {
         return this.editTime;
     }
+    public String getSynced() { return this.synced; }
 }

@@ -43,6 +43,8 @@ public class ArchiveBattery extends Activity {
     String[] batteryNames;
 
     ArrayAdapter<String> adapterSearch;
+    String userEmail;
+    Integer userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,9 @@ public class ArchiveBattery extends Activity {
         //hide label in action bar
         actionBar.setDisplayShowTitleEnabled(false);
 
+        userEmail = getIntent().getExtras().getString("userEmail");
+        userID = getIntent().getExtras().getInt("userID");
+
         //region Populate List from database
 //        List<Battery> batteries;
 //        Battery battery;
@@ -65,12 +70,10 @@ public class ArchiveBattery extends Activity {
         save = new SaveData(getApplicationContext());
         //gets all batteries in a List<Battery>
         //batteries = save.getAllBatteries();
-        batteries = save.getAllBatteries();
+        batteries = save.getAllBatteriesUser(userID);
 
         if (batteries.size() == 0) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("no_batteries", true);
-            startActivity(intent);
+            finish();
         }
         //new string for battery names
         batteryNames = new String[batteries.size()];
@@ -112,7 +115,6 @@ public class ArchiveBattery extends Activity {
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
-//        ListView batteryList = (ListView) findViewById(R.id.listView);
         ListView batteryList = (ListView) findViewById(R.id.listView);
 
         adapterSearch = new ArrayAdapter<>(ArchiveBattery.this, android.R.layout.simple_list_item_single_choice, batteryNames);
@@ -158,7 +160,7 @@ public class ArchiveBattery extends Activity {
                 .setPositiveButton(R.string.alert_confirm, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         try {
-                            delete.deleteBattery(batteryName);
+                            delete.deleteBattery(userID, batteryName);
                             createToast(toastText, duration);
                             startActivity(getIntent());
                         } catch (SQLiteException e) {
@@ -184,6 +186,11 @@ public class ArchiveBattery extends Activity {
             } else {
                 createToast(toastTextError, duration);
             }
+        }
+
+        if (id == android.R.id.home){
+            finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

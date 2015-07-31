@@ -1,11 +1,19 @@
 package Classes;
 
+import android.content.Context;
+
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by Parrish on 7/25/2015.
  */
 public class User implements Serializable {
+    private Integer id;
     private String email;
     private String password;
     private String question1;
@@ -20,6 +28,9 @@ public class User implements Serializable {
     private String loginDate;
 
     //getters
+    public Integer getId(){
+        return this.id;
+    }
 
     public String getEmail(){
         return this.email;
@@ -70,6 +81,8 @@ public class User implements Serializable {
     }
 
     //setters
+    public void setID(Integer id){this.id = id;}
+
     public void setEmail(String email){
         this.email = email;
     }
@@ -116,5 +129,37 @@ public class User implements Serializable {
 
     public void setLoginDate(String date){
         this.loginDate = date;
+    }
+
+    //end properties
+    public void logIn(Context context){
+        SaveData save = new SaveData(context);
+        List<User> listUser = save.getAllUsers();
+        Iterator<User> userIterator = listUser.iterator();
+        User user;
+
+        while (userIterator.hasNext()){
+            user = userIterator.next();
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            String date = dateFormat.format(calendar.getTime());
+
+            if (user.getId() != this.id){
+                save.updateUser(user.getId(), user.getEmail(), user.getPassword(), user.getQuestion1(), user.getAnswer1(),
+                                user.getQuestion2(), user.getAnswer2(), user.getQuestion3(), user.getAnswer3(), "", "",
+                        date);
+            } else {
+                save.updateUser(user.getId(), user.getEmail(), user.getPassword(), user.getQuestion1(), user.getAnswer1(),
+                        user.getQuestion2(), user.getAnswer2(), user.getQuestion3(), user.getAnswer3(), "X", "X",
+                        date);
+            }
+        }
+    }
+
+    public void logOut(Context context){
+        SaveData save = new SaveData(context);
+        save.updateUser(this.getId(), this.getEmail(), this.getPassword(), this.getQuestion1(), this.getAnswer1(),
+                this.getQuestion2(), this.getAnswer2(), this.getQuestion3(), this.getAnswer3(), "", "",
+                this.loginDate);
     }
 }

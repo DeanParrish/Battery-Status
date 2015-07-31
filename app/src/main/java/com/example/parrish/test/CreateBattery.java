@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 
 import Classes.Battery;
 import Classes.SaveData;
+import Classes.User;
 
 import static java.lang.Integer.*;
 
@@ -38,6 +39,8 @@ import com.rey.material.widget.EditText;
 public class CreateBattery extends Activity {
 
     Integer editFlag;
+    String userEmail;
+    Integer userID;
     SaveData save;
 
     public static boolean isValidBattery(CharSequence target) {
@@ -108,6 +111,8 @@ public class CreateBattery extends Activity {
 
         Integer variable = getIntent().getExtras().getInt("create_battery");
         editFlag = variable;
+        userEmail = getIntent().getExtras().getString("userEmail");
+        userID = getIntent().getExtras().getInt("userID");
 
         Spinner ddlBatteryType = (Spinner) findViewById(R.id.ddlType);
         Spinner ddlBatteryCells = (Spinner) findViewById(R.id.ddlCells);
@@ -132,7 +137,7 @@ public class CreateBattery extends Activity {
             Battery mbattery;
             save = new SaveData(getApplicationContext());
             //gets all batteries in a List<Battery>
-            mbattery = save.getBattery(stringBattery);
+            mbattery = save.getBattery(userID, stringBattery);
 
             TextView textViewToChange = (TextView) findViewById(R.id.title);
             textViewToChange.setText("EDIT BATTERY");
@@ -188,8 +193,6 @@ public class CreateBattery extends Activity {
                             return;
                         } else {
                             finish();
-                            Intent intent = new Intent(context, MainActivity.class);
-                            startActivity(intent);
                         }
                     }
                 })
@@ -237,8 +240,6 @@ public class CreateBattery extends Activity {
                                 return;
                             } else {
                                 finish();
-                                Intent intent = new Intent(context, MainActivity.class);
-                                startActivity(intent);
                             }
                         }
                     })
@@ -309,25 +310,31 @@ public class CreateBattery extends Activity {
                     capBatteryName = uncapBatteryName.substring(0, 1).toUpperCase() + uncapBatteryName.substring(1);
 
                     type = spinnerType.getSelectedItem().toString();
-                    batteryName = capBatteryName;//txtBattName.getText().toString();
+                    batteryName = capBatteryName;
                     batteryCells = parseInt(ddlCells.getSelectedItem().toString());
                     batteryMah = parseInt((txtMah.getText().toString()));
                     batteryCycle = parseInt(txtCycle.getText().toString());
                     //add the battery to the database
                     try {
-                        List<Battery> listBatteries = save.getAllBatteries();
+                        List<Battery> listBatteries;
+                        listBatteries = save.getAllBatteriesUser(userID);
                         Battery compareBattery;
                         boolean addBattery = true;
-                        Iterator<Battery> iterator = listBatteries.iterator();
-                        //iterate and compare battery names; if exists, set flag to not add battery; kick back an error message
-                        while (iterator.hasNext()){
-                            compareBattery = iterator.next();
-                            if (compareBattery.getName().equals(batteryName)){
-                                addBattery = false;
+
+                        if (listBatteries.size() > 1){
+                            addBattery = true;
+                            Iterator<Battery> iterator = listBatteries.iterator();
+                            //iterate and compare battery names; if exists, set flag to not add battery; kick back an error message
+                            while (iterator.hasNext()){
+                                compareBattery = iterator.next();
+                                if (compareBattery.getName().equals(batteryName)){
+                                    addBattery = false;
+                                }
                             }
                         }
+
                         if (addBattery == true) {
-                            save.addBattery(batteryName, batteryCells, batteryMah, batteryCycle, type);
+                            save.addBattery(userID, batteryName, batteryCells, batteryMah, batteryCycle, type);
                             toastCreate.show();
                             finish();
                         } else {
@@ -349,7 +356,7 @@ public class CreateBattery extends Activity {
                 batteryCycle = parseInt(txtCycle.getText().toString());
 
                 //update battery to the database
-                save.updateBattery(batteryName, batteryCells, batteryMah, batteryCycle, type);
+                save.updateBattery(userID, batteryName, batteryCells, batteryMah, batteryCycle, type);
                 toastUpdate.show();
                 finish();
             }

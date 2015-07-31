@@ -37,6 +37,8 @@ public class EditBattery extends Activity {
     List<Battery> batteries;
     Battery battery;
     String[] batteryNames;
+    String userEmail;
+    Integer userID;
 
     ArrayAdapter<String> adapterSearch;
 
@@ -54,19 +56,21 @@ public class EditBattery extends Activity {
 //        actionBar.setDisplayShowTitleEnabled(false);
         setTitle("Menu");
 
+        userEmail = getIntent().getExtras().getString("userEmail");
+        userID = getIntent().getExtras().getInt("userID");
+
         //region Populate List from database
 //        List<Battery> batteries;
 //        Battery battery;
 //        String[] batteryNames;
         //start population of drop down list
         save = new SaveData(getApplicationContext());
+
         //gets all batteries in a List<Battery>
-        batteries = save.getAllBatteries();
+        batteries = save.getAllBatteriesUser(userID);
 
         if (batteries.size() == 0) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("no_batteries", true);
-            startActivity(intent);
+            finish();
         }
         //new string for battery names
         batteryNames = new String[batteries.size()];
@@ -144,15 +148,15 @@ public class EditBattery extends Activity {
             if (batteryName != null) {
                 Intent intent = new Intent(context, CreateBattery.class);
                 intent.putExtra("create_battery", 0);  // sets flag for create battery
+                intent.putExtra("userEmail", userEmail);
                 intent.putExtra("battery", batteryName);
+                intent.putExtra("userID", userID);
                 startActivity(intent);
             } else {
                 createToast(toastText, duration);
             }
         }
         if (id == android.R.id.home) {
-            Intent intent = new Intent(context, MainActivity.class);
-            startActivity(intent);
             finish();
             return true;
         }

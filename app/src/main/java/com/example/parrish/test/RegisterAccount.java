@@ -1,9 +1,14 @@
 package com.example.parrish.test;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -36,6 +41,12 @@ public class RegisterAccount extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_account);
+
+        ActionBar actionBar = getActionBar();
+        actionBar.setElevation(0);
+        // Enabling Up / Back navigation
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setElevation(0);
 
 /*        SaveData save = new SaveData(getApplicationContext());
         save.upgrade(2, 3);*/
@@ -157,9 +168,38 @@ public class RegisterAccount extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        final Context context = this;
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+
+        // set icon
+        alertDialogBuilder.setIcon(R.mipmap.ic_alert);
+        // set title
+        alertDialogBuilder.setTitle("Account not saved!");
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("You will loose any unsaved data.")
+                .setCancelable(false)
+                .setPositiveButton(R.string.alert_confirm, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.alert_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        dialog.cancel();
+                    }
+                });
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == android.R.id.home){
+            alertDialog.show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -182,8 +222,8 @@ public class RegisterAccount extends Activity {
         EditText editTextAnswer2 = (EditText) findViewById(R.id.txtAnswer2);
         EditText editTextAnswer3 = (EditText) findViewById(R.id.txtAnswer3);
 
-        String email = editTextEmail.getText().toString();
-        String password = editTextPassword.getText().toString();
+        String email = editTextEmail.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
 
         if (!isEmailValid(email)){
             editTextEmail.setError("Please enter a valid email");
@@ -192,7 +232,7 @@ public class RegisterAccount extends Activity {
             String usedEmail;
             while (iterator.hasNext()){
                 usedEmail = iterator.next();
-                if (editTextEmail.getText().toString().equals(usedEmail)){
+                if (editTextEmail.getText().toString().trim().equals(usedEmail.trim())){
                     editTextEmail.setError("Email has already been used");
                     editTextEmail.requestFocus();
                     boolSubmit = false;
@@ -200,12 +240,12 @@ public class RegisterAccount extends Activity {
             }
         }
 
-        if (editTextPassword.getText().toString().equals("")){
+        if (editTextPassword.getText().toString().trim().equals("")){
             editTextPassword.setError("Please enter your password");
             editTextPassword.requestFocus();
         }
 
-        if (!password.equals(editTextConfirmPass.getText().toString())){
+        if (!password.equals(editTextConfirmPass.getText().toString().trim())){
             editTextConfirmPass.setError("Passwords do not match");
             editTextConfirmPass.requestFocus();
             boolSubmit = false;
@@ -217,7 +257,7 @@ public class RegisterAccount extends Activity {
             boolSubmit = false;
         }
 
-        if (editTextAnswer1.getText().toString().equals("")){
+        if (editTextAnswer1.getText().toString().trim().equals("")){
             editTextAnswer1.setError("Please enter your answer");
             editTextAnswer1.requestFocus();
             boolSubmit = false;
@@ -229,7 +269,7 @@ public class RegisterAccount extends Activity {
             boolSubmit = false;
         }
 
-        if (editTextAnswer2.getText().toString().equals("")){
+        if (editTextAnswer2.getText().toString().trim().equals("")){
             editTextAnswer2.setError("Please enter your answer");
             editTextAnswer2.requestFocus();
             boolSubmit = false;
@@ -241,19 +281,21 @@ public class RegisterAccount extends Activity {
             boolSubmit = false;
         }
 
-        if (editTextAnswer3.getText().toString().equals("")){
+        if (editTextAnswer3.getText().toString().trim().equals("")){
             editTextAnswer3.setError("Please enter your answer");
             editTextAnswer3.requestFocus();
             boolSubmit = false;
         }
 
         if (boolSubmit == true){
-            save.addUser(editTextEmail.getText().toString(), editTextPassword.getText().toString(), ddlQuestion1.getSelectedItem().toString(),
-                         editTextAnswer1.getText().toString(), ddlQuestion2.getSelectedItem().toString(), editTextAnswer2.getText().toString(),
-                         ddlQuestion3.getSelectedItem().toString(), editTextAnswer3.getText().toString());
+            save.addUser(editTextEmail.getText().toString().trim(), editTextPassword.getText().toString().trim(), ddlQuestion1.getSelectedItem().toString().trim(),
+                         editTextAnswer1.getText().toString().trim(), ddlQuestion2.getSelectedItem().toString().trim(), editTextAnswer2.getText().toString().trim(),
+                         ddlQuestion3.getSelectedItem().toString().trim(), editTextAnswer3.getText().toString().trim());
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra("userEmail", editTextEmail.getText().toString().trim());
             createToast("Account created!", Toast.LENGTH_SHORT);
             startActivity(intent);
+            finish();
         }
 
 
@@ -267,4 +309,5 @@ public class RegisterAccount extends Activity {
         Toast toast = Toast.makeText(getApplicationContext(), text, duration);
         toast.show();
     }
+
 }

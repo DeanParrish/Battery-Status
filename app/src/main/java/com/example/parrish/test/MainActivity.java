@@ -16,6 +16,7 @@ import java.util.List;
 
 import Classes.Battery;
 import Classes.SaveData;
+import Classes.User;
 
 public class MainActivity extends Activity {
 
@@ -28,11 +29,15 @@ public class MainActivity extends Activity {
     SaveData save;
     CharSequence toastText = "Please create a battery first!";
     int duration = Toast.LENGTH_LONG;
+    String userEmail;
+    Integer userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        userEmail = getIntent().getExtras().getString("userEmail");
+        userID = getIntent().getExtras().getInt("userID");
         onResume();
         addListenerOnButton();
         addListenerOnButton2();
@@ -76,6 +81,8 @@ public class MainActivity extends Activity {
             public void onClick(View arg0) {
                 Intent intentCreate = new Intent(context, CreateBattery.class);
                 intentCreate.putExtra("create_battery", 1);  // sets flag for create battery
+                intentCreate.putExtra("userEmail", userEmail);
+                intentCreate.putExtra("userID", userID);
                 startActivity(intentCreate);
             }
         });
@@ -88,6 +95,8 @@ public class MainActivity extends Activity {
             public void onClick(View arg0) {
                 if (hasNoBatteries() == false) {
                     Intent intent = new Intent(context, ArchiveBattery.class);
+                    intent.putExtra("userEmail", userEmail);
+                    intent.putExtra("userID", userID);
                     startActivity(intent);
                 } else {
                     createToast(toastText, duration);
@@ -104,6 +113,8 @@ public class MainActivity extends Activity {
                 if (hasNoBatteries() == false) {
                     Intent intent = new Intent(context, CreateEntry.class);
                     intent.putExtra("edit", false);
+                    intent.putExtra("userEmail", userEmail);
+                    intent.putExtra("userID", userID);
                     startActivity(intent);
                 } else {
                     createToast(toastText, duration);
@@ -119,6 +130,8 @@ public class MainActivity extends Activity {
             public void onClick(View arg0) {
                 if (hasNoBatteries() == false) {
                     Intent intent = new Intent(context, ViewStatistics.class);
+                    intent.putExtra("userEmail", userEmail);
+                    intent.putExtra("userID", userID);
                     startActivity(intent);
                 } else {
                     createToast(toastText, duration);
@@ -134,6 +147,8 @@ public class MainActivity extends Activity {
             public void onClick(View arg0) {
                 if (hasNoBatteries() == false) {
                     Intent intent = new Intent(context, EditBattery.class);
+                    intent.putExtra("userEmail", userEmail);
+                    intent.putExtra("userID", userID);
                     startActivity(intent);
                 } else {
                     createToast(toastText, duration);
@@ -148,6 +163,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View arg0) {
                 Intent intent = new Intent(context, Settings.class);
+                intent.putExtra("userID", userID);
                 startActivity(intent);
             }
         });
@@ -165,7 +181,8 @@ public class MainActivity extends Activity {
         save = new SaveData(getApplicationContext());
         //gets all batteries in a List<Battery>
         try {
-            batteries = save.getAllBatteries();
+            //User user = save.getUserByEmail(userEmail);
+            batteries = save.getAllBatteriesUser(userID);
             if (batteries.size() == 0) {
                 return true;
             } else {

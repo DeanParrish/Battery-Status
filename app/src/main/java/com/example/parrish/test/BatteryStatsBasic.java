@@ -20,6 +20,7 @@ import Classes.SaveData;
 public class BatteryStatsBasic extends Fragment {
     // Store instance variables
     SaveData save;
+    Integer userID;
     String batteryName;
     TextView txtviewBatteryName;
     TextView txtviewBatteryCells;
@@ -29,9 +30,10 @@ public class BatteryStatsBasic extends Fragment {
     TextView txtviewCyclesComplete;
     TextView txtviewCyclesLeft;
 
-    public static BatteryStatsBasic newInstance(String batteryName) {
+    public static BatteryStatsBasic newInstance(Integer user, String batteryName) {
         BatteryStatsBasic batteryStatsBasic = new BatteryStatsBasic();
         Bundle args = new Bundle();
+        args.putInt("userID", user);
         args.putString("batteryName", batteryName);
         batteryStatsBasic.setArguments(args);
         return batteryStatsBasic;
@@ -47,6 +49,7 @@ public class BatteryStatsBasic extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        this.userID = this.getArguments().getInt("userID");
         this.batteryName = this.getArguments().getString("batteryName");
         save = new SaveData(container.getContext());
         View view;
@@ -69,7 +72,7 @@ public class BatteryStatsBasic extends Fragment {
         List<Entry> entryList;
         Integer cyclesLeft;
 
-        battery = save.getBattery(batteryName);
+        battery = save.getBattery(userID, batteryName);
 
         txtviewBatteryName.setText(battery.getName());
         txtviewBatteryCells.setText(battery.getCells());
@@ -77,7 +80,7 @@ public class BatteryStatsBasic extends Fragment {
         txtviewBatteryCycles.setText(battery.getCycles());
         txtviewBatteryMAH.setText(battery.getMah());
 
-        entryList = save.getAllEntriesForBattery(batteryName);
+        entryList = save.getAllEntriesForBattery(userID, batteryName);
 
         txtviewCyclesComplete.setText(Integer.toString(entryList.size()));
         cyclesLeft = Integer.parseInt(battery.getCycles()) - entryList.size();

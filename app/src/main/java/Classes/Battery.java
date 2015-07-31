@@ -11,7 +11,8 @@ public class Battery implements Serializable {
     private int mah;
     private int cycles;
     private String type;
-    private int runCyclesFinished;
+    private Integer userID;
+    private String synced;
 
     public Battery() {}
 
@@ -31,6 +32,8 @@ public class Battery implements Serializable {
     }
 
     //setters
+    public void setUserID(Integer id){this.userID = id;}
+
     public void setName(String name) {
         this.name = name;
     }
@@ -54,8 +57,12 @@ public class Battery implements Serializable {
     public void setRunCyclesFinished(int cycles){
         this.cycles = cycles;
     }
+    public void setSynced(String synced){
+        this.synced = synced;
+    }
 
     //getters
+    public Integer getUserID() {return this.userID;}
     public String getName(){
         return this.name.toString();
     }
@@ -71,6 +78,7 @@ public class Battery implements Serializable {
     public String getType(){
         return this.type.toString();
     }
-    public String getRunCyclesFinished(){return Integer.toString(this.runCyclesFinished); }
+    public String getSynced() { return this.synced; }
+
 
 }

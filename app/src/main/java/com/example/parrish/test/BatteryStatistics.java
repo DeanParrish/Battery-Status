@@ -30,9 +30,14 @@ public class BatteryStatistics extends FragmentActivity {
 
 //         2. get person object from intent
         String stringBattery  = intent.getStringExtra("battery");
+        String userEmail = intent.getExtras().getString("userEmail");
+        Integer userID = intent.getExtras().getInt("userID");
+
+        SaveData save = new SaveData(getApplicationContext());
 
         viewPager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), stringBattery, getApplicationContext());
+        mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), userID,
+                                            stringBattery, getApplicationContext());
         viewPager.setAdapter(mPagerAdapter);
         mtabs = (SlidingTabLayout) findViewById(R.id.tabs);
         mtabs.setDistributeEvenly(true);
