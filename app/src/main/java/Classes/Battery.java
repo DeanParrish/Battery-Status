@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * Created by Parrish on 6/17/2015.
+ * For Git test 8/2
  */
 public class Battery implements Serializable {
     private String name;
