@@ -113,6 +113,11 @@ public class CreateBattery extends Activity {
         editFlag = variable;
         userEmail = getIntent().getExtras().getString("userEmail");
         userID = getIntent().getExtras().getInt("userID");
+        if (userID == 0){
+            if (getIntent().getExtras().getString("userID") == null){
+                userID = null;
+            }
+        }
 
         Spinner ddlBatteryType = (Spinner) findViewById(R.id.ddlType);
         Spinner ddlBatteryCells = (Spinner) findViewById(R.id.ddlCells);
@@ -334,7 +339,7 @@ public class CreateBattery extends Activity {
                         }
 
                         if (addBattery == true) {
-                            save.addBattery(userID, batteryName, batteryCells, batteryMah, batteryCycle, type);
+                            save.addBattery(userID, batteryName, batteryCells, batteryMah, batteryCycle, type, "");
                             toastCreate.show();
                             finish();
                         } else {
@@ -356,7 +361,7 @@ public class CreateBattery extends Activity {
                 batteryCycle = parseInt(txtCycle.getText().toString());
 
                 //update battery to the database
-                save.updateBattery(userID, batteryName, batteryCells, batteryMah, batteryCycle, type);
+                save.updateBattery(userID, batteryName, batteryCells, batteryMah, batteryCycle, type, "");
                 toastUpdate.show();
                 finish();
             }

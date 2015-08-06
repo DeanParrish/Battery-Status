@@ -2,9 +2,12 @@ package com.example.parrish.test;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -20,12 +23,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.security.GeneralSecurityException;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import Classes.Battery;
+import Classes.Entry;
 import Classes.SaveData;
 import Classes.User;
 
@@ -41,42 +47,124 @@ public class Login extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final SaveData save = new SaveData(getApplicationContext());
+        final User activeUser = save.getActiveUser();
+
         //check for network connection
         if (hasNetworkConnection() == false){
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            intent.putExtra("userID", "");
-            startActivity(intent);
-            finish();
-        }
-        if (getResources().getConfiguration().orientation ==
-                Configuration.ORIENTATION_PORTRAIT) {
-            setContentView(R.layout.activity_login);
-        } else {
-            setContentView(R.layout.activity_login_l);
-        }
-        addListenerOnButtonLogin();
-        handleSignUpClick();
 
-        // hides shadow from action bar
-        ActionBar actionBar = getActionBar();
-        actionBar.setElevation(0);
-        actionBar.hide();
+            final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 
-        TextView signUp = (TextView) findViewById(R.id.lbl_sign_up);
-        signUp.setPaintFlags(signUp.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
-        TextView forgot = (TextView) findViewById(R.id.lbl_forgot);
-        forgot.setPaintFlags(forgot.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
-        TextView lblSkip = (TextView) findViewById(R.id.lbl_skip);
-        lblSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                Intent intent = new Intent(context, MainActivity.class);
+            if (activeUser.getId() == null){
+                intent.putExtra("userID", "");
                 startActivity(intent);
                 finish();
+            } else {
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+
+                // set icon
+                dialog.setIcon(R.mipmap.ic_alert);
+                // set title
+                dialog.setTitle("Still user " + activeUser.getEmail() + "?");
+
+                // set dialog message
+                dialog
+                        .setMessage("This action will affect the saving process.")
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.alert_confirm, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                intent.putExtra("userID", activeUser.getId());
+                                startActivity(intent);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // if this button is clicked, close
+                                // the dialog box and update all users to not active
+                                save.logIn(null);
+                                intent.putExtra("userID", "");
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+                dialog.show();
             }
-        });
+        } else if(hasNetworkConnection() == true && activeUser.getId() == null) {
+            if (getResources().getConfiguration().orientation ==
+                    Configuration.ORIENTATION_PORTRAIT) {
+                setContentView(R.layout.activity_login);
+            } else {
+                setContentView(R.layout.activity_login_l);
+            }
+            List<Battery> batteryList = save.getAllBatteriesUser(null);
+            Iterator<Battery> batteryIterator = batteryList.iterator();
+            List<Entry> entryList = save.getAllEntriesForUser(null);
+            Iterator<Entry> entryIterator = entryList.iterator();
+            addListenerOnButtonLogin(batteryList, entryList);
+            handleSignUpClick();
+
+            // hides shadow from action bar
+            ActionBar actionBar = getActionBar();
+            actionBar.setElevation(0);
+            actionBar.hide();
+
+            TextView signUp = (TextView) findViewById(R.id.lbl_sign_up);
+            signUp.setPaintFlags(signUp.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+            TextView forgot = (TextView) findViewById(R.id.lbl_forgot);
+            forgot.setPaintFlags(forgot.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+            TextView lblSkip = (TextView) findViewById(R.id.lbl_skip);
+            lblSkip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.putExtra("userID", activeUser.getId());
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
+        }
+        else if (hasNetworkConnection() == true && activeUser.getId() != null){
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra("userID", activeUser.getId());
+            startActivity(intent);
+            finish();
+        } else {
+            if (getResources().getConfiguration().orientation ==
+                    Configuration.ORIENTATION_PORTRAIT) {
+                setContentView(R.layout.activity_login);
+            } else {
+                setContentView(R.layout.activity_login_l);
+            }
+            addListenerOnButtonLogin();
+            handleSignUpClick();
+
+            // hides shadow from action bar
+            ActionBar actionBar = getActionBar();
+            actionBar.setElevation(0);
+            actionBar.hide();
+
+            TextView signUp = (TextView) findViewById(R.id.lbl_sign_up);
+            signUp.setPaintFlags(signUp.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+            TextView forgot = (TextView) findViewById(R.id.lbl_forgot);
+            forgot.setPaintFlags(forgot.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+            TextView lblSkip = (TextView) findViewById(R.id.lbl_skip);
+            lblSkip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
+
     }
 
     @Override
@@ -127,26 +215,26 @@ public class Login extends Activity {
                 String txtEmail = textViewEmail.getText().toString();
                 String txtPassword = textViewPassword.getText().toString();
 
-                if (txtEmail.isEmpty()){
+                if (txtEmail.isEmpty()) {
                     textViewEmail.setError("Please enter an email!");
                     boolLogin = false;
                 }
 
-                if (txtPassword.isEmpty()){
+                if (txtPassword.isEmpty()) {
                     textViewPassword.setError("Please enter your password!");
                     boolLogin = false;
                 }
 
-                if (!isEmailValid(txtEmail)){
+                if (!isEmailValid(txtEmail)) {
                     textViewEmail.setError("Please enter a valid email!");
                     boolLogin = false;
                 }
 
-                if (boolLogin == true){
+                if (boolLogin == true) {
                     SaveData save = new SaveData(getApplicationContext());
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     User user = save.getUserByEmail(textViewEmail.getText().toString().trim());
-                    user.logIn(getApplicationContext());
+                    save.logIn(user.getId());
                     List<User> userList = save.getAllUsers();
                     intent.putExtra("userEmail", textViewEmail.getText().toString().trim());
                     intent.putExtra("userID", user.getId());
@@ -156,6 +244,57 @@ public class Login extends Activity {
 
             }
         });
+    }
+    public void addListenerOnButtonLogin(final List<Battery> nullBatteryList, List<Entry> nullEntryList) {
+        Button btn_login = (Button) findViewById(R.id.btn_login);
+        final TextView textViewEmail = (TextView) findViewById(R.id.txt_email);
+        final TextView textViewPassword = (TextView) findViewById(R.id.txt_password);
+        final Iterator<Battery> batteryIterator = nullBatteryList.iterator();
+        Iterator<Entry> entryIterator = nullEntryList.iterator();
+
+        btn_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                boolean boolLogin = true;
+        String txtEmail = textViewEmail.getText().toString();
+        String txtPassword = textViewPassword.getText().toString();
+
+        if (txtEmail.isEmpty()) {
+            textViewEmail.setError("Please enter an email!");
+            boolLogin = false;
+        }
+
+        if (txtPassword.isEmpty()) {
+            textViewPassword.setError("Please enter your password!");
+            boolLogin = false;
+        }
+
+        if (!isEmailValid(txtEmail)) {
+            textViewEmail.setError("Please enter a valid email!");
+            boolLogin = false;
+        }
+
+        if (boolLogin == true) {
+            SaveData save = new SaveData(getApplicationContext());
+
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            User user = save.getUserByEmail(textViewEmail.getText().toString().trim());
+            save.logIn(user.getId());
+            List<User> userList = save.getAllUsers();
+            intent.putExtra("userEmail", textViewEmail.getText().toString().trim());
+            intent.putExtra("userID", user.getId());
+
+
+            if (nullBatteryList.size() >= 1){
+                /*save.setUserIDOfNull(save.getUserByEmail(txtEmail).getId(), Login.this);*/
+                intent.putExtra("nullBatteries", true);
+            } else {
+                intent.putExtra("nullBatteries", false);
+            }
+            startActivity(intent);
+        }
+    }
+});
     }
 
     public void handleSignUpClick(){
@@ -245,7 +384,7 @@ public class Login extends Activity {
                 hasConnectedMobile = true;
             }
         }
-        //return hasConnectedWiFi || hasConnectedMobile;
-        return false;
+        return hasConnectedWiFi || hasConnectedMobile;
+        //return false;
     }
 }

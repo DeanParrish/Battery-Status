@@ -33,7 +33,11 @@ public class BatteryStatsBasic extends Fragment {
     public static BatteryStatsBasic newInstance(Integer user, String batteryName) {
         BatteryStatsBasic batteryStatsBasic = new BatteryStatsBasic();
         Bundle args = new Bundle();
-        args.putInt("userID", user);
+        if (user != null) {
+            args.putInt("userID", user);
+        } else {
+            args.putString("userID", "");
+        }
         args.putString("batteryName", batteryName);
         batteryStatsBasic.setArguments(args);
         return batteryStatsBasic;
@@ -50,6 +54,12 @@ public class BatteryStatsBasic extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.userID = this.getArguments().getInt("userID");
+        if (this.userID == 0){
+            String tempString = this.getArguments().getString("userID");
+            if (tempString.equals("")){
+                this.userID = null;
+            }
+        }
         this.batteryName = this.getArguments().getString("batteryName");
         save = new SaveData(container.getContext());
         View view;

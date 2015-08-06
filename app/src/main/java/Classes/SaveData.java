@@ -1,15 +1,26 @@
 package Classes;
 
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.text.InputType;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,6 +38,7 @@ public class SaveData {
     private static String batteryMah = "mah";
     private static String batteryCycles = "cycles";
     private static String batteryType = "type";
+    private static String batterySynced = "synced";
     private static String entryTableName = "entries";
     private static String entryUserID = "userid";
     private static String entryID = "id";
@@ -38,6 +50,7 @@ public class SaveData {
     private static String entryNotes = "notes";
     private static String entryEditDate = "editDate";
     private static String entryEditTime = "editTime";
+    private static String entrySynced = "synced";
     private static String usersTableName = "users";
     private static String userEmail = "email";
     private static String userpassword = "password";
@@ -51,6 +64,7 @@ public class SaveData {
     private static String userRecent = "recent";
     private static String userCreateDate = "createDate";
     private static String userLoginDate = "loginDate";
+
     public SaveData() {
 
     }
@@ -59,12 +73,12 @@ public class SaveData {
         context = con;
     }
 
-    public void addBattery(Integer userID, String name, int cells, int mah, int cycles, String type) {
+    public void addBattery(Integer userID, String name, int cells, int mah, int cycles, String type, String synced) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         ContentValues values = new ContentValues();
 
         //add values to be inserted
-        if (userID == null){
+        if (userID == null) {
             values.putNull(batteryUserID);
         } else {
             values.put(batteryUserID, userID);
@@ -74,6 +88,7 @@ public class SaveData {
         values.put(batteryMah, mah);
         values.put(batteryCycles, cycles);
         values.put(batteryType, type);
+        values.put(batterySynced, synced);
 
         db = dbcon.getWritableDatabase();
 
@@ -86,7 +101,7 @@ public class SaveData {
 
     public Battery getBattery(Integer userID, String name) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
-        String[] columns = {batteryName, batteryCell, batteryMah, batteryCycles, batteryType};
+        String[] columns = {batteryUserID, batteryName, batteryCell, batteryMah, batteryCycles, batteryType, batterySynced};
         Battery battery = new Battery();
 
         db = dbcon.getReadableDatabase();
@@ -102,13 +117,15 @@ public class SaveData {
                             null,                                                 //order by
                             null);                                                //limit
 
-            if (cursor != null) {
-                cursor.moveToFirst();
-                battery.setName(cursor.getString(0));
-                battery.setCells(Integer.parseInt(cursor.getString(1)));
-                battery.setMah(Integer.parseInt(cursor.getString(2)));
-                battery.setCycles(Integer.parseInt(cursor.getString(3)));
-                battery.setType(cursor.getString(4));
+            if (cursor.moveToFirst()) {
+                //cursor.moveToFirst();
+                battery.setUserID(cursor.getInt(0));
+                battery.setName(cursor.getString(1));
+                battery.setCells(Integer.parseInt(cursor.getString(2)));
+                battery.setMah(Integer.parseInt(cursor.getString(3)));
+                battery.setCycles(Integer.parseInt(cursor.getString(4)));
+                battery.setType(cursor.getString(5));
+                battery.setSynced(cursor.getString(6));
             }
         } else {
             Cursor cursor =
@@ -123,11 +140,13 @@ public class SaveData {
 
             if (cursor != null) {
                 cursor.moveToFirst();
-                battery.setName(cursor.getString(0));
-                battery.setCells(Integer.parseInt(cursor.getString(1)));
-                battery.setMah(Integer.parseInt(cursor.getString(2)));
-                battery.setCycles(Integer.parseInt(cursor.getString(3)));
-                battery.setType(cursor.getString(4));
+                battery.setUserID(cursor.getInt(0));
+                battery.setName(cursor.getString(1));
+                battery.setCells(Integer.parseInt(cursor.getString(2)));
+                battery.setMah(Integer.parseInt(cursor.getString(3)));
+                battery.setCycles(Integer.parseInt(cursor.getString(4)));
+                battery.setType(cursor.getString(5));
+                battery.setSynced(cursor.getString(6));
             }
         }
         return battery;
@@ -152,6 +171,7 @@ public class SaveData {
                 battery.setMah(Integer.parseInt(cursor.getString(3)));
                 battery.setCycles(Integer.parseInt(cursor.getString(4)));
                 battery.setType(cursor.getString(5));
+                battery.setSynced(cursor.getString(6));
 
                 batteries.add(battery);
             } while (cursor.moveToNext());
@@ -159,9 +179,9 @@ public class SaveData {
         return batteries;
     }
 
-    public List<Battery> getAllBatteriesUser(Integer userid){
+    public List<Battery> getAllBatteriesUser(Integer userid) {
         List<Battery> batteries = new LinkedList<>();
-        String[] columns = {batteryUserID, batteryName, batteryCell, batteryMah, batteryCycles, batteryType};
+        String[] columns = {batteryUserID, batteryName, batteryCell, batteryMah, batteryCycles, batteryType, batterySynced};
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         Battery battery;
 
@@ -187,6 +207,7 @@ public class SaveData {
                     battery.setMah(Integer.parseInt(cursor.getString(3)));
                     battery.setCycles(Integer.parseInt(cursor.getString(4)));
                     battery.setType(cursor.getString(5));
+                    battery.setSynced(cursor.getString(6));
 
                     batteries.add(battery);
                 } while (cursor.moveToNext());
@@ -211,6 +232,7 @@ public class SaveData {
                     battery.setMah(Integer.parseInt(cursor.getString(3)));
                     battery.setCycles(Integer.parseInt(cursor.getString(4)));
                     battery.setType(cursor.getString(5));
+                    battery.setSynced(cursor.getString(6));
 
                     batteries.add(battery);
                 } while (cursor.moveToNext());
@@ -219,7 +241,7 @@ public class SaveData {
         return batteries;
     }
 
-    public void update(){
+    public void update() {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
 
         db = dbcon.getWritableDatabase();
@@ -229,20 +251,20 @@ public class SaveData {
         db.close();
     }
 
-    public void deleteBattery(Integer userID, String name){
+    public void deleteBattery(Integer userID, String name) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
 
 
         db = dbcon.getWritableDatabase();
         if (userID != null) {
-            String[] whereArgs = new String[] {
+            String[] whereArgs = new String[]{
                     Integer.toString(userID),
                     name,
             };
             db.delete(batteryTableName, "userid = ? AND name = ?", whereArgs);
             db.delete(entryTableName, "userid = ? AND name = ?", whereArgs);
         } else {
-            String[] whereArgs = new String[] {
+            String[] whereArgs = new String[]{
                     name,
             };
             db.delete(batteryTableName, "userid IS NULL AND name = ?", whereArgs);
@@ -251,7 +273,8 @@ public class SaveData {
 
         db.close();
     }
-    public void updateBattery(Integer userID, String name, int cells, int mah, int cycles, String type){
+
+    public void updateBattery(Integer userID, String name, int cells, int mah, int cycles, String type, String synced) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
 
         ContentValues values = new ContentValues();
@@ -260,10 +283,11 @@ public class SaveData {
         values.put(batteryMah, mah);
         values.put(batteryCycles, cycles);
         values.put(batteryType, type);
+        values.put(batterySynced, synced);
 
         if (userID != null) {
             try {
-                String[] whereArgs = new String[] {
+                String[] whereArgs = new String[]{
                         Integer.toString(userID),
                         name,
                 };
@@ -274,7 +298,7 @@ public class SaveData {
                 Log.e("Update Battery", e.toString());
             }
         } else {
-            String[] whereArgs = new String[] {
+            String[] whereArgs = new String[]{
                     name,
             };
             db = dbcon.getWritableDatabase();
@@ -283,26 +307,70 @@ public class SaveData {
         }
     }
 
-    public Integer getLastEntryId(Integer userID){
+    public void updateNullBattery(Integer oldUserID, String oldName, Integer userID, String name, int cells, int mah, int cycles,
+                                  String type, String synced) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
-        List<Integer> integerList = new LinkedList<>();
-        String query = "Select id FROM " + entryTableName + " WHERE userid = ?";
-        String[] whereArgs = new String[] {
-                Integer.toString(userID),
-        };
 
-        db = dbcon.getReadableDatabase();
+        ContentValues values = new ContentValues();
 
-        Cursor cursor = db.rawQuery(query, whereArgs);
+        values.put(batteryUserID, userID);
+        values.put(batteryName, name);
+        values.put(batteryCell, cells);
+        values.put(batteryMah, mah);
+        values.put(batteryCycles, cycles);
+        values.put(batteryType, type);
+        values.put(batterySynced, synced);
 
-        if (cursor.moveToLast()){
+        if (oldUserID != null) {
+            try {
+                String[] whereArgs = new String[]{
+                        Integer.toString(oldUserID),
+                        oldName,
+                };
+                db = dbcon.getWritableDatabase();
+                db.update(batteryTableName, values, "userid = ? AND name = ?", whereArgs);
+                db.close();
+            } catch (SQLiteException e) {
+                Log.e("Update Battery", e.toString());
+            }
+        } else {
+            String[] whereArgs = new String[]{
+                    oldName,
+            };
+            db = dbcon.getWritableDatabase();
+            db.update(batteryTableName, values, "userid IS NULL AND name = ?", whereArgs);
+            db.close();
+        }
+    }
+
+    public Integer getLastEntryId(Integer userID) {
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        Cursor cursor;
+
+        if (userID != null) {
+            String query = "SELECT id FROM " + entryTableName + " WHERE userid = ?";
+            String[] whereArgs = new String[]{
+                    Integer.toString(userID),
+            };
+
+            db = dbcon.getReadableDatabase();
+
+            cursor = db.rawQuery(query, whereArgs);
+        } else {
+            String query = "SELECT id FROM " + entryTableName + " WHERE userid IS NULL";
+            db = dbcon.getReadableDatabase();
+            cursor = db.rawQuery(query, null);
+        }
+
+
+        if (cursor.moveToLast()) {
             return cursor.getInt(0) + 1;
         } else {
             return 0;
         }
     }
 
-    public void addEntry(Integer userId, Integer id, String name, long time, int start, int end, String notes) {
+    public void addEntry(Integer userId, Integer id, String name, long time, int start, int end, String notes, String synced) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         ContentValues values = new ContentValues();
         Calendar calendar = Calendar.getInstance();
@@ -316,7 +384,7 @@ public class SaveData {
         runTime = Integer.parseInt(Long.toString(time));
 
         //add values to be inserted
-        if (userId == null){
+        if (userId == null) {
             values.putNull(entryUserID);
         } else {
             values.put(entryUserID, userId);
@@ -331,6 +399,7 @@ public class SaveData {
         values.put(entryEditDate, "");
         values.put(entryEditTime, "");
         values.put(entryNotes, notes);
+        values.put(entrySynced, synced);
 
 
         db = dbcon.getWritableDatabase();
@@ -369,6 +438,7 @@ public class SaveData {
                 entry.setEditDate(cursor.getString(8));
                 entry.setEditDate(cursor.getString(9));
                 entry.setNotes(cursor.getString(10));
+                entry.setSynced(cursor.getString(11));
             }
         } else {
             String query = "Select * FROM " + entryTableName + " WHERE userid IS NULL AND id = ?";
@@ -392,44 +462,79 @@ public class SaveData {
                 entry.setEditDate(cursor.getString(8));
                 entry.setEditDate(cursor.getString(9));
                 entry.setNotes(cursor.getString(10));
+                entry.setSynced(cursor.getString(11));
             }
         }
 
         return entry;
     }
 
-    public List<Entry> getAllEntries() {
+    public List<Entry> getAllEntriesForUser(Integer userID) {
         List<Entry> entries = new LinkedList<>();
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
 
-        String query = "SELECT * FROM " + entryTableName;
+        if (userID != null) {
+            String query = "SELECT * FROM " + entryTableName + " WHERE userid = ?";
+            String[] whereArgs = new String[]{
+                    Integer.toString(userID)
+            };
 
-        db = dbcon.getReadableDatabase();
+            db = dbcon.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery(query, null);
+            Cursor cursor = db.rawQuery(query, whereArgs);
 
-        Entry entry;
-        if (cursor.moveToFirst()) {
-            do {
-                entry = new Entry();
-                entry.setUserID(cursor.getInt(0));
-                entry.setId(cursor.getInt(1));
-                entry.setBatteryName(cursor.getString(2));
-                entry.setRunTime(cursor.getInt(3));
-                entry.setStartCharge(Integer.parseInt(cursor.getString(4)));
-                entry.setEndCharge(Integer.parseInt(cursor.getString(5)));
-                entry.setEntryDate(cursor.getString(6));
-                entry.setEntryTime(cursor.getString(7));
-                entry.setEditDate(cursor.getString(8));
-                entry.setEditDate(cursor.getString(9));
-                entry.setNotes(cursor.getString(10));
+            Entry entry;
+            if (cursor.moveToFirst()) {
+                do {
+                    entry = new Entry();
+                    entry.setUserID(cursor.getInt(0));
+                    entry.setId(cursor.getInt(1));
+                    entry.setBatteryName(cursor.getString(2));
+                    entry.setRunTime(cursor.getInt(3));
+                    entry.setStartCharge(Integer.parseInt(cursor.getString(4)));
+                    entry.setEndCharge(Integer.parseInt(cursor.getString(5)));
+                    entry.setEntryDate(cursor.getString(6));
+                    entry.setEntryTime(cursor.getString(7));
+                    entry.setEditDate(cursor.getString(8));
+                    entry.setEditDate(cursor.getString(9));
+                    entry.setNotes(cursor.getString(10));
+                    entry.setSynced(cursor.getString(11));
 
-                entries.add(entry);
-            } while (cursor.moveToNext());
+                    entries.add(entry);
+                } while (cursor.moveToNext());
+            }
+        } else {
+            String query = "SELECT * FROM " + entryTableName + " WHERE userid IS NULL";
+
+            db = dbcon.getReadableDatabase();
+
+            Cursor cursor = db.rawQuery(query, null);
+
+            Entry entry;
+            if (cursor.moveToFirst()) {
+                do {
+                    entry = new Entry();
+                    entry.setUserID(cursor.getInt(0));
+                    entry.setId(cursor.getInt(1));
+                    entry.setBatteryName(cursor.getString(2));
+                    entry.setRunTime(cursor.getInt(3));
+                    entry.setStartCharge(Integer.parseInt(cursor.getString(4)));
+                    entry.setEndCharge(Integer.parseInt(cursor.getString(5)));
+                    entry.setEntryDate(cursor.getString(6));
+                    entry.setEntryTime(cursor.getString(7));
+                    entry.setEditDate(cursor.getString(8));
+                    entry.setEditDate(cursor.getString(9));
+                    entry.setNotes(cursor.getString(10));
+                    entry.setSynced(cursor.getString(11));
+
+                    entries.add(entry);
+                } while (cursor.moveToNext());
+            }
         }
 
         return entries;
     }
+
     public List<Entry> getAllEntriesForBattery(Integer userID, String name) {
         List<Entry> entries = new LinkedList<>();
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
@@ -522,7 +627,7 @@ public class SaveData {
 
     }
 
-    public void updateEntry(Integer userid, int id, String name, long time, int start, int end, String notes){
+    public void updateEntry(Integer userid, int id, String name, long time, int start, int end, String notes, String synced) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -530,7 +635,7 @@ public class SaveData {
         SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
         String dateTime = timeFormat.format(calendar.getTime());
 
-        String[] whereArgs = new String[] {
+        String[] whereArgs = new String[]{
                 Integer.toString(userid),
                 Integer.toString(id),
         };
@@ -543,6 +648,7 @@ public class SaveData {
         values.put(entryEditDate, date);
         values.put(entryEditTime, dateTime);
         values.put(entryNotes, notes);
+        values.put(entrySynced, synced);
 
         db = dbcon.getWritableDatabase();
 
@@ -551,8 +657,66 @@ public class SaveData {
         db.close();
     }
 
+    public void updateNullEntry(Integer oldUserID, int oldID, Integer userid, int id, String name, long time,
+                                int start, int end, String notes, String synced) {
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        String date = dateFormat.format(calendar.getTime());
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+        String dateTime = timeFormat.format(calendar.getTime());
+        ContentValues values = new ContentValues();
+
+        if (oldUserID == null) {
+            values.put(entryUserID, userid);
+            values.put(entryID, id);
+            values.put(batteryName, name);
+            values.put(chargeTime, time);
+            values.put(chargeStart, start);
+            values.put(chargeEnd, end);
+            values.put(entryEditDate, date);
+            values.put(entryEditTime, dateTime);
+            values.put(entryNotes, notes);
+            values.put(entrySynced, synced);
+
+            db = dbcon.getWritableDatabase();
+
+
+            String[] whereArgs = new String[]{
+                    Integer.toString(oldID),
+            };
+
+            db.update(entryTableName, values, "userid IS NULL AND id = ?", whereArgs);
+
+            db.close();
+        } else {
+            values.put(entryUserID, userid);
+            values.put(entryID, id);
+            values.put(batteryName, name);
+            values.put(chargeTime, time);
+            values.put(chargeStart, start);
+            values.put(chargeEnd, end);
+            values.put(entryEditDate, date);
+            values.put(entryEditTime, dateTime);
+            values.put(entryNotes, notes);
+            values.put(entrySynced, synced);
+
+            db = dbcon.getWritableDatabase();
+
+
+            String[] whereArgs = new String[]{
+                    Integer.toString(oldUserID),
+                    Integer.toString(oldID),
+            };
+
+            db.update(entryTableName, values, "userid = ? AND id = ?", whereArgs);
+
+            db.close();
+        }
+    }
+
     public void addUser(String email, String password, String question1, String answer1, String question2, String answer2,
-                        String question3, String answer3){
+                        String question3, String answer3) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         ContentValues values = new ContentValues();
         Calendar calendar = Calendar.getInstance();
@@ -579,11 +743,11 @@ public class SaveData {
         db.close();
     }
 
-    public User getUser(int id){
+    public User getUser(int id) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
 
         String query = "Select * FROM " + usersTableName + " WHERE id = ?";
-        String[] whereArgs = new String[] {
+        String[] whereArgs = new String[]{
                 Integer.toString(id),
         };
 
@@ -591,7 +755,7 @@ public class SaveData {
 
         Cursor cursor = db.rawQuery(query, whereArgs);
         User user = new User();
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             user.setID(cursor.getInt(0));
             user.setEmail(cursor.getString(1));
             user.setPassword(cursor.getString(2));
@@ -610,12 +774,12 @@ public class SaveData {
         return user;
     }
 
-    public User getUserByEmail(String email){
+    public User getUserByEmail(String email) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         String query;
         Cursor cursor;
         db = dbcon.getReadableDatabase();
-        if (email == null){
+        if (email == null) {
             query = "SELECT * FROM " + usersTableName + " WHERE email IS NULL";
             cursor = db.rawQuery(query, null);
         } else {
@@ -627,7 +791,7 @@ public class SaveData {
         }
 
         User user = new User();
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             user.setID(cursor.getInt(0));
             user.setEmail(cursor.getString(1));
             user.setPassword(cursor.getString(2));
@@ -642,28 +806,28 @@ public class SaveData {
             user.setCreateDate(cursor.getString(11));
             user.setLoginDate(cursor.getString(12));
         }
-;
+        ;
         return user;
     }
 
-    public List<String> getAllUsersEmail(){
+    public List<String> getAllUsersEmail() {
         List<String> listEmail = new LinkedList<>();
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
 
-        String query = "Select " + userEmail + " FROM " + usersTableName;
+        String query = "SELECT " + userEmail + " FROM " + usersTableName;
 
         db = dbcon.getReadableDatabase();
 
         Cursor cursor = db.rawQuery(query, null);
 
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             listEmail.add(cursor.getString(0));
         }
 
         return listEmail;
     }
 
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         List<User> listUsers = new LinkedList<>();
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
 
@@ -674,7 +838,7 @@ public class SaveData {
         Cursor cursor = db.rawQuery(query, null);
         User user;
 
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             user = new User();
             user.setID(cursor.getInt(0));
             user.setEmail(cursor.getString(1));
@@ -699,7 +863,7 @@ public class SaveData {
                            String recent, String active, String loginDate) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
 
-        String[] whereArgs = new String[] {
+        String[] whereArgs = new String[]{
                 Integer.toString(userId),
         };
         ContentValues values = new ContentValues();
@@ -722,7 +886,7 @@ public class SaveData {
         db.close();
     }
 
-    public boolean validatePassword(Integer id, String enteredPassword){
+    public boolean validatePassword(Integer id, String enteredPassword) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         String pass;
         String query = "SELECT " + userpassword + " FROM " + usersTableName + " WHERE id = ?";
@@ -730,29 +894,232 @@ public class SaveData {
                 Integer.toString(id)
         };
         db = dbcon.getWritableDatabase();
-       Cursor cursor = db.rawQuery(query, whereArgs);
+        Cursor cursor = db.rawQuery(query, whereArgs);
 
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             pass = cursor.getString(0);
         } else {
             pass = "";
         }
 
-        if (enteredPassword.equals(pass)){
+        if (enteredPassword.equals(pass)) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
-    public void upgrade(int oldVer, int newVer){
+    public User getActiveUser() {
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        String query = "SELECT * FROM " + usersTableName + " WHERE active = 'X'";
+        User user = new User();
+
+        db = dbcon.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            user.setID(cursor.getInt(0));
+            user.setEmail(cursor.getString(1));
+            user.setPassword(cursor.getString(2));
+            user.setQuestion1(cursor.getString(3));
+            user.setAnswer1(cursor.getString(4));
+            user.setQuestion2(cursor.getString(5));
+            user.setAnswer2(cursor.getString(6));
+            user.setQuestion3(cursor.getString(7));
+            user.setAnswer3(cursor.getString(8));
+            user.setActive(cursor.getString(9));
+            user.setRecent(cursor.getString(10));
+            user.setCreateDate(cursor.getString(11));
+            user.setLoginDate(cursor.getString(12));
+        }
+        return user;
+    }
+
+    public void logIn(Integer userID) {
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        List<User> listUser = getAllUsers();
+        Iterator<User> userIterator = listUser.iterator();
+        User user;
+        ContentValues values;
+
+        db = dbcon.getWritableDatabase();
+
+        while (userIterator.hasNext()) {
+            user = userIterator.next();
+            values = new ContentValues();
+
+            if (user.getId() != userID) {
+/*                updateUser(user.getId(), user.getEmail(), user.getPassword(), user.getQuestion1(), user.getAnswer1(),
+                        user.getQuestion2(), user.getAnswer2(), user.getQuestion3(), user.getAnswer3(), "", "",
+                        date);*/
+                String[] whereArgs = new String[]{
+                        Integer.toString(user.getId()),
+                };
+                values.put(userActive, "");
+
+                db.update(usersTableName, values, "id = ?", whereArgs);
+            } else {
+/*                updateUser(user.getId(), user.getEmail(), user.getPassword(), user.getQuestion1(), user.getAnswer1(),
+                        user.getQuestion2(), user.getAnswer2(), user.getQuestion3(), user.getAnswer3(), "X", "X",
+                        date);*/
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+                String date = dateFormat.format(calendar.getTime());
+                String[] whereArgs = new String[]{
+                        Integer.toString(userID),
+                };
+                values.put(userActive, "X");
+                values.put(userLoginDate, date);
+                db.update(usersTableName, values, "id = ?", whereArgs);
+            }
+            db.close();
+        }
+    }
+
+    public void logOut(Integer userID) {
+        //SaveData save = new SaveData(context);
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        ContentValues values = new ContentValues();
+        String[] whereArgs = new String[]{
+                Integer.toString(userID)
+        };
+
+        db = dbcon.getWritableDatabase();
+        db.update(usersTableName, values, "id = ?", whereArgs);
+        db.close();
+/*        updateUser(userID, this.getEmail(), this.getPassword(), this.getQuestion1(), this.getAnswer1(),
+                this.getQuestion2(), this.getAnswer2(), this.getQuestion3(), this.getAnswer3(), "", "",
+                this.loginDate);*/
+    }
+
+    public void setUserIDOfNull(final Integer userID, final Context con) {
+        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+        //String batteryNullQuery = "SELECT " + batteryUserID + " " + batteryName + " FROM " + batteryTableName + " WHERE id IS NULL";
+        final String batteryNullQuery = "SELECT * FROM " + batteryTableName + " WHERE userid IS NULL";
+        String batteryUserQuery = "SELECT " + batteryName + " FROM " + batteryTableName + " WHERE userid = ?";
+        String[] batteryUserArgs = new String[]{
+                Integer.toString(userID)
+        };
+        boolean updateNull = true;
+        db = dbcon.getReadableDatabase();
+        final AlertDialog.Builder builder = new AlertDialog.Builder(con);
+        AlertDialog dialog = builder.create();
+
+        final Cursor batteryNullCursor = db.rawQuery(batteryNullQuery, null);
+        final Cursor batteryUserCursor = db.rawQuery(batteryUserQuery, batteryUserArgs);
+
+        //check battery names/set new userID
+        while (batteryNullCursor.moveToNext()) {
+            //second loop to compare battery names
+            while (batteryUserCursor.moveToNext()) {
+                if (batteryNullCursor.getString(1).equals(batteryUserCursor.getString(0))) {
+                    //kick back battery duplicate error
+                    builder.setTitle("Duplicate battery found");
+                    builder.setMessage("Please enter another name for battery: " + batteryNullCursor.getString(1));
+                    final EditText input = new EditText(con);
+                    input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+                    input.setId(0);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT);
+                    input.setLayoutParams(lp);
+                    builder.setView(input);
+                    builder.setCancelable(false);
+                    updateNull = false;
+
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            List<Battery> batteryList = getAllBatteriesUser(userID);
+                            List<Entry> entryList = getAllEntriesForBattery(null, batteryNullCursor.getString(1));
+                            Iterator<Entry> entryIterator = entryList.iterator();
+                            Iterator<Battery> batteryIterator = batteryList.iterator();
+                            Battery battery;
+                            Entry entry;
+                            boolean updateBattery = true;
+                            while (batteryIterator.hasNext()) {
+                                battery = batteryIterator.next();
+                                if (input.getText().toString().trim().equals(battery.getName())) {
+                                    updateBattery = false;
+                                    Toast toast = Toast.makeText(con, "Battery " + battery.getName() +
+                                            " already exists", Toast.LENGTH_SHORT);
+                                    TextView textView = (TextView) toast.getView().findViewById(android.R.id.message);
+                                    View toastView = toast.getView();
+                                    int color = toastView.getSolidColor();
+                                    textView.setBackgroundColor(color);
+                                    toast.show();
+                                } else if (input.getText().toString().trim().equals("")){
+                                    Toast toast = Toast.makeText(con, "You must enter a battery name", Toast.LENGTH_SHORT);
+                                    TextView textView = (TextView) toast.getView().findViewById(android.R.id.message);
+                                    View toastView = toast.getView();
+                                    int color = toastView.getSolidColor();
+                                    textView.setBackgroundColor(color);
+                                    toast.show();
+                                }
+                            }
+
+                            if (updateBattery == true) {
+                                try {
+                                    updateNullBattery(null, batteryNullCursor.getString(1), userID, input.getText().toString().trim(),
+                                            Integer.parseInt(batteryNullCursor.getString(2)), Integer.parseInt(batteryNullCursor.getString(3)),
+                                            Integer.parseInt(batteryNullCursor.getString(4)), batteryNullCursor.getString(5),
+                                            batteryNullCursor.getString(6));
+
+                                    while (entryIterator.hasNext()) {
+                                        entry = entryIterator.next();
+                                        updateNullEntry(null, Integer.parseInt(entry.getId()), userID, getLastEntryId(userID),
+                                                input.getText().toString().trim(), Long.parseLong(entry.getRunTime()),
+                                                Integer.parseInt(entry.getStartCharge()), Integer.parseInt(entry.getEndCharge()),
+                                                entry.getNotes(), entry.getSynced());
+                                    }
+                                } catch (SQLiteException e) {
+                                    Log.e("updateNullToUser", e.toString());
+                                }
+                            }
+                            setUserIDOfNull(userID, con);
+                        }
+                    });
+                     dialog = builder.create();
+                    break;
+                }
+                if (updateNull == false){
+                    break;
+                }
+            }
+            if (updateNull == false){
+                break;
+            } else {
+                List<Entry> entryList = getAllEntriesForBattery(null, batteryNullCursor.getString(1));
+                Iterator<Entry> entryIterator = entryList.iterator();
+                Entry entry;
+                try {
+                    updateNullBattery(null, batteryNullCursor.getString(1), userID, batteryNullCursor.getString(1),
+                            Integer.parseInt(batteryNullCursor.getString(2)), Integer.parseInt(batteryNullCursor.getString(3)),
+                            Integer.parseInt(batteryNullCursor.getString(4)), batteryNullCursor.getString(5),
+                            batteryNullCursor.getString(6));
+
+                    while (entryIterator.hasNext()) {
+                        entry = entryIterator.next();
+                        updateNullEntry(null, Integer.parseInt(entry.getId()), userID, getLastEntryId(userID),
+                                batteryNullCursor.getString(1), Long.parseLong(entry.getRunTime()),
+                                Integer.parseInt(entry.getStartCharge()), Integer.parseInt(entry.getEndCharge()),
+                                entry.getNotes(), entry.getSynced());
+                    }
+                } catch (SQLiteException e) {
+                    Log.e("updateNullToUser", e.toString());
+                }
+            }
+        }
+        if (updateNull == false){
+            dialog.show();
+
+        }
+    }
+
+    public void upgrade(int oldVer, int newVer) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         db = dbcon.getWritableDatabase();
         dbcon.onUpgrade(db, oldVer, newVer);
         db.close();
     }
 }
-
-
-
-

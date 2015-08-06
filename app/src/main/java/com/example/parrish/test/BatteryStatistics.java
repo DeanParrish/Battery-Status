@@ -32,6 +32,12 @@ public class BatteryStatistics extends FragmentActivity {
         String stringBattery  = intent.getStringExtra("battery");
         String userEmail = intent.getExtras().getString("userEmail");
         Integer userID = intent.getExtras().getInt("userID");
+        if (userID == 0){
+            String tempString = intent.getExtras().getString("userID");
+            if (tempString == null){
+                userID = null;
+            }
+        }
 
         SaveData save = new SaveData(getApplicationContext());
 

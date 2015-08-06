@@ -58,6 +58,12 @@ public class EditBattery extends Activity {
 
         userEmail = getIntent().getExtras().getString("userEmail");
         userID = getIntent().getExtras().getInt("userID");
+        if(userID == 0){
+         String tempString = getIntent().getExtras().getString("userID");
+            if (tempString == null){
+                userID = null;
+            }
+        }
 
         //region Populate List from database
 //        List<Battery> batteries;

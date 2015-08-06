@@ -73,7 +73,11 @@ public class BatteryStatsGraph extends Fragment {
     public static BatteryStatsGraph newInstance(Integer userID, String batteryName) {
         BatteryStatsGraph fragment = new BatteryStatsGraph();
         Bundle args = new Bundle();
-        args.putInt("userID", userID);
+        if (userID != null) {
+            args.putInt("userID", userID);
+        }else {
+            args.putString("userID", "");
+        }
         args.putString("batteryName", batteryName);
         fragment.setArguments(args);
         return fragment;
@@ -103,6 +107,12 @@ public class BatteryStatsGraph extends Fragment {
         }
 
         this.userID = this.getArguments().getInt("userID");
+        if (this.userID == 0){
+            String tempString = this.getArguments().getString("userID");
+            if (tempString.equals("")){
+                this.userID = null;
+            }
+        }
         this.batteryName = this.getArguments().getString("batteryName");
         this.floatingActionMenu = (FloatingActionMenu) view.findViewById(R.id.actionMenu);
         this.fabEdit = (FloatingActionButton) view.findViewById(R.id.fabEdit);

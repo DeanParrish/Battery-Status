@@ -100,6 +100,11 @@ public class ViewStatistics extends Activity {
         this.fabDelete= (FloatingActionButton) findViewById(R.id.fabDelete);
         this.userEmail = getIntent().getExtras().getString("userEmail");
         this.userID = getIntent().getExtras().getInt("userID");
+        if (this.userID == 0){
+            if (getIntent().getExtras().getString("userID") == null){
+                this.userID = null;
+            }
+        }
 
         //start population of drop down list
         save = new SaveData(getApplicationContext());

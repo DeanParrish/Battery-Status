@@ -45,6 +45,7 @@ public class ArchiveBattery extends Activity {
     ArrayAdapter<String> adapterSearch;
     String userEmail;
     Integer userID;
+    ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,40 +71,7 @@ public class ArchiveBattery extends Activity {
         save = new SaveData(getApplicationContext());
         //gets all batteries in a List<Battery>
         //batteries = save.getAllBatteries();
-        batteries = save.getAllBatteriesUser(userID);
-
-        if (batteries.size() == 0) {
-            finish();
-        }
-        //new string for battery names
-        batteryNames = new String[batteries.size()];
-
-        //loops through the List<Battery>
-        for (int i = 0; i < batteries.size(); i++) {
-            //gets the battery into the object battery
-            battery = batteries.get(i);
-            //appends the battery name to the batteryName array
-            batteryNames[i] = battery.getName().toString();
-        }
-
-        Arrays.sort(batteryNames);
-        ListView batteryList = (ListView) findViewById(R.id.listView);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(ArchiveBattery.this, android.R.layout.simple_list_item_single_choice, batteryNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-        batteryList.setAdapter(adapter);
-        batteryList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
-        // listening to single list item on click
-        batteryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                // populating class with selected item
-                String name = ((TextView) view).getText().toString();
-                batteryName = name;
-            }
-        });
+        setListViewAdapter();
     }
 
 
@@ -162,7 +130,9 @@ public class ArchiveBattery extends Activity {
                         try {
                             delete.deleteBattery(userID, batteryName);
                             createToast(toastText, duration);
-                            startActivity(getIntent());
+                            adapter.notifyDataSetChanged();
+                            setListViewAdapter();
+                            //startActivity(getIntent());
                         } catch (SQLiteException e) {
                             Log.e("Add Battery", e.toString());
                         }
@@ -199,6 +169,43 @@ public class ArchiveBattery extends Activity {
     public void createToast(CharSequence text, Integer duration) {
         Toast toast = Toast.makeText(getApplicationContext(), text, duration);
         toast.show();
+    }
+
+    public void setListViewAdapter(){
+        batteries = save.getAllBatteriesUser(userID);
+
+        if (batteries.size() == 0) {
+            finish();
+        }
+        //new string for battery names
+        batteryNames = new String[batteries.size()];
+
+        //loops through the List<Battery>
+        for (int i = 0; i < batteries.size(); i++) {
+            //gets the battery into the object battery
+            battery = batteries.get(i);
+            //appends the battery name to the batteryName array
+            batteryNames[i] = battery.getName().toString();
+        }
+
+        Arrays.sort(batteryNames);
+        ListView batteryList = (ListView) findViewById(R.id.listView);
+
+        adapter = new ArrayAdapter<>(ArchiveBattery.this, android.R.layout.simple_list_item_single_choice, batteryNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        batteryList.setAdapter(adapter);
+        batteryList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        // listening to single list item on click
+        batteryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+
+                // populating class with selected item
+                String name = ((TextView) view).getText().toString();
+                batteryName = name;
+            }
+        });
     }
 
 }

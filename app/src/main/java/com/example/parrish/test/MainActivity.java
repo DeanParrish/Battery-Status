@@ -36,8 +36,18 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        userEmail = getIntent().getExtras().getString("userEmail");
+        save = new SaveData(getApplicationContext());
         userID = getIntent().getExtras().getInt("userID");
+        if (userID == 0){
+            if (getIntent().getExtras().getString("userID").equals("")){
+                userID = null;
+            }
+        }
+        boolean nullBatteries = getIntent().getExtras().getBoolean("nullBatteries");
+
+        if (nullBatteries == true){
+            save.setUserIDOfNull(userID, MainActivity.this);
+        }
         onResume();
         addListenerOnButton();
         addListenerOnButton2();

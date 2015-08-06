@@ -132,34 +132,4 @@ public class User implements Serializable {
     }
 
     //end properties
-    public void logIn(Context context){
-        SaveData save = new SaveData(context);
-        List<User> listUser = save.getAllUsers();
-        Iterator<User> userIterator = listUser.iterator();
-        User user;
-
-        while (userIterator.hasNext()){
-            user = userIterator.next();
-            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-            String date = dateFormat.format(calendar.getTime());
-
-            if (user.getId() != this.id){
-                save.updateUser(user.getId(), user.getEmail(), user.getPassword(), user.getQuestion1(), user.getAnswer1(),
-                                user.getQuestion2(), user.getAnswer2(), user.getQuestion3(), user.getAnswer3(), "", "",
-                        date);
-            } else {
-                save.updateUser(user.getId(), user.getEmail(), user.getPassword(), user.getQuestion1(), user.getAnswer1(),
-                        user.getQuestion2(), user.getAnswer2(), user.getQuestion3(), user.getAnswer3(), "X", "X",
-                        date);
-            }
-        }
-    }
-
-    public void logOut(Context context){
-        SaveData save = new SaveData(context);
-        save.updateUser(this.getId(), this.getEmail(), this.getPassword(), this.getQuestion1(), this.getAnswer1(),
-                this.getQuestion2(), this.getAnswer2(), this.getQuestion3(), this.getAnswer3(), "", "",
-                this.loginDate);
-    }
 }

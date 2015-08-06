@@ -108,6 +108,11 @@ public class CreateEntry extends Activity {
         inEditMode = getIntent().getExtras().getBoolean("edit");
         userEmail = getIntent().getExtras().getString("userEmail");
         userID = getIntent().getExtras().getInt("userID");
+        if (userID == 0){
+            if (getIntent().getExtras().getString("userID") == null){
+                userID = null;
+            }
+        }
 
         if (inEditMode == true) {
             inEditId = getIntent().getExtras().getInt("id");
@@ -579,7 +584,7 @@ public class CreateEntry extends Activity {
 
                     try {
                         int entryID = save.getLastEntryId(userID);
-                        save.addEntry(userID, entryID, name, time, start, end, notes);
+                        save.addEntry(userID, entryID, name, time, start, end, notes, "");
                         toast.show();
                         finish();
                     } catch (SQLiteException e) {
@@ -599,7 +604,7 @@ public class CreateEntry extends Activity {
                     notes = txtNotes.getText().toString();
 
                     try {
-                        save.updateEntry(userID, inEditId, name, time, start, end, notes);
+                        save.updateEntry(userID, inEditId, name, time, start, end, notes, "");
                         createToast(toastUpdate, duration);
                         finish();
                     } catch (SQLiteException e) {

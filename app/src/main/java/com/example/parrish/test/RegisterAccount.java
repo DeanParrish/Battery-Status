@@ -178,7 +178,7 @@ public class RegisterAccount extends Activity {
 
         // set dialog message
         alertDialogBuilder
-                .setMessage("You will loose any unsaved data.")
+                .setMessage("You will lose any unsaved data.")
                 .setCancelable(false)
                 .setPositiveButton(R.string.alert_confirm, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -230,7 +230,7 @@ public class RegisterAccount extends Activity {
             boolSubmit = false;
         } else {
             String usedEmail;
-            while (iterator.hasNext()){
+             while (iterator.hasNext()){
                 usedEmail = iterator.next();
                 if (editTextEmail.getText().toString().trim().equals(usedEmail.trim())){
                     editTextEmail.setError("Email has already been used");
