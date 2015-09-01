@@ -60,7 +60,8 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                         "active TEXT, " +
                         "recent TEXT, " +
                         "createDate TEXT, " +
-                        "loginDate TEXT )";
+                        "loginDate TEXT," +
+                        "salt TEXT )";
 
         db.execSQL(SQL_CREATE_BATTERY);
         db.execSQL(SQL_CREATE_ENTRY);

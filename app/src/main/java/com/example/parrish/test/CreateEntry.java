@@ -255,6 +255,27 @@ public class CreateEntry extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_create_entry, menu);
+        for (int i = 0; i < menu.size(); i++){
+            final MenuItem item = menu.getItem(i);
+            if (item.getItemId() == R.id.action_save){
+                View itemActionView = item.getActionView();
+                if (itemActionView != null){
+                    itemActionView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            onSubmitClick(item);
+                        }
+                    });
+                    itemActionView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            Toast.makeText(getApplicationContext(), "Save", Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                    });
+                }
+            }
+        }
         return true;
     }
 

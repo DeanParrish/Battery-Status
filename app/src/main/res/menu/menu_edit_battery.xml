@@ -9,10 +9,11 @@
         android:actionViewClass="android.widget.SearchView"/>
     <item
         android:id="@+id/action_edit"
-        android:icon="@mipmap/ic_edit_black"
         android:orderInCategory="0"
         android:showAsAction="ifRoom"
-        android:title="@string/activity_edit" />
+        android:title="@string/activity_edit"
+        android:background="?android:selectableItemBackground"
+        android:actionLayout="@layout/menu_edit_button"/>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

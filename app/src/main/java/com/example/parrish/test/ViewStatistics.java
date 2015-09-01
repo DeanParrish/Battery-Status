@@ -137,6 +137,27 @@ public class ViewStatistics extends Activity {
                 return false;
             }
         });
+        for (int i = 0; i < menu.size(); i++){
+            final MenuItem item = menu.getItem(i);
+            if (item.getItemId() == R.id.action_filter){
+                View itemActionView = item.getActionView();
+                if (itemActionView != null){
+                    itemActionView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            handleFilter();
+                        }
+                    });
+                    itemActionView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            Toast.makeText(getApplicationContext(), "Filter", Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                    });
+                }
+            }
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

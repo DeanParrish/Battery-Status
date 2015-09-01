@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.text.InputType;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -18,11 +19,31 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.scottyab.aescrypt.AESCrypt;
+
+import java.util.Random;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Created by Dean Parrish on 6/15/2015.
@@ -64,6 +85,7 @@ public class SaveData {
     private static String userRecent = "recent";
     private static String userCreateDate = "createDate";
     private static String userLoginDate = "loginDate";
+    private static String userSalt = "salt";
 
     public SaveData() {
 
@@ -681,7 +703,6 @@ public class SaveData {
 
             db = dbcon.getWritableDatabase();
 
-
             String[] whereArgs = new String[]{
                     Integer.toString(oldID),
             };
@@ -703,7 +724,6 @@ public class SaveData {
 
             db = dbcon.getWritableDatabase();
 
-
             String[] whereArgs = new String[]{
                     Integer.toString(oldUserID),
                     Integer.toString(oldID),
@@ -722,23 +742,34 @@ public class SaveData {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         String date = dateFormat.format(calendar.getTime());
+        byte[] salt = generateSalt();
+        boolean saveUser = true;
 
-        values.put(userEmail, email);
-        values.put(userpassword, password);
-        values.put(userQuestion1, question1);
-        values.put(userAnswer1, answer1.toLowerCase());
-        values.put(userQuestion2, question2);
-        values.put(userAnswer2, answer2.toLowerCase());
-        values.put(userQuestion3, question3);
-        values.put(userAnswer3, answer3.toLowerCase());
-        values.put(userActive, "X");
-        values.put(userRecent, "X");
-        values.put(userCreateDate, date);
-        values.put(userLoginDate, date);
+        if (saveUser == true) {
+            values.put(userEmail, email);
+            try {
+                String encrypted = AESCrypt.encrypt(password, new String(salt, StandardCharsets.UTF_8));
+                values.put(userpassword, encrypted);
+            } catch (GeneralSecurityException e) {
+                String message = e.getMessage();
+            }
 
-        db = dbcon.getWritableDatabase();
+            values.put(userQuestion1, question1);
+            values.put(userAnswer1, answer1.toLowerCase());
+            values.put(userQuestion2, question2);
+            values.put(userAnswer2, answer2.toLowerCase());
+            values.put(userQuestion3, question3);
+            values.put(userAnswer3, answer3.toLowerCase());
+            values.put(userActive, "X");
+            values.put(userRecent, "X");
+            values.put(userCreateDate, date);
+            values.put(userLoginDate, date);
+            values.put(userSalt, new String(salt, StandardCharsets.UTF_8));
 
-        db.insert(usersTableName, null, values);
+            db = dbcon.getWritableDatabase();
+
+            db.insert(usersTableName, null, values);
+        }
 
         db.close();
     }
@@ -769,6 +800,7 @@ public class SaveData {
             user.setRecent(cursor.getString(10));
             user.setCreateDate(cursor.getString(11));
             user.setLoginDate(cursor.getString(12));
+            user.setSalt(cursor.getString(13));
         }
 
         return user;
@@ -805,6 +837,7 @@ public class SaveData {
             user.setRecent(cursor.getString(10));
             user.setCreateDate(cursor.getString(11));
             user.setLoginDate(cursor.getString(12));
+            user.setSalt(cursor.getString(13));
         }
         ;
         return user;
@@ -853,6 +886,7 @@ public class SaveData {
             user.setRecent(cursor.getString(10));
             user.setCreateDate(cursor.getString(11));
             user.setLoginDate(cursor.getString(12));
+            user.setSalt(cursor.getString(13));
             listUsers.add(user);
         }
         return listUsers;
@@ -860,7 +894,7 @@ public class SaveData {
 
     public void updateUser(Integer userId, String email, String pass, String question1, String answer1,
                            String question2, String answer2, String question3, String answer3,
-                           String recent, String active, String loginDate) {
+                           String recent, String active, String loginDate, String salt) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
 
         String[] whereArgs = new String[]{
@@ -878,6 +912,7 @@ public class SaveData {
         values.put(userRecent, recent);
         values.put(userActive, active);
         values.put(userLoginDate, loginDate);
+        values.put(userSalt, salt);
 
         db = dbcon.getWritableDatabase();
 
@@ -889,7 +924,9 @@ public class SaveData {
     public boolean validatePassword(Integer id, String enteredPassword) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
         String pass;
-        String query = "SELECT " + userpassword + " FROM " + usersTableName + " WHERE id = ?";
+        String salt;
+        String encryptedEnteredPass;
+        String query = "SELECT " + userpassword + ", " + userSalt + " FROM " + usersTableName + " WHERE id = ?";
         String[] whereArgs = new String[]{
                 Integer.toString(id)
         };
@@ -898,11 +935,20 @@ public class SaveData {
 
         if (cursor.moveToFirst()) {
             pass = cursor.getString(0);
+            salt = cursor.getString(1);
         } else {
             pass = "";
+            salt = Integer.toString(-1).getBytes().toString();
         }
 
-        if (enteredPassword.equals(pass)) {
+        try {
+            encryptedEnteredPass = AESCrypt.encrypt(enteredPassword, salt);
+        } catch (GeneralSecurityException e) {
+            String message = e.getMessage();
+            return false;
+        }
+
+        if (encryptedEnteredPass.equals(pass)) {
             return true;
         } else {
             return false;
@@ -931,6 +977,7 @@ public class SaveData {
             user.setRecent(cursor.getString(10));
             user.setCreateDate(cursor.getString(11));
             user.setLoginDate(cursor.getString(12));
+            user.setSalt(cursor.getString(13));
         }
         return user;
     }
@@ -977,24 +1024,21 @@ public class SaveData {
     }
 
     public void logOut(Integer userID) {
-        //SaveData save = new SaveData(context);
-        FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
-        ContentValues values = new ContentValues();
-        String[] whereArgs = new String[]{
-                Integer.toString(userID)
-        };
-
-        db = dbcon.getWritableDatabase();
-        db.update(usersTableName, values, "id = ?", whereArgs);
-        db.close();
-/*        updateUser(userID, this.getEmail(), this.getPassword(), this.getQuestion1(), this.getAnswer1(),
-                this.getQuestion2(), this.getAnswer2(), this.getQuestion3(), this.getAnswer3(), "", "",
-                this.loginDate);*/
+        if (userID != null) {
+            FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
+            ContentValues values = new ContentValues();
+            String[] whereArgs = new String[]{
+                    Integer.toString(userID)
+            };
+            values.put(userActive, "");
+            db = dbcon.getWritableDatabase();
+            db.update(usersTableName, values, "id = ?", whereArgs);
+            db.close();
+        }
     }
 
     public void setUserIDOfNull(final Integer userID, final Context con) {
         FeedReaderDbHelper dbcon = new FeedReaderDbHelper(context);
-        //String batteryNullQuery = "SELECT " + batteryUserID + " " + batteryName + " FROM " + batteryTableName + " WHERE id IS NULL";
         final String batteryNullQuery = "SELECT * FROM " + batteryTableName + " WHERE userid IS NULL";
         String batteryUserQuery = "SELECT " + batteryName + " FROM " + batteryTableName + " WHERE userid = ?";
         String[] batteryUserArgs = new String[]{
@@ -1048,7 +1092,7 @@ public class SaveData {
                                     int color = toastView.getSolidColor();
                                     textView.setBackgroundColor(color);
                                     toast.show();
-                                } else if (input.getText().toString().trim().equals("")){
+                                } else if (input.getText().toString().trim().equals("")) {
                                     Toast toast = Toast.makeText(con, "You must enter a battery name", Toast.LENGTH_SHORT);
                                     TextView textView = (TextView) toast.getView().findViewById(android.R.id.message);
                                     View toastView = toast.getView();
@@ -1079,14 +1123,14 @@ public class SaveData {
                             setUserIDOfNull(userID, con);
                         }
                     });
-                     dialog = builder.create();
+                    dialog = builder.create();
                     break;
                 }
-                if (updateNull == false){
+                if (updateNull == false) {
                     break;
                 }
             }
-            if (updateNull == false){
+            if (updateNull == false) {
                 break;
             } else {
                 List<Entry> entryList = getAllEntriesForBattery(null, batteryNullCursor.getString(1));
@@ -1110,10 +1154,17 @@ public class SaveData {
                 }
             }
         }
-        if (updateNull == false){
+        if (updateNull == false) {
             dialog.show();
 
         }
+    }
+
+    public byte[] generateSalt() {
+        SecureRandom random = new SecureRandom();
+        byte[] salt2 = new byte[32];
+        random.nextBytes(salt2);
+        return salt2;
     }
 
     public void upgrade(int oldVer, int newVer) {

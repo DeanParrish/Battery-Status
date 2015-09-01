@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,8 +40,6 @@ import Classes.User;
 public class Login extends Activity {
 
     Context context = this;
-    private final static String ALGORITM = "Blowfish";
-    private final static String KEY = "g7~98I2D}>r?iWo(;]7IR1@v1<7'%2";
 //    private final static String PLAIN_TEXT = "here is your text";
     private String PLAIN_TEXT;
 
@@ -48,7 +47,10 @@ public class Login extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final SaveData save = new SaveData(getApplicationContext());
+        //save.update();
         final User activeUser = save.getActiveUser();
+
+
 
         //check for network connection
         if (hasNetworkConnection() == false){
@@ -113,8 +115,28 @@ public class Login extends Activity {
             TextView signUp = (TextView) findViewById(R.id.lbl_sign_up);
             signUp.setPaintFlags(signUp.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-            TextView forgot = (TextView) findViewById(R.id.lbl_forgot);
-            forgot.setPaintFlags(forgot.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            TextView lblForgot = (TextView) findViewById(R.id.lbl_forgot);
+            lblForgot.setPaintFlags(lblForgot.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            lblForgot.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TextView textViewEmail = (TextView) findViewById(R.id.txt_email);
+                    if (textViewEmail.getText().toString().trim().equals("")) {
+                        textViewEmail.setError("You must enter an email to recover");
+                    } else {
+                        User user = save.getUserByEmail(textViewEmail.getText().toString().trim());
+                        if (user.getEmail() == null){
+                            textViewEmail.setError("You must enter an email to recover");
+                        } else {
+                            Intent intent = new Intent(getApplicationContext(), ForgotPassword.class);
+                            intent.putExtra("userEmail", textViewEmail.getText().toString().trim());
+                            startActivity(intent);
+                            //finish();
+                        }
+
+                    }
+                }
+            });
 
             TextView lblSkip = (TextView) findViewById(R.id.lbl_skip);
             lblSkip.setOnClickListener(new View.OnClickListener() {
@@ -151,8 +173,29 @@ public class Login extends Activity {
             TextView signUp = (TextView) findViewById(R.id.lbl_sign_up);
             signUp.setPaintFlags(signUp.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-            TextView forgot = (TextView) findViewById(R.id.lbl_forgot);
-            forgot.setPaintFlags(forgot.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            TextView lblForgot = (TextView) findViewById(R.id.lbl_forgot);
+            lblForgot.setPaintFlags(lblForgot.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            lblForgot.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TextView textViewEmail = (TextView) findViewById(R.id.txt_email);
+                    if (textViewEmail.getText().toString().trim().equals("")) {
+                        textViewEmail.setError("You must enter an email to recover");
+                    } else {
+                        User user = save.getUserByEmail(textViewEmail.getText().toString().trim());
+                        if (user.getEmail() == null){
+                            textViewEmail.setError("You must enter an email to recover");
+                        } else {
+                            Intent intent = new Intent(getApplicationContext(), ForgotPassword.class);
+                            intent.putExtra("userEmail", textViewEmail.getText().toString().trim());
+                            startActivity(intent);
+                            //finish();
+                        }
+
+                    }
+                }
+            });
+
 
             TextView lblSkip = (TextView) findViewById(R.id.lbl_skip);
             lblSkip.setOnClickListener(new View.OnClickListener() {
@@ -248,16 +291,22 @@ public class Login extends Activity {
     public void addListenerOnButtonLogin(final List<Battery> nullBatteryList, List<Entry> nullEntryList) {
         Button btn_login = (Button) findViewById(R.id.btn_login);
         final TextView textViewEmail = (TextView) findViewById(R.id.txt_email);
-        final TextView textViewPassword = (TextView) findViewById(R.id.txt_password);
+        final EditText textViewPassword = (EditText) findViewById(R.id.txt_password);
         final Iterator<Battery> batteryIterator = nullBatteryList.iterator();
         Iterator<Entry> entryIterator = nullEntryList.iterator();
+        final SaveData save = new SaveData(getApplicationContext());
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 boolean boolLogin = true;
-        String txtEmail = textViewEmail.getText().toString();
-        String txtPassword = textViewPassword.getText().toString();
+        String txtEmail = textViewEmail.getText().toString().trim();
+        String txtPassword = textViewPassword.getText().toString().trim();
+
+        if (save.getUserByEmail(txtEmail).getId() == null){
+            textViewEmail.setError("User does not exist!");
+            boolLogin = false;
+        }
 
         if (txtEmail.isEmpty()) {
             textViewEmail.setError("Please enter an email!");
@@ -274,9 +323,13 @@ public class Login extends Activity {
             boolLogin = false;
         }
 
-        if (boolLogin == true) {
-            SaveData save = new SaveData(getApplicationContext());
+        if (boolLogin == true && save.validatePassword(save.getUserByEmail(textViewEmail.getText().toString().trim()).getId(),
+                textViewPassword.getText().toString().trim()) == false){
+            boolLogin = false;
+            textViewPassword.setError("Password is incorrect!");
+        }
 
+        if (boolLogin == true) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             User user = save.getUserByEmail(textViewEmail.getText().toString().trim());
             save.logIn(user.getId());
@@ -309,57 +362,6 @@ public class Login extends Activity {
             }
         });
     }
-//
-//    public void run(View v) {
-//        try {
-//
-//            byte[] encrypted = encrypt(KEY, PLAIN_TEXT);
-//            Log.i("FOO", "Encrypted: " + bytesToHex(encrypted));
-//
-//            String decrypted = decrypt(KEY, encrypted);
-//            Log.i("FOO", "Decrypted: " + decrypted);
-//
-//        } catch (GeneralSecurityException e) {
-//            e.printStackTrace();
-//        }
-//    }
-/*
-    private byte[] encrypt(String key, String plainText) throws GeneralSecurityException {
-
-        SecretKey secret_key = new SecretKeySpec(key.getBytes(), ALGORITM);
-
-        Cipher cipher = Cipher.getInstance(ALGORITM);
-        cipher.init(Cipher.ENCRYPT_MODE, secret_key);
-
-        return cipher.doFinal(plainText.getBytes());
-    }
-
-    private String decrypt(String key, byte[] encryptedText) throws GeneralSecurityException {
-
-        SecretKey secret_key = new SecretKeySpec(key.getBytes(), ALGORITM);
-
-        Cipher cipher = Cipher.getInstance(ALGORITM);
-        cipher.init(Cipher.DECRYPT_MODE, secret_key);
-
-        byte[] decrypted = cipher.doFinal(encryptedText);
-
-        return new String(decrypted);
-    }
-
-    public static String bytesToHex(byte[] data) {
-        if (data == null)
-            return null;
-
-        String str = "";
-
-        for (int i = 0; i < data.length; i++) {
-            if ((data[i] & 0xFF) < 16)
-                str = str + "0" + java.lang.Integer.toHexString(data[i] & 0xFF);
-            else
-                str = str + java.lang.Integer.toHexString(data[i] & 0xFF);
-        }
-        return str;
-    }*/
 
     public void createToast(CharSequence text, Integer duration) {
         Toast toast = Toast.makeText(getApplicationContext(), text, duration);

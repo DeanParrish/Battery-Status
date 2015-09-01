@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import Classes.Battery;
 import Classes.SaveData;
 import Classes.User;
 
@@ -289,10 +290,15 @@ public class RegisterAccount extends Activity {
 
         if (boolSubmit == true){
             save.addUser(editTextEmail.getText().toString().trim(), editTextPassword.getText().toString().trim(), ddlQuestion1.getSelectedItem().toString().trim(),
-                         editTextAnswer1.getText().toString().trim(), ddlQuestion2.getSelectedItem().toString().trim(), editTextAnswer2.getText().toString().trim(),
-                         ddlQuestion3.getSelectedItem().toString().trim(), editTextAnswer3.getText().toString().trim());
+                    editTextAnswer1.getText().toString().trim(), ddlQuestion2.getSelectedItem().toString().trim(), editTextAnswer2.getText().toString().trim(),
+                    ddlQuestion3.getSelectedItem().toString().trim(), editTextAnswer3.getText().toString().trim());
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.putExtra("userEmail", editTextEmail.getText().toString().trim());
+            intent.putExtra("userID", save.getUserByEmail(editTextEmail.getText().toString().trim()).getId());
+            List<Battery> listNullBatteries = save.getAllBatteriesUser(null);
+            if (listNullBatteries.size() >= 1){
+                save.setUserIDOfNull(save.getUserByEmail(editTextEmail.getText().toString().trim()).getId(), getApplicationContext());
+            }
             createToast("Account created!", Toast.LENGTH_SHORT);
             startActivity(intent);
             finish();

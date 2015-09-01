@@ -103,6 +103,68 @@ public class ArchiveBattery extends Activity {
                 return false;
             }
         });
+
+        for (int i = 0; i < menu.size(); i++){
+            final MenuItem item = menu.getItem(i);
+            if (item.getItemId() == R.id.action_archive){
+                View itemActionView = item.getActionView();
+                if (itemActionView != null){
+                    itemActionView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final SaveData delete = new SaveData(getApplicationContext());
+                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
+
+                            // set icon
+                            alertDialogBuilder.setIcon(R.mipmap.ic_alert);
+                            // set title
+                            alertDialogBuilder.setTitle("Delete battery?");
+
+                            // set dialog message
+                            alertDialogBuilder
+                                    .setMessage("This action can't be undone and will delete all associated entries.")
+                                    .setCancelable(false)
+                                    .setPositiveButton(R.string.alert_confirm, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            try {
+                                                delete.deleteBattery(userID, batteryName);
+                                                createToast(toastText, duration);
+                                                adapter.notifyDataSetChanged();
+                                                setListViewAdapter();
+                                                //startActivity(getIntent());
+                                            } catch (SQLiteException e) {
+                                                Log.e("Add Battery", e.toString());
+                                            }
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.alert_cancel, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            // if this button is clicked, just close
+                                            // the dialog box and do nothing
+                                            dialog.cancel();
+                                        }
+                                    });
+                            // create alert dialog
+                            AlertDialog alertDialog = alertDialogBuilder.create();
+
+                            if (batteryName != null) {
+                                // show alert dialog
+                                alertDialog.show();
+                            } else {
+                                createToast(toastTextError, duration);
+                            }
+                        }
+                    });
+                    itemActionView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            Toast.makeText(getApplicationContext(), "Archive Battery", Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                    });
+                }
+            }
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

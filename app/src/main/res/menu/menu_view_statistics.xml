@@ -9,10 +9,11 @@
         android:actionViewClass="android.widget.SearchView"/>
     <item
         android:id="@+id/action_filter"
-        android:icon="@mipmap/ic_filter"
-        android:orderInCategory="1"
+        android:orderInCategory="0"
         android:showAsAction="ifRoom"
-        android:title="@string/activity_filter" />
+        android:title="@string/activity_filter"
+        android:background="?android:selectableItemBackground"
+        android:actionLayout="@layout/menu_filter_button"/>
 <!--    <item
         android:id="@+id/action_search"
         android:icon="@mipmap/ic_search"

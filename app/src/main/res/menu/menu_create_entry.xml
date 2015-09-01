@@ -3,11 +3,11 @@
     tools:context="com.example.parrish.test.CreateEntry">
     <item
         android:id="@+id/action_save"
-        android:icon="@mipmap/ic_save"
         android:orderInCategory="0"
         android:showAsAction="ifRoom"
         android:title="@string/activity_save"
-        android:onClick="onSubmitClick"/>
+        android:background="?android:selectableItemBackground"
+        android:actionLayout="@layout/menu_image_button"/>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

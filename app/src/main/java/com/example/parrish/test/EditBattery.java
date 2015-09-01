@@ -139,6 +139,37 @@ public class EditBattery extends Activity {
                 return false;
             }
         });
+
+        for (int i = 0; i < menu.size(); i++){
+            final MenuItem item = menu.getItem(i);
+            if (item.getItemId() == R.id.action_edit){
+                View itemActionView = item.getActionView();
+                if (itemActionView != null){
+                    itemActionView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (batteryName != null) {
+                                Intent intent = new Intent(context, CreateBattery.class);
+                                intent.putExtra("create_battery", 0);  // sets flag for create battery
+                                intent.putExtra("userEmail", userEmail);
+                                intent.putExtra("battery", batteryName);
+                                intent.putExtra("userID", userID);
+                                startActivity(intent);
+                            } else {
+                                createToast(toastText, duration);
+                            }
+                        }
+                    });
+                    itemActionView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            Toast.makeText(getApplicationContext(), "Edit Battery", Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                    });
+                }
+            }
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -3,16 +3,26 @@ package Classes;
 import android.content.Context;
 
 import java.io.Serializable;
+import java.security.GeneralSecurityException;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Created by Parrish on 7/25/2015.
  */
 public class User implements Serializable {
+
+    //private final static String KEY = "g7~98I2D}>r?iWo(;]7IR1@v1<7'%2";
+
     private Integer id;
     private String email;
     private String password;
@@ -26,6 +36,7 @@ public class User implements Serializable {
     private String recent;
     private String createDate;
     private String loginDate;
+    private String salt;
 
     //getters
     public Integer getId(){
@@ -80,6 +91,8 @@ public class User implements Serializable {
         return this.loginDate;
     }
 
+    public String getSalt(){ return this.salt; }
+
     //setters
     public void setID(Integer id){this.id = id;}
 
@@ -131,5 +144,9 @@ public class User implements Serializable {
         this.loginDate = date;
     }
 
+    public void setSalt(String salt){ this.salt = salt; }
+
     //end properties
+
+
 }

@@ -10,10 +10,11 @@
         android:actionViewClass="android.widget.SearchView"/>
     <item
         android:id="@+id/action_archive"
-        android:icon="@mipmap/ic_delete"
         android:orderInCategory="0"
         android:showAsAction="ifRoom"
-        android:title="@string/activity_archive" />
+        android:title="@string/activity_archive"
+        android:background="?android:selectableItemBackground"
+        android:actionLayout="@layout/menu_delete_button"/>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

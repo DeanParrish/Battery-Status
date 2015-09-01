@@ -8,15 +8,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 //import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -102,11 +109,14 @@ public class CreateBattery extends Activity {
             // Enabling Up / Back navigation
             actionBar.setDisplayHomeAsUpEnabled(true);
             //hide label in action bar
-//            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayShowTitleEnabled(false);
             setTitle("Menu");
+
         } catch (NullPointerException e) {
             Log.e("actionbar", e.toString());
         }
+
+        View testView = findViewById(R.id.action_save );
 
 
         Integer variable = getIntent().getExtras().getInt("create_battery");
@@ -118,6 +128,8 @@ public class CreateBattery extends Activity {
                 userID = null;
             }
         }
+
+        //handleLongClick(findViewById(R.id.action_save), true);
 
         Spinner ddlBatteryType = (Spinner) findViewById(R.id.ddlType);
         Spinner ddlBatteryCells = (Spinner) findViewById(R.id.ddlCells);
@@ -170,11 +182,34 @@ public class CreateBattery extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        //super.onCreateOptionsMenu(menu);
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
+        //menu.
         inflater.inflate(R.menu.menu_create_battery, menu);
 
-        return super.onCreateOptionsMenu(menu);
+        for (int i = 0; i < menu.size(); i++){
+            final MenuItem item = menu.getItem(i);
+            if (item.getItemId() == R.id.action_save){
+                View itemActionView = item.getActionView();
+                if (itemActionView != null){
+                    itemActionView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            onSubmitClick(item);
+                        }
+                    });
+                    itemActionView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            Toast.makeText(getApplicationContext(), "Save", Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                    });
+                }
+            }
+        }
+        return true;
     }
 
     @Override
@@ -210,7 +245,6 @@ public class CreateBattery extends Activity {
                 });
         // create alert dialog
         AlertDialog alertDialog = alertDialogBuilder.create();
-
 
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
@@ -366,15 +400,16 @@ public class CreateBattery extends Activity {
                 finish();
             }
         } else {
-            Integer intMah = parseInt(txtMah.getText().toString());
-            Integer intCycles = parseInt(txtCycle.getText().toString());
-
-            EditText lblMahValue = (EditText) findViewById(R.id.txtMah);
-            lblMahValue.setText(intMah.toString());
-
-            EditText lblCyclesValue = (EditText) findViewById(R.id.txtCycles);
-            lblCyclesValue.setText(intCycles.toString());
-
+            if (!txtMah.getText().toString().trim().equals("")){
+                Integer intMah = parseInt(txtMah.getText().toString());
+                EditText lblMahValue = (EditText) findViewById(R.id.txtMah);
+                lblMahValue.setText(intMah.toString());
+            }
+            if (!txtCycle.getText().toString().trim().equals("")){
+                Integer intCycles = parseInt(txtCycle.getText().toString());
+                EditText lblCyclesValue = (EditText) findViewById(R.id.txtCycles);
+                lblCyclesValue.setText(intCycles.toString());
+            }
             createToast(toastInvalid, duration);
         }
     }
@@ -383,5 +418,44 @@ public class CreateBattery extends Activity {
     public void createToast(CharSequence text, Integer duration) {
         Toast toast = Toast.makeText(getApplicationContext(), text, duration);
         toast.show();
+    }
+
+    public void handleLongClick(final MenuItem menuItem, final boolean enable){
+        final View actionView = menuItem.getActionView();
+        //final View actionView = MenuItemCompat.getActionView(menuItem);
+        //final View actionView = findViewById(R.id.m)
+        //menuItem.view
+        if (actionView == null){
+            return;
+        }
+        //final CharSequence title = menuItem.getTitle();
+        if(!enable){
+            actionView.setOnLongClickListener(null);
+        } else {
+            actionView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    final int[] screenPos = new int[2];
+                    final Rect displayFrame = new Rect();
+                    actionView.getLocationOnScreen(screenPos);
+                    actionView.getWindowVisibleDisplayFrame(displayFrame);
+
+                    final Context context = actionView.getContext();
+                    final int width = actionView.getWidth();
+                    final int height = actionView.getHeight();
+                    final int midy = screenPos[1] + height / 2;
+                    final int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
+
+                    final Toast toolTip = Toast.makeText(context, "TOAST", Toast.LENGTH_SHORT);
+                    TextView textView = (TextView) toolTip.getView().findViewById(android.R.id.message);
+                    View toastView = toolTip.getView();
+                    int color = toastView.getSolidColor();
+                    textView.setBackgroundColor(color);
+                    toolTip.show();
+                    return true;
+                }
+            });
+        }
+
     }
 }

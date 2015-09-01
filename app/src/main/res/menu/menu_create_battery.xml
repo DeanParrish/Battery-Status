@@ -1,22 +1,29 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.parrish.test.CreateBattery">
-    <!--<item-->
-        <!--android:id="@+id/action_search"-->
-        <!--android:icon="@mipmap/ic_search"-->
-        <!--android:orderInCategory="1"-->
-        <!--android:showAsAction="ifRoom"-->
-        <!--android:title="@string/activity_save" />-->
-    <item
-        android:id="@+id/action_save"
-        android:icon="@mipmap/ic_save"
-        android:orderInCategory="0"
-        android:showAsAction="ifRoom"
-        android:title="@string/activity_save"
-        android:onClick="onSubmitClick" />
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings" />
-</menu>
+
+    <menu xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.example.parrish.test.CreateBattery">
+        <!--<item-->
+            <!--android:id="@+id/action_search"-->
+            <!--android:icon="@mipmap/ic_search"-->
+            <!--android:orderInCategory="1"-->
+            <!--android:showAs Action="ifRoom"-->
+            <!--android:title="@string/activity_save" />-->
+        <item
+            android:id="@+id/action_save"
+            android:orderInCategory="0"
+            android:showAsAction="ifRoom"
+            android:title="@string/activity_save"
+            android:background="?android:selectableItemBackground"
+            android:actionLayout="@layout/menu_image_button"/>
+    <!--    <ImageButton
+            android:id="@+id/action_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@mipmap/ic_search" />-->
+        <item
+            android:id="@+id/action_settings"
+            android:orderInCategory="100"
+            android:showAsAction="never"
+            android:title="@string/action_settings" />
+    </menu>
